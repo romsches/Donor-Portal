@@ -1,0 +1,10 @@
+MySQL Database Donor Portal
+
+Server Passwort: MyNewPass
+Login Name: your_login_name
+Passwort: your_password
+
+Admin-user for Spender-Portal
+
+Login: admin_login
+Passwort: admin_password

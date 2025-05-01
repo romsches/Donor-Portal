@@ -1,0 +1,71 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300&display=swap');
+
+/* Allgemeine Styles */
+/* Allgemeine Einstellungen für den Body: Keine Ränder oder Abstände, Poppins-Schriftart und flexibles Layout */
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Poppins', sans-serif; /* Schriftart Poppins */
+    color: #000; /* Textfarbe schwarz */
+    font-size: 16px; /* Schriftgröße */
+    display: flex;
+    flex-direction: column; /* Layout in einer vertikalen Richtung */
+    min-height: 100vh; /* Mindestens volle Bildschirmhöhe */
+}
+
+/* Main Bereich nimmt den restlichen verfügbaren Platz ein */
+main {
+    flex: 1; /* Flexbox: nimmt den restlichen verfügbaren Raum ein */
+}
+
+/* Styles für den Header */
+.header_container {
+    padding: 5px;
+    background-size: 400% 400%; /* Hintergrundgröße für den Verlauf */
+    background-image: linear-gradient(
+        -45deg, /* Diagonaler Farbverlauf */
+        hsl(0, 100%, 50%), /* Farbwerte für den Verlauf */
+        hsl(0, 63%, 28%),
+        hsl(0, 97%, 34%),
+        hsl(0, 100%, 60%)
+    );
+    animation: diagonal 8s infinite alternate; /* Animation für den Hintergrund */
+    color: white; /* Textfarbe weiß */
+    text-align: center; /* Text zentrieren */
+}
+
+/* Navigation innerhalb des Headers */
+.header_container nav ul {
+    list-style: none; /* Keine Aufzählungszeichen */
+    padding: 0; /* Kein Padding */
+    display: flex; /* Flexbox für horizontale Ausrichtung */
+    justify-content: center; /* Zentriert die Navigation */
+}
+
+.header_container nav ul li {
+    margin-right: 20px; /* Abstand zwischen den Navigationselementen */
+}
+
+.header_container nav ul li a {
+    text-decoration: none; /* Keine Unterstreichung */
+    color: inherit; /* Erbt die Textfarbe */
+    font-size: 16px; /* Schriftgröße für die Links */
+}
+
+.header_container nav ul li a:hover {
+    color: #ddd; /* Farbe bei Hover-Effekt */
+}
+
+/* Logo Styling */
+.logodrk {
+    text-align: center; /* Zentriert das Logo */
+    padding: 20px; /* Abstand rund um das Logo */
+}
+
+.logodrk img {
+    width: auto; /* Auto-Breite für das Bild */
+    max-width: 100%; /* Maximale Breite auf 100% setzen */
+    height: auto; /* Automatische Höhe */
+    display: block; /* Block-Layout für das Bild */
+    margin: 0 auto; /* Zentriert das Bild */
+}

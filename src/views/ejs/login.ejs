@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"> <!-- Festlegung der Zeichencodierung auf UTF-8 -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- Einstellen der Ansichtsbreite und Zoom-Steuerung für mobile Geräte -->
+    <title>Login</title> <!-- Titel der Webseite -->
+    <link rel="stylesheet" href="/css/main.css"> <!-- Verknüpfung zur externen CSS-Datei -->
+</head>
+<body>
+    <!-- Benutzerdefiniertes Header-Element einbinden -->
+    <special-header></special-header>
+    <!-- Benutzerdefiniertes Logo-Element einbinden -->
+    <special-logo></special-logo>
+    <main>
+        <section class="lgn">
+            <!-- Anmeldeformular -->
+            <form action="/login" method="post" aria-labelledby="login-form"> <!-- Formular, das eine POST-Anfrage an die URL /login sendet -->
+                <legend>Anmeldung</legend>
+                <label for="SpenderID">SpenderID:</label> <!-- Beschriftung für das Eingabefeld der SpenderID -->
+                <input type="text" name="SpenderID" id="SpenderID" required pattern="^[^\s]+$"> <!-- Eingabefeld für die SpenderID -->
+                <button type="submit">Login</button> <!-- Anmelde-Schaltfläche -->
+            </form>
+            
+            <!-- HTML für chatbot -->
+            <div id="chat-container">
+                <div id="chat-header">
+                    <h2>Chat</h2>
+                    <button id="chat-close">&times;</button>
+                </div>
+                <div id="chat-messages"></div>
+                <div id="chat-footer">
+                    <input type="text" id="chat-input" placeholder="Ihre Nachricht...">
+                    <button id="chat-send-button">Senden</button>
+                </div>
+            </div>
+            <button id="chat-toggle">Chatbot öffnen</button>
+
+            <!-- section für Hilfe Bereich -->
+            <div class="hilfe">
+                <p>Probleme beim Einloggen?</p>
+                <p>Besuchen Sie unsere <a href="#">Hilfe-Site</a>, wo Sie alle Antworten über unsere Anmeldung finden können.</p>
+                <p>Oder öffnen Sie den <span style="color: rgb(27, 29, 117); font-weight: bold;">Chatbot</span> an der unteren rechten Ecke, um Ihres Anliegens/Probleme zu finden.</p>
+                <p>Außerdem können Sie uns per E-Mail: <span class="email">spender-portal@blutspende.de</span> oder telefonisch <span class="telefon">+49123456789</span> kontaktieren.</p>
+            </div>
+        </section>
+    </main>
+    <!-- Benutzerdefiniertes Footer-Element einbinden -->
+    <special-footer></special-footer>
+    <!-- Verknüpfung zur externen JavaScript-Datei -->
+    <script src="/js/main.js"></script>
+    <script src="/js/chatbot.js"></script>
+</body>
+</html>

@@ -1,0 +1,191 @@
+@charset "UTF-8";
+/* Основные стили для панели управления */
+#admin-dashboard {
+  font-family: Arial, sans-serif;
+  padding: 20px;
+}
+
+/* Заголовок */
+#admin-dashboard h1 {
+  color: #333;
+  font-size: 24px;
+}
+
+/* Параграфы */
+#admin-dashboard p {
+  font-size: 16px;
+}
+
+/* Ссылки */
+#admin-dashboard a {
+  color: #0066cc;
+  text-decoration: none;
+}
+
+#admin-dashboard a:hover {
+  text-decoration: underline;
+}
+
+/* Стили для чекбокса управления чат-ботом */
+#admin-dashboard #chatbot-control-toggle {
+  margin-top: 20px;
+  display: flex;
+  align-items: center;
+  border: 1px solid #ddd;
+  padding: 10px;
+  border-radius: 4px;
+  background-color: #f9f9f9;
+}
+
+#admin-dashboard #chatbot-control-toggle label {
+  margin-right: 10px;
+}
+
+#admin-dashboard #chatbot-control-toggle input[type=checkbox] {
+  width: 20px;
+  height: 20px;
+}
+
+/* Стили для раздела управления чат-ботом */
+#admin-dashboard #chatbot-control {
+  margin-top: 20px;
+  padding: 20px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  background-color: #f9f9f9;
+}
+
+#admin-dashboard #chatbot-control h2 {
+  font-size: 20px;
+  margin-bottom: 10px;
+}
+
+/* Метки */
+#admin-dashboard #chatbot-control label {
+  display: block;
+  margin-top: 10px;
+  font-weight: bold;
+}
+
+/* Стили для селекторов */
+#admin-dashboard #chatbot-control select {
+  width: calc(100% - 20px); /* Уменьшение ширины для учета внутреннего отступа */
+  padding: 8px;
+  margin-top: 5px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background-color: #fff;
+  box-sizing: border-box; /* Включает отступы и границы в ширину элемента */
+}
+
+/* Стили для текстовых областей */
+#admin-dashboard #chatbot-control textarea {
+  width: calc(100% - 20px); /* Уменьшение ширины для учета внутреннего отступа */
+  padding: 8px;
+  margin-top: 5px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background-color: #fff;
+  box-sizing: border-box; /* Включает отступы и границы в ширину элемента */
+  min-height: 100px; /* Минимальная высота для textarea */
+  resize: vertical; /* Позволяет изменять размер только по вертикали */
+}
+
+/* Стили для кнопок */
+#admin-dashboard #chatbot-control button {
+  margin-top: 10px;
+  padding: 10px;
+  background-color: #28a745;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+#admin-dashboard #chatbot-control button:hover {
+  background-color: #218838;
+}
+
+/* Контейнеры */
+#admin-dashboard #chatbot-control div {
+  margin-top: 20px;
+}
+
+/* Стили для чат-бота */
+#admin-dashboard #chat-container {
+  margin-top: 20px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  background-color: #f9f9f9;
+}
+
+#admin-dashboard #chat-header {
+  background-color: #f1f1f1;
+  padding: 10px;
+  border-bottom: 1px solid #ddd;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+#admin-dashboard #chat-header h2 {
+  margin: 0;
+}
+
+#admin-dashboard #chat-close {
+  background: none;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+/* Сообщения чат-бота */
+#admin-dashboard #chat-messages {
+  padding: 10px;
+  height: 300px;
+  overflow-y: auto;
+}
+
+/* Футер чат-бота */
+#admin-dashboard #chat-footer {
+  padding: 10px;
+  border-top: 1px solid #ddd;
+  display: flex;
+  justify-content: space-between;
+}
+
+#admin-dashboard #chat-input {
+  flex: 1;
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+#admin-dashboard #chat-send-button {
+  padding: 8px 16px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+#admin-dashboard #chat-send-button:hover {
+  background-color: #0056b3;
+}
+
+/* Кнопка для открытия/закрытия чата */
+#admin-dashboard #chat-toggle {
+  margin-top: 20px;
+  padding: 10px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+#admin-dashboard #chat-toggle:hover {
+  background-color: #0056b3;
+}/*# sourceMappingURL=dashboard.css.map */

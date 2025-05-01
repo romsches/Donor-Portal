@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8"> <!-- Meta-Daten für Zeichencodierung festlegen -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- Meta-Daten für Ansichtsbreite und Zoom festlegen -->
+    <meta name="description" content="Login Fehlerseite"> <!-- Meta-Beschreibung für SEO -->
+    <title>Login Error</title> <!-- Titel der Seite -->
+    <link rel="stylesheet" href="/css/main.css"> <!-- Verknüpfung zur CSS-Datei für Styling -->
+</head>
+<body>
+    <special-header></special-header> <!-- Benutzerdefiniertes Header-Element einfügen -->
+    <special-logo></special-logo> <!-- Benutzerdefiniertes Logo-Element einfügen -->
+    <main>
+        <section class="error-section"> <!-- Abschnitt für Fehlermeldung -->
+            <h1>Login Fehler</h1> <!-- Überschrift für Fehlermeldung -->
+            <p class="login_fehler"><%= error %></p> <!-- Anzeige der Fehlermeldung -->
+            <a href="/">Zurück zum Login</a> <!-- Link zur Login-Seite -->
+        </section>
+        <div class="hilfe"> <!-- Hilfe-Abschnitt für Benutzer -->
+            <p>Probleme beim Einloggen?</p> <!-- Hinweis, dass es ein Problem beim Login gibt -->
+            <p>Besuchen Sie unsere <a href="#">Hilfe-Site</a>, wo alle Antworten über unsere Anmeldung finden können.</p> <!-- Link zur Hilfeseite -->
+            <p>Oder öffnen Sie den <span style="color: rgb(27, 29, 117); font-weight: bold;">Chatbot</span> an der unteren rechten Ecke, um Ihr Anliegen/Problem zu lösen.</p> <!-- Hinweis auf Chatbot -->
+            <p>Außerdem können Sie uns per E-Mail: <span class="email">spender-portal@blutspende.de</span> oder telefonisch <span class="telefon">+49123456789</span> kontaktieren.</p> <!-- Kontaktinformationen -->
+        </div>
+
+        <!-- HTML für den Chat -->
+        <div id="chat-container"> <!-- Container für den Chat -->
+            <div id="chat-header"> <!-- Kopfzeile des Chats -->
+                <h2>Chat</h2> <!-- Titel des Chats -->
+                <button id="chat-close">&times;</button> <!-- Schließen-Schaltfläche für den Chat -->
+            </div>
+            <div id="chat-messages"></div> <!-- Bereich für die Chat-Nachrichten -->
+            <div id="chat-footer"> <!-- Fußzeile des Chats -->
+                <input type="text" id="chat-input" placeholder="Ihre Nachricht..."> <!-- Eingabefeld für Nachrichten -->
+                <button id="chat-send-button">Senden</button> <!-- Schaltfläche zum Senden der Nachricht -->
+            </div>
+        </div>
+        <button id="chat-toggle">Chatbot öffnen</button> <!-- Schaltfläche zum Öffnen des Chatbots -->
+    </main>
+    <special-footer></special-footer> <!-- Benutzerdefiniertes Footer-Element einfügen -->
+    <script src="/js/main.js"></script> <!-- Verknüpfung zur JavaScript-Datei für Hauptfunktionen -->
+    <script src="/js/chatbot.js"></script> <!-- Verknüpfung zur JavaScript-Datei für den Chatbot -->
+</body>
+</html>

@@ -1,0 +1,50 @@
+/* Stile für den Hauptabschnitt der Seite */
+.admin-login-main {
+    max-width: 400px;
+    margin: auto;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1); /* Hinzufügen eines Schattens für eine bessere visuelle Trennung */
+    margin-bottom: 50px; /* Fügen Sie unten eine Polsterung hinzu */
+}
+
+/* Stile für den Admin-Login-Bereich */
+.admin-login-section {
+    margin: 0;
+}
+
+/* Fehlermeldungsstile */
+.admin-login-error-message {
+    color: red;
+    margin-bottom: 15px; /* am Ende der Fehlermeldung einen Einzug hinzufügen */
+}
+
+/* Stile für den Passwortcontainer */
+.admin-password-container {
+    position: relative;
+    margin-bottom: 15px;
+    display: flex;
+    flex-direction: column; /* Richtungswechsel zur Säule */
+}
+
+/* Stile für den Container mit den Kennwortanzeigeoptionen */
+.admin-password-options {
+    display: flex; /* Elemente in einer Linie anordnen */
+    align-items: center; /* Vertikal ausrichten der Elemente */
+    margin-top: 10px; /* Abstand oben hinzufügen, um es vom Passwort-Eingabefeld zu trennen */
+    margin-bottom: 15px;
+}
+
+/* Checkbox-Stile */
+.admin-password-options input[type="checkbox"] {
+    margin-right: 5px; /* Rechts neben dem Kontrollkästchen einrücken */
+    width: 15px; /* Festlegen der Breite des Kontrollkästchens */
+}
+
+/* Stile für die Kontrollkästchenbeschriftung */
+.admin-password-options label {
+    cursor: pointer; /* Setzt den Cursor auf Zeiger */
+    font-size: 14px; /* Schriftgröße der Beschriftung */
+    color: #333; /* Textfarbe der Beschriftung */
+}

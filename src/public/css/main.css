@@ -1,0 +1,1259 @@
+@charset "UTF-8";
+/* Links */
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300&display=swap");
+a, a:link, a:visited {
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: none;
+}
+
+/* Common */
+aside, nav, footer, header, section, main {
+  display: block;
+}
+
+h1, h2, h3, h4, h5, h6, p {
+  font-size: inherit;
+  font-weight: inherit;
+}
+
+ul, ul li {
+  list-style: none;
+}
+
+img {
+  vertical-align: top;
+}
+
+img, svg {
+  max-width: 100%;
+  height: auto;
+}
+
+address {
+  font-style: normal;
+}
+
+/* Form */
+input, textarea, button, select {
+  font-family: inherit;
+  font-size: inherit;
+  color: inherit;
+  background-color: transparent;
+}
+
+input::-ms-clear {
+  display: none;
+}
+
+button, input[type=submit] {
+  display: inline-block;
+  box-shadow: none;
+  background-color: transparent;
+  background: none;
+  cursor: pointer;
+}
+
+input:focus, input:active,
+button:focus, button:active {
+  outline: none;
+}
+
+button::-moz-focus-inner {
+  padding: 0;
+  border: 0;
+}
+
+label {
+  cursor: pointer;
+}
+
+legend {
+  display: block;
+}
+
+/* Grundlegender Chat-Container-Stil */
+#chat-container {
+  display: none; /* Chat standardmäßig ausblenden */
+  position: fixed; /* Fixiert den Chat in der unteren rechten Ecke */
+  bottom: 10px; /* Abstand vom unteren Rand */
+  right: 10px; /* Abstand vom rechten Rand */
+  width: 90%; /* Chat-Container nimmt 90% der Breite ein */
+  max-width: 700px; /* Maximale Breite des Chat-Containers */
+  height: 700px; /* Höhe des Chat-Containers */
+  border: 1px solid #ddd; /* Grauer Rand */
+  background-color: #fff; /* Hintergrundfarbe des Chats */
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Schattierung des Containers */
+  border-radius: 8px; /* Abgerundete Ecken */
+  overflow: hidden; /* Verhindert, dass der Chat überläuft */
+  font-family: Arial, sans-serif; /* Schriftart */
+  z-index: 1000; /* Hoher Z-Index für die Anzeige über anderen Inhalten */
+  flex-direction: column; /* Flexbox für vertikale Ausrichtung */
+}
+
+/* Öffnen Sie Chat-Stile */
+#chat-container.open {
+  display: flex; /* Zeigt den Chat, wenn er geöffnet ist */
+}
+
+/* Eine Schaltfläche ausblenden, wenn der Chat geöffnet ist */
+#chat-container.open ~ #chat-toggle {
+  display: none; /* Blenden Sie die Schaltfläche vollständig aus */
+}
+
+/* Chat-Header mit Farbverlauf und Animation */
+#chat-header {
+  display: flex; /* Flexbox für den Header */
+  justify-content: space-between; /* Abstand zwischen Header-Inhalten */
+  align-items: center; /* Vertikale Zentrierung */
+  padding: 10px; /* Innenabstand */
+  background-size: 400% 400%; /* Hintergrundgröße für den Verlauf */
+  background-image: linear-gradient(-45deg, hsl(0, 100%, 50%), hsl(0, 63%, 28%), hsl(0, 97%, 34%), hsl(0, 100%, 60%));
+  animation: diagonal 8s infinite alternate; /* Animation für den Hintergrund */
+  color: #fff; /* Textfarbe weiß */
+  height: 25px; /* Headerhöhe */
+}
+
+#chat-header h2 {
+  margin: 0; /* Entfernt den Standardabstand */
+  font-size: 18px; /* Schriftgröße erhöhen */
+}
+
+#chat-close {
+  background: none; /* Kein Hintergrund */
+  border: 2px solid transparent; /* Der anfängliche Rand ist transparent, um nicht zu stören */
+  font-size: 24px; /* Schriftgröße erhöhen */
+  color: #fff; /* Textfarbe weiß */
+  cursor: pointer; /* Zeiger beim Hover */
+  padding: 1px; /* Padding */
+  transition: border 0.3s ease; /* Sanfter Übergang beim Hover-Effekt */
+  margin-bottom: 3px;
+}
+
+#chat-close:hover {
+  border: 2px solid #fff; /* Rand beim Schweben, nicht zu groß */
+  border-radius: 5px; /* Ecken abrunden */
+}
+
+/* Hauptnachrichtencontainer */
+#chat-messages {
+  flex: 1; /* Ermöglicht dem Nachrichtencontainer, den gesamten verfügbaren Platz zu belegen */
+  display: flex; /* Flexbox für die Nachrichten */
+  flex-direction: column; /* Vertikale Ausrichtung */
+  align-items: center; /* Alle Nachrichten horizontal zentrieren */
+  padding: 10px; /* Innenabstand */
+  overflow-y: auto; /* Fügt Scrollen hinzu, wenn zu viele Nachrichten vorhanden sind */
+}
+
+/* Stil für Nachrichten */
+.message {
+  width: 100%; /* Ermöglicht, dass Nachrichten die gesamte Breite des Containers einnehmen */
+  max-width: 95%; /* Begrenzt die maximale Nachrichtenbreite */
+  margin-bottom: 15px; /* Erhöht den Abstand zwischen Nachrichten */
+  padding: 10px; /* Erhöht den Abstand für Nachrichten */
+  border-radius: 5px; /* Abgerundete Ecken */
+  word-wrap: break-word; /* Lange Wörter einpacken */
+  font-size: 14px; /* Schriftgröße erhöhen */
+  line-height: 1.4; /* Zeilenabstand vergrößern */
+  text-align: center; /* Text in einer Nachricht zentrieren */
+  margin-left: 1000px;
+}
+
+/* Stil für Benutzernachrichten */
+.user-message {
+  background-color: #e1ffc7; /* Hintergrundfarbe für Benutzernachrichten */
+  text-align: right; /* Text nach rechts ausrichten */
+  align-self: flex-end; /* Richten Benutzerbeiträge rechts aus */
+}
+
+/* Stil für Bot-Nachrichten */
+.bot-message {
+  color: rgb(2, 192, 2); /* Grüne Textfarbe für Bot-Nachrichten */
+  font-size: x-large; /* Größere Schrift für Bot-Nachrichten */
+  padding-bottom: 20px; /* Abstand nach unten */
+}
+
+/* Stil für Optionsnachrichten */
+.bot-message.options {
+  background-color: #e0e0e0; /* Hintergrundfarbe für Optionen */
+  color: #000; /* Schwarze Textfarbe */
+  font-weight: bold; /* Fettschrift für Optionen */
+  text-align: center; /* Text zentrieren */
+}
+
+/* Chat-Fußzeilenstil */
+#chat-footer {
+  display: flex; /* Flexbox für die Fußzeile */
+  padding: 10px; /* Innenabstand */
+  background-size: 400% 400%; /* Hintergrundgröße für den Verlauf */
+  background-image: linear-gradient(-45deg, hsl(0, 100%, 50%), hsl(0, 63%, 28%), hsl(0, 97%, 34%), hsl(0, 100%, 60%));
+  animation: diagonal 8s infinite alternate; /* Animation für den Hintergrund */
+}
+
+/* Eingabefeld im Footer */
+#chat-input {
+  flex: 1; /* Nimmt den verfügbaren Platz ein */
+  padding: 10px; /* Innenabstand */
+  border: 1px solid #ddd; /* Grauer Rand */
+  background-color: #f9f9f9; /* Hintergrundfarbe für das Eingabefeld */
+  border-radius: 4px; /* Abgerundete Ecken */
+  font-size: 16px; /* Schriftgröße erhöhen */
+}
+
+#chat-send-button {
+  padding: 10px; /* Polsterung des Buttons */
+  margin-left: 10px; /* Abstand nach links */
+  border: 2px solid white; /* Weißer Rahmen um den Button */
+  border-radius: 10px; /* Abgerundete Ecken des Buttons */
+  background-size: 400% 400%; /* Hintergrundgröße für den Verlauf */
+  background-image: linear-gradient(-45deg, hsl(0, 100%, 50%), hsl(0, 63%, 28%), hsl(0, 97%, 34%), hsl(0, 100%, 60%));
+  animation: diagonal 8s infinite alternate; /* Animation für den Farbverlauf */
+  color: white; /* Weißer Text */
+  cursor: pointer; /* Mauszeiger wird zum Zeiger beim Überfahren des Buttons */
+  font-size: 16px; /* Schriftgröße des Textes im Button */
+  font-weight: bold; /* Fetter Text für bessere Lesbarkeit */
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3); /* Schattierung des Textes, um ihn hervorzuheben */
+}
+
+#chat-send-button:hover {
+  background-color: #0056b3; /* Hintergrundfarbe beim Hover über den Button */
+}
+
+/* Stil für die Chat-Umschaltfläche (Schaltfläche, um den Chat ein- oder auszublenden) */
+#chat-toggle {
+  position: fixed; /* Positionierung des Buttons am Bildschirmrand */
+  bottom: 10px; /* Abstand vom unteren Rand */
+  right: 10px; /* Abstand vom rechten Rand */
+  padding: 10px 20px; /* Polsterung des Buttons */
+  background-color: rgb(27, 29, 117); /* Hintergrundfarbe des Buttons */
+  color: #fff; /* Weiße Schriftfarbe */
+  border: none; /* Kein Rand um den Button */
+  border-radius: 5px; /* Abgerundete Ecken des Buttons */
+  cursor: pointer; /* Mauszeiger wird zum Zeiger beim Überfahren des Buttons */
+  z-index: 1000; /* Sicherstellen, dass der Button über anderen Elementen bleibt */
+  font-size: 16px; /* Schriftgröße erhöhen, damit der Text gut sichtbar ist */
+}
+
+#chat-toggle:hover {
+  background-color: #0056b3; /* Hintergrundfarbe des Buttons beim Hover */
+}
+
+/* Stil für Fehlermeldungen */
+.error-message {
+  color: rgb(255, 94, 0); /* Orangene Schriftfarbe für Fehlernachrichten */
+  font-size: 16px; /* Schriftgröße erhöhen für bessere Lesbarkeit */
+  padding: 10px; /* Polsterung der Fehlermeldung */
+  background-color: #ffe6e6; /* Hellrosa Hintergrundfarbe für Fehlermeldungen */
+  border: 1px solid rgb(255, 94, 0); /* Orangefarbener Rand um die Fehlermeldung */
+  border-radius: 4px; /* Abgerundete Ecken der Fehlermeldung */
+  margin-bottom: 10px; /* Abstand zum nächsten Element */
+}
+
+/* Stil für alle Buttons (einschließlich der Sektionen, Optionen, Fragen, etc.) */
+.button, .section-button, .section-option, .question-option, .yes-option, .no-option, .restart-chat {
+  background-color: #d3d3d3; /* Hellgraue Hintergrundfarbe für alle Buttons */
+  color: white; /* Weiße Schriftfarbe */
+  border: none; /* Kein Rand um die Buttons */
+  padding: 10px; /* Polsterung der Buttons */
+  border-radius: 25px; /* Abgerundete Ecken der Buttons */
+  cursor: pointer; /* Mauszeiger wird zum Zeiger beim Überfahren der Buttons */
+  margin: 5px; /* Abstand zu anderen Buttons */
+  font-size: 16px; /* Schriftgröße erhöhen für bessere Lesbarkeit */
+  text-align: center; /* Zentrierte Textausrichtung */
+  display: block; /* Buttons als Block-Elemente */
+  width: 90%; /* Breite der Buttons, die 90% des Containers einnehmen */
+  transition: background-color 0.3s; /* Sanfter Übergang der Hintergrundfarbe */
+}
+
+.button:hover, .section-button:hover, .section-option:hover, .question-option:hover, .yes-option:hover, .no-option:hover, .restart-chat:hover {
+  background-color: rgb(200, 17, 17); /* Hintergrundfarbe der Buttons beim Hover */
+}
+
+/* Stil für den "Chat neu starten"-Button */
+.restart-chat {
+  background-color: #d3d3d3; /* Standard-Hintergrundfarbe für den „Chat neu starten“-Button */
+}
+
+/* Hover-Effekt für den "Chat neu starten"-Button */
+.restart-chat:hover {
+  background-color: rgb(200, 17, 17); /* Hintergrundfarbe beim Hover */
+}
+
+/* Versteckt das Eingabefeld */
+#chat-input {
+  display: none; /* Versteckt das Eingabefeld */
+}
+
+/* Versteckt die Schaltfläche „Senden“ */
+#chat-send-button {
+  display: none; /* Blendet die Schaltfläche „Senden“ aus, wenn das Eingabefeld ausgeblendet ist */
+}
+
+/* Stil für Schaltflächen im aktiven Zustand */
+.button.active, .section-button.active, .section-option.active, .question-option.active, .yes-option.active, .no-option.active, .restart-chat.active {
+  background-color: rgb(200, 17, 17); /* Farbe der Schaltflächen beim Klicken */
+}
+
+/* Hover-Effekt für Schaltflächen im aktiven Zustand */
+.button:hover, .section-button:hover, .section-option:hover, .question-option:hover, .yes-option:hover, .no-option:hover, .restart-chat:hover {
+  background-color: rgb(200, 17, 17); /* Hover-Farbe für aktive Schaltflächen */
+}
+
+/* Keyframe für die diagonale Animation des Hintergrunds */
+@keyframes diagonal {
+  0% {
+    background-position: 0% 50%;
+  } /* Startposition des Verlaufs */
+  100% {
+    background-position: 100% 50%;
+  } /* Endposition des Verlaufs */
+}
+/*--->__ENDE__<---*/
+/*
+font-family: 'Poppins', sans-serif;
+*/
+/* Allgemeine Styles */
+/* Allgemeine Einstellungen für den Body: Keine Ränder oder Abstände, Poppins-Schriftart und flexibles Layout */
+body {
+  margin: 0;
+  padding: 0;
+  font-family: "Poppins", sans-serif; /* Schriftart Poppins */
+  color: #000; /* Textfarbe schwarz */
+  font-size: 16px; /* Schriftgröße */
+  display: flex;
+  flex-direction: column; /* Layout in einer vertikalen Richtung */
+  min-height: 100vh; /* Mindestens volle Bildschirmhöhe */
+}
+
+/* Main Bereich nimmt den restlichen verfügbaren Platz ein */
+main {
+  flex: 1; /* Flexbox: nimmt den restlichen verfügbaren Raum ein */
+}
+
+/* Styles für den Header */
+.header_container {
+  padding: 5px;
+  background-size: 400% 400%; /* Hintergrundgröße für den Verlauf */
+  background-image: linear-gradient(-45deg, hsl(0, 100%, 50%), hsl(0, 63%, 28%), hsl(0, 97%, 34%), hsl(0, 100%, 60%));
+  animation: diagonal 8s infinite alternate; /* Animation für den Hintergrund */
+  color: white; /* Textfarbe weiß */
+  text-align: center; /* Text zentrieren */
+}
+
+/* Navigation innerhalb des Headers */
+.header_container nav ul {
+  list-style: none; /* Keine Aufzählungszeichen */
+  padding: 0; /* Kein Padding */
+  display: flex; /* Flexbox für horizontale Ausrichtung */
+  justify-content: center; /* Zentriert die Navigation */
+}
+
+.header_container nav ul li {
+  margin-right: 20px; /* Abstand zwischen den Navigationselementen */
+}
+
+.header_container nav ul li a {
+  text-decoration: none; /* Keine Unterstreichung */
+  color: inherit; /* Erbt die Textfarbe */
+  font-size: 16px; /* Schriftgröße für die Links */
+}
+
+.header_container nav ul li a:hover {
+  color: #ddd; /* Farbe bei Hover-Effekt */
+}
+
+/* Logo Styling */
+.logodrk {
+  text-align: center; /* Zentriert das Logo */
+  padding: 20px; /* Abstand rund um das Logo */
+}
+
+.logodrk img {
+  width: auto; /* Auto-Breite für das Bild */
+  max-width: 100%; /* Maximale Breite auf 100% setzen */
+  height: auto; /* Automatische Höhe */
+  display: block; /* Block-Layout für das Bild */
+  margin: 0 auto; /* Zentriert das Bild */
+}
+
+/* SpecialFooter Styles */
+/* Footer Container */
+.footer_container {
+  padding: 5px;
+  background-size: 400% 400%; /* Hintergrundgröße für den Verlauf */
+  background-image: linear-gradient(-45deg, hsl(0, 100%, 50%), hsl(0, 63%, 28%), hsl(0, 97%, 34%), hsl(0, 100%, 60%));
+  animation: diagonal 8s infinite alternate; /* Animation für den Hintergrund */
+  color: white; /* Textfarbe weiß */
+  text-align: center; /* Text zentrieren */
+}
+
+/* Links im Footer */
+.footer_container .links {
+  list-style: none; /* Keine Aufzählungszeichen */
+  padding: 0; /* Kein Padding */
+  display: flex; /* Flexbox für horizontale Ausrichtung */
+  justify-content: center; /* Zentrierte Anordnung der Links */
+  margin-left: 15px;
+}
+
+.footer_container .links a {
+  text-decoration: none; /* Keine Unterstreichung */
+  color: inherit; /* Erbt die Textfarbe */
+  margin: 0 10px; /* Abstand zwischen den Links */
+  transition: color 0.3s ease; /* Sanfter Farbwechsel beim Hover-Effekt */
+}
+
+.footer_container .links a:hover {
+  color: #ddd; /* Hover-Farbe für Links */
+}
+
+/* App-Icons im Footer */
+.footer_container .apps {
+  display: flex; /* Flexbox für horizontale Ausrichtung der Symbole */
+  justify-content: center; /* Zentrierte Anordnung der Symbole */
+  align-items: center; /* Vertikale Zentrierung */
+  margin-top: 5px; /* Abstand zwischen Links und Symbolen */
+  margin-bottom: 5px; /* Abstand nach unten */
+}
+
+.footer_container .apps a {
+  display: inline-block; /* Symbole in einer Reihe anzeigen */
+  margin: 0 10px; /* Abstand zwischen den Symbolen */
+  transition: transform 0.3s ease; /* Sanfter Übergang beim Skalieren */
+}
+
+.footer_container .apps img {
+  width: 30px; /* Symbolgröße */
+}
+
+.footer_container .apps a:hover {
+  transform: scale(1.2); /* Vergrößern der Symbole beim Hover-Effekt */
+}
+
+/* Entfernen des rechten Abstands beim letzten Symbol */
+.footer_container .apps a:last-child {
+  margin-right: 0; /* Kein zusätzlicher Abstand nach dem letzten Symbol */
+}
+
+/* Transparenz für die Symbole beim Hover-Effekt */
+.footer_container .apps a img:hover {
+  opacity: 0.7; /* Transparenz beim Hover-Effekt */
+}
+
+/* Allgemeine Stile */
+/* Stile für den Abschnitts-Container */
+.section_container {
+  display: flex; /* Flexbox verwenden, um Elemente zu ordnen */
+  align-items: center; /* Vertikale Ausrichtung der Elemente */
+  justify-content: center; /* Horizontale Ausrichtung der Elemente */
+  align-content: flex-end; /* Ausrichtung des Inhalts am unteren Ende des Containers */
+  flex-wrap: nowrap; /* Elemente sollen nicht in eine neue Zeile umbrechen */
+  flex-direction: column; /* Elemente werden in einer Spalte angeordnet */
+  margin-top: 30px; /* Abstand oben */
+}
+
+/* Stile für den Filter */
+.filter h1 {
+  color: hsl(0, 100%, 50%); /* Rote Farbe für die Überschrift */
+  font-size: xxx-large; /* Sehr große Schriftgröße */
+  margin-bottom: 20px; /* Abstand nach unten */
+  margin-top: -70px; /* Abstand nach oben */
+  display: flex; /* Flexbox für die Ausrichtung */
+  justify-content: center; /* Zentrierung der Inhalte horizontal */
+  padding: 10px; /* Innenabstand um den Text */
+  align-items: center; /* Zentrierung der Inhalte vertikal */
+  text-align: center; /* Text zentrieren */
+}
+
+.filter h2 {
+  display: flex; /* Flexbox für die Ausrichtung */
+  justify-content: center; /* Zentrierung der Inhalte horizontal */
+  padding: 8px; /* Innenabstand um den Text */
+  align-items: center; /* Zentrierung der Inhalte vertikal */
+  text-align: center; /* Text zentrieren */
+}
+
+.filter select {
+  -moz-appearance: none; /* Entfernen des Standardstils in Firefox */
+  appearance: none; /* Entfernen des Standardstils in anderen Browsern */
+  border: none; /* Keine Randlinie */
+  width: 200px; /* Breite des Auswahlfeldes */
+  height: 40px; /* Höhe des Auswahlfeldes */
+  background-color: rgb(200, 17, 17); /* Roter Hintergrund */
+  color: aliceblue; /* Weiße Textfarbe */
+  font-size: 16px; /* Schriftgröße */
+  margin-bottom: 5px; /* Abstand nach unten */
+  margin-top: 10px; /* Abstand nach oben */
+  border-radius: 5px; /* Abgerundete Ecken */
+  text-align: center; /* Text zentrieren */
+}
+
+select::-ms-expand {
+  display: none; /* Entfernen des Dropdown-Icons in Internet Explorer */
+}
+
+.filter_btn {
+  display: flex; /* Flexbox für die Ausrichtung */
+  align-items: center; /* Vertikale Ausrichtung der Inhalte */
+  justify-content: center; /* Horizontale Ausrichtung der Inhalte */
+  align-content: flex-end; /* Ausrichtung des Inhalts am unteren Ende des Containers */
+  flex-wrap: nowrap; /* Keine Umbruch der Elemente */
+  flex-direction: column; /* Anordnung der Elemente in einer Spalte */
+}
+
+.filter_btn [type=date] {
+  background-color: rgb(200, 17, 17); /* Roter Hintergrund für das Datumseingabefeld */
+  padding: 15px; /* Innenabstand */
+  width: 150px; /* Breite des Eingabefeldes */
+  height: 5px; /* Höhe des Eingabefeldes */
+  color: #ffffff; /* Weiße Schriftfarbe */
+  font-size: 18px; /* Schriftgröße */
+  border: none; /* Keine Randlinie */
+  border-radius: 5px; /* Abgerundete Ecken */
+  outline: none; /* Entfernen des Rahmens bei Fokussierung */
+}
+
+::-webkit-calendar-picker-indicator {
+  background-color: #ffffff; /* Hintergrundfarbe des Kalendersymbols */
+  padding: 5px; /* Innenabstand */
+  cursor: pointer; /* Zeiger-Cursor bei Hover */
+  border-radius: 3px; /* Abgerundete Ecken für das Kalendersymbol */
+}
+
+/* Stile für die Standorte */
+.standorte {
+  display: flex; /* Flexbox für die Ausrichtung */
+  justify-content: flex-start; /* Ausrichtung am Anfang */
+  align-items: center; /* Zentrierung der Inhalte vertikal */
+  margin-top: 10px; /* Abstand nach oben */
+}
+
+/* Stile für die Tabelle */
+table {
+  border-collapse: collapse; /* Entfernt den Abstand zwischen Tabellenzellen */
+  width: 900px; /* Breite der Tabelle */
+  margin-top: 20px; /* Abstand nach oben */
+}
+
+th, td {
+  border: 1px solid rgb(204, 204, 204); /* Graue Randlinie für die Zellen */
+  padding: 5px; /* Innenabstand der Zellen */
+}
+
+th {
+  font-weight: bold; /* Fette Schrift für die Kopfzeilen */
+  font-size: 20px; /* Schriftgröße der Kopfzeilen */
+  text-align: center; /* Zentrierung des Texts in den Kopfzeilen */
+  color: #333; /* Dunkle Schriftfarbe */
+  margin-bottom: 16px; /* Abstand nach unten */
+}
+
+/* Stile für den Kontaktbereich */
+.kontakt p {
+  display: flex; /* Flexbox für die Ausrichtung */
+  justify-content: center; /* Zentrierung der Inhalte horizontal */
+  padding: 10px; /* Innenabstand */
+  align-items: center; /* Zentrierung der Inhalte vertikal */
+  text-align: center; /* Zentrierung des Textes */
+}
+
+.kontakt a {
+  display: flex; /* Flexbox für die Ausrichtung */
+  justify-content: center; /* Zentrierung der Inhalte horizontal */
+  padding: 10px; /* Innenabstand */
+  align-items: center; /* Zentrierung der Inhalte vertikal */
+  text-align: center; /* Zentrierung des Textes */
+  color: black; /* Schwarze Textfarbe */
+  text-decoration-line: underline; /* Unterstreichung des Links */
+}
+
+.kontakt a:hover {
+  color: rgb(255, 0, 0); /* Rote Farbe beim Hover über den Link */
+}
+
+span {
+  font-size: larger; /* Größere Schriftgröße für span */
+}
+
+/* Medienabfragen für verschiedene Bildschirmgrößen */
+@media (max-width: 1200px) {
+  .section_container .filter select {
+    text-align: center; /* Zentrierung des Textes im Select-Feld */
+  }
+}
+@media (max-width: 998px) {
+  table {
+    width: 500px; /* Tabelle wird bei kleinerem Bildschirm schmaler */
+  }
+  .one {
+    width: 25%;
+  } /* Spaltenbreite für die erste Spalte */
+  .two {
+    width: 55%;
+  } /* Spaltenbreite für die zweite Spalte */
+  .three {
+    width: 10%;
+  } /* Spaltenbreite für die dritte Spalte */
+  .four {
+    width: 10%;
+  } /* Spaltenbreite für die vierte Spalte */
+  .section_container .filter select {
+    text-align: center; /* Zentrierung des Textes im Select-Feld */
+  }
+}
+@media (max-width: 768px) {
+  table {
+    width: 500px; /* Tabelle wird bei kleinerem Bildschirm schmaler */
+  }
+  .one {
+    width: 25%;
+  } /* Spaltenbreite für die erste Spalte */
+  .two {
+    width: 55%;
+  } /* Spaltenbreite für die zweite Spalte */
+  .three {
+    width: 10%;
+  } /* Spaltenbreite für die dritte Spalte */
+  .four {
+    width: 10%;
+  } /* Spaltenbreite für die vierte Spalte */
+  .section_container .filter select {
+    text-align: center; /* Zentrierung des Textes im Select-Feld */
+  }
+}
+@media (max-width: 576px) {
+  table {
+    width: 400px; /* Tabelle wird bei sehr kleinem Bildschirm noch schmaler */
+  }
+  .one {
+    width: 25%;
+  } /* Spaltenbreite für die erste Spalte */
+  .two {
+    width: 55%;
+  } /* Spaltenbreite für die zweite Spalte */
+  .three {
+    width: 10%;
+  } /* Spaltenbreite für die dritte Spalte */
+  .four {
+    width: 10%;
+  } /* Spaltenbreite für die vierte Spalte */
+  .section_container .filter select {
+    text-align: center; /* Zentrierung des Textes im Select-Feld */
+  }
+}
+/* Allgemeine Styles */
+body {
+  margin: 0; /* Entfernt den Standardabstand des Browsers */
+  padding: 0; /* Entfernt das Standard-Padding des Browsers */
+  font-family: "Poppins", sans-serif; /* Setzt die Schriftart auf Poppins */
+  color: #000; /* Setzt die Textfarbe auf Schwarz */
+  font-size: 16px; /* Setzt die Schriftgröße auf 16px */
+  display: flex; /* Setzt das Display auf Flexbox */
+  flex-direction: column; /* Setzt die Flexrichtung auf Spalten */
+  min-height: 100vh; /* Setzt die Mindesthöhe auf 100% der Viewporthöhe */
+}
+
+main {
+  flex: 1; /* Nimmt den verbleibenden Platz ein */
+  padding: 40px 0; /* Setzt das Padding auf 40px oben und unten */
+  text-align: center; /* Zentriert den Text */
+}
+
+.section_container, form {
+  display: flex; /* Verwendet Flexbox für die Container */
+  align-items: center; /* Zentriert die Elemente vertikal */
+  justify-content: center; /* Zentriert die Elemente horizontal */
+  align-content: flex-end; /* Richtet den Inhalt am unteren Ende aus */
+  flex-wrap: nowrap; /* Verhindert das Umwickeln der Flex-Elemente */
+  flex-direction: column; /* Setzt die Flex-Richtung auf Spalten */
+  margin-top: 40px; /* Fügt oben einen Abstand von 40px hinzu */
+}
+
+.section_container label, form label {
+  color: black; /* Setzt die Textfarbe der Labels auf Schwarz */
+  display: block; /* Setzt das Label als Block-Element */
+  margin-bottom: 10px; /* Fügt einen Abstand unten hinzu */
+}
+
+.section_container label h1, form label h1 {
+  color: hsl(0, 100%, 50%); /* Setzt die Schriftfarbe auf Rot */
+  font-size: xx-large; /* Setzt die Schriftgröße auf extra groß */
+  padding: 10px; /* Fügt Padding von 10px hinzu */
+  margin-top: -50px; /* Verschiebt den oberen Rand um -50px */
+}
+
+.section_container input, form input {
+  width: 300px; /* Setzt die Breite der Eingabefelder auf 300px */
+  padding: 20px; /* Fügt Padding von 20px hinzu */
+  margin-bottom: 10px; /* Fügt einen Abstand unten hinzu */
+  border: none; /* Entfernt den Standardrahmen */
+  border-radius: 20px; /* Fügt abgerundete Ecken hinzu */
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Fügt einen sanften Schatten hinzu */
+}
+
+.section_container button, form button {
+  background-color: #ccc; /* Setzt die Hintergrundfarbe der Schaltflächen auf Grau */
+  color: #fff; /* Setzt die Textfarbe auf Weiß */
+  padding: 10px 20px; /* Fügt Padding von 10px oben/unten und 20px links/rechts hinzu */
+  border: none; /* Entfernt den Standardrahmen */
+  cursor: pointer; /* Zeigt den Zeiger-Cursor an */
+  margin-bottom: 10px; /* Fügt einen Abstand unten hinzu */
+  border-radius: 20px; /* Fügt abgerundete Ecken hinzu */
+  transition: background-color 0.3s, box-shadow 0.3s, transform 0.3s; /* Fügt Übergangseffekte hinzu */
+}
+
+.section_container button:hover, form button:hover {
+  background-color: rgb(255, 0, 0); /* Setzt die Hintergrundfarbe beim Hover auf Rot */
+  box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.24), 0 6px 18px 0 rgba(0, 0, 0, 0.19); /* Fügt einen Schatten beim Hover hinzu */
+}
+
+.section_container button:active, form button:active {
+  background-color: rgb(255, 75, 75); /* Setzt die Hintergrundfarbe beim Klicken auf Hellrot */
+  transform: translateY(2.5px); /* Verschiebt die Schaltfläche nach unten, wenn sie geklickt wird */
+}
+
+.section_container p, form p {
+  align-items: center; /* Zentriert den Text im Container */
+  padding-top: 5px; /* Fügt oben einen Abstand von 5px hinzu */
+}
+
+.section_container a, form a {
+  text-decoration: underline; /* Unterstreicht den Text */
+  padding-bottom: 5px; /* Fügt unten einen Abstand von 5px hinzu */
+  padding-top: 5px; /* Fügt oben einen Abstand von 5px hinzu */
+  color: black; /* Setzt die Textfarbe auf Schwarz */
+  cursor: pointer; /* Zeigt den Zeiger-Cursor an */
+  transition: color 0.3s; /* Fügt einen Übergangseffekt für die Farbe hinzu */
+}
+
+.section_container a:hover, form a:hover {
+  color: rgb(255, 0, 0); /* Setzt die Farbe auf Rot beim Hover */
+}
+
+.checkbox {
+  display: flex; /* Verwendet Flexbox für die Checkboxen */
+  align-items: center; /* Zentriert die Elemente vertikal */
+  margin-top: 10px; /* Fügt oben einen Abstand von 10px hinzu */
+}
+
+.form__checkbox {
+  margin-right: 10px; /* Fügt einen Abstand von 10px rechts der Checkbox hinzu */
+}
+
+label {
+  font-size: 14px; /* Setzt die Schriftgröße auf 14px */
+}
+
+label span {
+  font-weight: bold; /* Macht den Text fett */
+  color: #333; /* Setzt die Textfarbe auf dunkelgrau */
+}
+
+.checkbox input {
+  width: 20px; /* Setzt die Breite der Checkbox auf 20px */
+}
+
+/* Stil für den Hilfe-Abschnitt */
+.hilfe {
+  margin-top: 20px; /* Fügt oben einen Abstand von 20px hinzu */
+  text-align: center; /* Zentriert den Text */
+  background-color: #f0f0f0; /* Setzt den Hintergrund auf ein helles Grau */
+  padding: 20px; /* Fügt Padding von 20px hinzu */
+  border-radius: 10px; /* Fügt abgerundete Ecken hinzu */
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Fügt einen sanften Schatten hinzu */
+}
+
+.hilfe p {
+  margin-bottom: 10px; /* Fügt einen Abstand unten von 10px hinzu */
+}
+
+.hilfe a {
+  text-decoration: underline; /* Unterstreicht den Link */
+  color: #28a745; /* Setzt die Textfarbe des Links auf Grün */
+  transition: color 0.3s ease; /* Fügt einen Übergangseffekt für die Farbe hinzu */
+}
+
+.hilfe a:hover {
+  color: #70d888; /* Setzt die Farbe des Links auf ein helleres Grün beim Hover */
+}
+
+.hilfe p:last-child {
+  margin-bottom: 0; /* Entfernt den Abstand nach dem letzten Absatz */
+}
+
+.hilfe .email {
+  color: #007bff; /* Setzt die Farbe für die E-Mail auf Blau */
+  font-weight: bold; /* Macht den E-Mail-Link fett */
+}
+
+.hilfe .telefon {
+  color: #dc3545; /* Setzt die Farbe für die Telefonnummer auf Rot */
+  font-weight: bold; /* Macht die Telefonnummer fett */
+}
+
+legend {
+  color: rgb(228, 10, 10); /* Setzt die Textfarbe auf Rot für das Legend */
+  font-size: xx-large; /* Setzt die Schriftgröße auf extra groß */
+  padding-bottom: 20px; /* Fügt Padding unten hinzu */
+}
+
+.login_fehler {
+  color: rgb(187, 12, 12); /* Setzt die Textfarbe für Fehler auf Rot */
+  font-size: x-large; /* Setzt die Schriftgröße für Fehler auf extra groß */
+  padding: 10px; /* Fügt Padding von 10px hinzu */
+}
+
+/* Media Queries */
+/* Für Bildschirme mit einer maximalen Breite von 1200px */
+@media (max-width: 1200px) {
+  /* Header-Stile bei kleinerer Bildschirmgröße */
+  header {
+    padding: 20px; /* Innenabstand anpassen */
+    background-size: 500% 500%; /* Hintergrundbildgröße ändern */
+    background-image: repeating-linear-gradient(-45deg, hsl(0, 100%, 50%) 0%, hsl(0, 63%, 28%) 15%, hsl(0, 97%, 34%) 30%, hsl(0, 100%, 60%) 45%);
+    animation: diagonal 40s infinite; /* Animation für Hintergrundbild */
+    width: 100%; /* Breite auf 100% setzen */
+    z-index: 1000; /* Sicherstellen, dass der Header oben bleibt */
+    position: fixed; /* Header fixieren */
+    top: 0; /* Oben positionieren */
+  }
+  .werbung {
+    margin-bottom: 100px; /* Abstand nach unten für Werbung */
+  }
+  footer {
+    text-align: center; /* Text zentrieren */
+    padding: 20px; /* Innenabstand für das Footer */
+    position: fixed; /* Footer fixieren */
+    left: 0; /* Links positionieren */
+    bottom: 0; /* Unten positionieren */
+    width: 100%; /* Breite auf 100% setzen */
+    background-size: 500% 500%; /* Hintergrundbildgröße ändern */
+    background-image: repeating-linear-gradient(-45deg, rgb(255, 0, 0) 0%, hsl(0, 63%, 28%) 15%, rgb(171, 3, 3) 30%, hsl(0, 100%, 60%) 45%);
+    animation: diagonal 40s infinite; /* Animation für Hintergrundbild */
+    z-index: 1000; /* Sicherstellen, dass der Footer oben bleibt */
+  }
+  @keyframes diagonal {
+    0% {
+      background-position: 0% 50%;
+    } /* Hintergrund bei 0% */
+    100% {
+      background-position: 100% 50%;
+    } /* Hintergrund bei 100% */
+  }
+}
+/* Für Bildschirme mit einer maximalen Breite von 998px */
+@media (max-width: 998px) {
+  header {
+    padding: 20px; /* Innenabstand anpassen */
+    background-size: 500% 500%; /* Hintergrundbildgröße ändern */
+    background-image: repeating-linear-gradient(-45deg, hsl(0, 100%, 50%) 0%, hsl(0, 63%, 28%) 15%, hsl(0, 97%, 34%) 30%, hsl(0, 100%, 60%) 45%);
+    animation: diagonal 40s infinite; /* Animation für Hintergrundbild */
+    width: 100%; /* Breite auf 100% setzen */
+  }
+  .section_container {
+    margin-top: 8%; /* Abstand nach oben für die Sektionen */
+  }
+  .werbung {
+    margin-bottom: 120px; /* Abstand nach unten für Werbung */
+  }
+  footer {
+    text-align: center; /* Text zentrieren */
+    padding: 20px; /* Innenabstand für das Footer */
+    position: fixed; /* Footer fixieren */
+    left: 0; /* Links positionieren */
+    bottom: 0; /* Unten positionieren */
+    width: 100%; /* Breite auf 100% setzen */
+    background-size: 500% 500%; /* Hintergrundbildgröße ändern */
+    background-image: repeating-linear-gradient(-45deg, rgb(255, 0, 0) 0%, hsl(0, 63%, 28%) 15%, rgb(171, 3, 3) 30%, hsl(0, 100%, 60%) 45%);
+    animation: diagonal 40s infinite; /* Animation für Hintergrundbild */
+  }
+}
+/* Für Bildschirme mit einer maximalen Breite von 768px */
+@media (max-width: 768px) {
+  header {
+    padding: 20px; /* Innenabstand anpassen */
+    background-size: 500% 500%; /* Hintergrundbildgröße ändern */
+    background-image: repeating-linear-gradient(-45deg, hsl(0, 100%, 50%) 0%, hsl(0, 63%, 28%) 15%, hsl(0, 97%, 34%) 30%, hsl(0, 100%, 60%) 45%);
+    animation: diagonal 40s infinite; /* Animation für Hintergrundbild */
+    width: 100%; /* Breite auf 100% setzen */
+    z-index: 1000; /* Sicherstellen, dass der Header oben bleibt */
+  }
+  .werbung {
+    margin-bottom: 100px; /* Abstand nach unten für Werbung */
+  }
+  footer {
+    text-align: center; /* Text zentrieren */
+    padding: 20px; /* Innenabstand für das Footer */
+    position: fixed; /* Footer fixieren */
+    left: 0; /* Links positionieren */
+    bottom: 0; /* Unten positionieren */
+    width: 100%; /* Breite auf 100% setzen */
+    background-size: 500% 500%; /* Hintergrundbildgröße ändern */
+    background-image: repeating-linear-gradient(-45deg, rgb(255, 0, 0) 0%, hsl(0, 63%, 28%) 15%, rgb(171, 3, 3) 30%, hsl(0, 100%, 60%) 45%);
+    animation: diagonal 40s infinite; /* Animation für Hintergrundbild */
+    z-index: 1000; /* Sicherstellen, dass der Footer oben bleibt */
+  }
+}
+/* Für Bildschirme mit einer maximalen Breite von 576px */
+@media (max-width: 576px) {
+  header {
+    padding: 20px; /* Innenabstand anpassen */
+    background-size: 500% 500%; /* Hintergrundbildgröße ändern */
+    background-image: repeating-linear-gradient(-45deg, hsl(0, 100%, 50%) 0%, hsl(0, 63%, 28%) 15%, hsl(0, 97%, 34%) 30%, hsl(0, 100%, 60%) 45%);
+    animation: diagonal 40s infinite; /* Animation für Hintergrundbild */
+    width: 100%; /* Breite auf 100% setzen */
+    z-index: 1000; /* Sicherstellen, dass der Header oben bleibt */
+  }
+  .werbung {
+    margin-bottom: 160px; /* Abstand nach unten für Werbung */
+  }
+  footer {
+    text-align: center; /* Text zentrieren */
+    padding: 20px; /* Innenabstand für das Footer */
+    position: fixed; /* Footer fixieren */
+    left: 0; /* Links positionieren */
+    bottom: 0; /* Unten positionieren */
+    width: 100%; /* Breite auf 100% setzen */
+    background-size: 500% 500%; /* Hintergrundbildgröße ändern */
+    background-image: repeating-linear-gradient(-45deg, rgb(255, 0, 0) 0%, hsl(0, 63%, 28%) 15%, rgb(171, 3, 3) 30%, hsl(0, 100%, 60%) 45%);
+    animation: diagonal 40s infinite; /* Animation für Hintergrundbild */
+    z-index: 1000; /* Sicherstellen, dass der Footer oben bleibt */
+  }
+}
+/* Основные стили для панели управления */
+#admin-dashboard {
+  font-family: Arial, sans-serif; /* Шрифт для панели управления */
+  padding: 20px; /* Отступы вокруг панели */
+}
+
+/* Заголовок */
+#admin-dashboard h1 {
+  color: #333; /* Цвет текста заголовка */
+  font-size: 24px; /* Размер шрифта заголовка */
+}
+
+/* Параграфы */
+#admin-dashboard p {
+  font-size: 16px; /* Размер шрифта для параграфов */
+}
+
+/* Ссылки */
+#admin-dashboard a {
+  color: #0066cc; /* Цвет текста ссылок */
+  text-decoration: none; /* Убираем подчеркивание ссылок */
+}
+
+#admin-dashboard a:hover {
+  text-decoration: underline; /* Подчеркивание при наведении на ссылку */
+}
+
+/* Ограничение ширины раздела управления чат-ботом */
+#admin-dashboard #chatbot-control {
+  margin-top: 20px; /* Отступ сверху */
+  padding: 20px; /* Внутренние отступы */
+  border: 1px solid #ddd; /* Граница */
+  border-radius: 4px; /* Скругленные углы */
+  background-color: #f9f9f9; /* Фоновый цвет */
+  max-width: 800px; /* Устанавливаем максимальную ширину */
+  margin-left: auto; /* Центрируем элемент по горизонтали */
+  margin-right: auto; /* Центрируем элемент по горизонтали */
+}
+
+/* Стили для чекбокса управления чат-ботом */
+#admin-dashboard #chatbot-control-toggle {
+  display: inline-block; /* Инлайн-блок, чтобы элемент имел ширину по содержимому */
+  margin-top: 20px; /* Отступ сверху */
+  border: 1px solid #ddd; /* Граница */
+  padding: 10px; /* Внутренние отступы */
+  border-radius: 4px; /* Скругленные углы */
+  background-color: #f9f9f9; /* Фоновый цвет */
+  white-space: nowrap; /* Запрещаем перенос текста */
+}
+
+#admin-dashboard #chatbot-control-toggle label {
+  margin-right: 10px; /* Отступ справа от метки */
+  font-size: large; /* Размер шрифта для метки */
+}
+
+#admin-dashboard #chatbot-control-toggle input[type=checkbox] {
+  width: 14px; /* Ширина чекбокса */
+  height: 14px; /* Высота чекбокса */
+}
+
+/* Стили для раздела управления чат-ботом */
+#admin-dashboard #chatbot-control h2 {
+  font-size: 20px; /* Размер шрифта для подзаголовков */
+  margin-bottom: 10px; /* Отступ снизу */
+}
+
+/* Метки */
+#admin-dashboard #chatbot-control label {
+  display: block; /* Блочное отображение меток */
+  margin-top: 10px; /* Отступ сверху */
+  font-weight: bold; /* Жирный шрифт для меток */
+}
+
+/* Ширина селекторов и текстовых областей */
+#admin-dashboard #chatbot-control select,
+#admin-dashboard #chatbot-control textarea,
+#admin-dashboard #chatbot-control input[type=text] {
+  width: 100%; /* Ширина элементов 100% от контейнера */
+  max-width: 100%; /* Максимальная ширина 100% */
+}
+
+/* Стили для кнопок */
+#admin-dashboard #chatbot-control button {
+  margin-top: 10px; /* Отступ сверху */
+  padding: 10px; /* Внутренние отступы */
+  background-color: #28a745; /* Зеленый цвет фона кнопки */
+  color: #fff; /* Белый цвет текста */
+  border: none; /* Убираем границу */
+  border-radius: 4px; /* Скругленные углы */
+  cursor: pointer; /* Курсор в виде указателя */
+  font-size: 16px; /* Размер шрифта */
+}
+
+#admin-dashboard #chatbot-control button:hover {
+  background-color: #218838; /* Темно-зеленый цвет фона при наведении */
+}
+
+/* Container im Chatbot-Verwaltungsbereich */
+#admin-dashboard #chatbot-control div {
+  padding: 10px; /* Внутренние отступы */
+  border-radius: 4px; /* Скругленные углы */
+  background-color: #fff; /* Белый фон */
+  max-width: 100%; /* Максимальная ширина 100% */
+}
+
+/* Стили для таблицы вопросов */
+#admin-dashboard #questions-table {
+  width: 100%; /* Ширина таблицы 100% */
+  border-collapse: collapse; /* Убираем промежутки между ячейками */
+  margin-top: 20px; /* Отступ сверху */
+}
+
+#admin-dashboard #questions-table th,
+#admin-dashboard #questions-table td {
+  border: 1px solid #ddd; /* Граница ячеек */
+  padding: 8px; /* Внутренние отступы ячеек */
+  text-align: left; /* Выравнивание текста по левому краю */
+  overflow-wrap: break-word; /* Перенос длинного текста в ячейках */
+}
+
+#admin-dashboard #questions-table th {
+  background-color: #f4f4f4; /* Светлый фон для заголовков таблицы */
+  font-weight: bold; /* Жирный шрифт для заголовков */
+}
+
+#admin-dashboard #questions-table tr:nth-child(even) {
+  background-color: #f9f9f9; /* Светлый фон для четных строк таблицы */
+}
+
+#admin-dashboard #questions-table tr:hover {
+  background-color: #eaeaea; /* Цвет фона строки при наведении */
+}
+
+/* Стили для кнопок редактирования и удаления в таблице */
+#admin-dashboard #questions-table .edit-button,
+#admin-dashboard #questions-table .delete-button {
+  margin-right: 5px;
+  padding: 5px 10px;
+  font-size: 14px;
+}
+
+/* Стили для кнопки редактирования */
+#admin-dashboard #questions-table .edit-button {
+  background-color: #ffc107;
+  color: #000;
+}
+
+#admin-dashboard #questions-table .edit-button:hover {
+  background-color: #e0a800;
+}
+
+/* Стили для кнопки удаления */
+#admin-dashboard #questions-table .delete-button {
+  background-color: #dc3545;
+  color: #fff;
+}
+
+#admin-dashboard #questions-table .delete-button:hover {
+  background-color: #c82333;
+}
+
+/* Стили для контейнера чат-бота */
+#admin-dashboard #chat-container {
+  margin-top: 20px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  background-color: #f9f9f9;
+}
+
+/* Заголовок чат-бота */
+#admin-dashboard #chat-header {
+  background-color: #f1f1f1;
+  padding: 10px;
+  border-bottom: 1px solid #ddd;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+#admin-dashboard #chat-header h2 {
+  margin: 0;
+}
+
+/* Кнопка закрытия чат-бота */
+#admin-dashboard #chat-close {
+  background: none;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+/* Стили для сообщений чат-бота */
+#admin-dashboard #chat-messages {
+  padding: 10px;
+  height: 300px;
+  overflow-y: auto;
+}
+
+/* Стили для футера чат-бота */
+#admin-dashboard #chat-footer {
+  padding: 10px;
+  border-top: 1px solid #ddd;
+  display: flex;
+  justify-content: space-between;
+}
+
+#admin-dashboard #chat-input {
+  flex: 1;
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+#admin-dashboard #chat-send-button {
+  padding: 8px 16px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+#admin-dashboard #chat-send-button:hover {
+  background-color: #0056b3;
+}
+
+/* Кнопка для открытия/закрытия чат-бота */
+#admin-dashboard #chat-toggle {
+  margin-top: 20px;
+  padding: 10px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+#admin-dashboard #chat-toggle:hover {
+  background-color: #0056b3;
+}
+
+/* Классы для скрытия элементов */
+.dash_hidden {
+  display: none;
+}
+
+.hidden {
+  display: none;
+}
+
+/* Стили для сообщений об ошибках */
+.alert {
+  color: red;
+}
+
+/* Класс для выделенных элементов */
+.selected {
+  background-color: #f0f0f0; /* Цвет выделения */
+}
+
+/* Стили для textarea */
+textarea {
+  width: 100%; /* Занимает всю ширину родительского контейнера */
+  height: auto;
+  white-space: normal; /* Разрешает перенос текста */
+  overflow-wrap: break-word; /* Перенос строк */
+}
+
+/* Стили для стилизованной таблицы */
+.styled-table {
+  border-collapse: collapse;
+  width: 100%;
+  margin: 20px 0;
+  font-size: 18px;
+  text-align: left;
+}
+
+.styled-table th, .styled-table td {
+  padding: 12px 15px;
+}
+
+.styled-table tr:hover {
+  background-color: #f1f1f1;
+}
+
+/* Stile für den Hauptabschnitt der Seite */
+.admin-login-main {
+  max-width: 400px;
+  margin: auto;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Hinzufügen eines Schattens für eine bessere visuelle Trennung */
+  margin-bottom: 50px; /* Fügen Sie unten eine Polsterung hinzu */
+}
+
+/* Stile für den Admin-Login-Bereich */
+.admin-login-section {
+  margin: 0;
+}
+
+/* Fehlermeldungsstile */
+.admin-login-error-message {
+  color: red;
+  margin-bottom: 15px; /* am Ende der Fehlermeldung einen Einzug hinzufügen */
+}
+
+/* Stile für den Passwortcontainer */
+.admin-password-container {
+  position: relative;
+  margin-bottom: 15px;
+  display: flex;
+  flex-direction: column; /* Richtungswechsel zur Säule */
+}
+
+/* Stile für den Container mit den Kennwortanzeigeoptionen */
+.admin-password-options {
+  display: flex; /* Elemente in einer Linie anordnen */
+  align-items: center; /* Vertikal ausrichten der Elemente */
+  margin-top: 10px; /* Abstand oben hinzufügen, um es vom Passwort-Eingabefeld zu trennen */
+  margin-bottom: 15px;
+}
+
+/* Checkbox-Stile */
+.admin-password-options input[type=checkbox] {
+  margin-right: 5px; /* Rechts neben dem Kontrollkästchen einrücken */
+  width: 15px; /* Festlegen der Breite des Kontrollkästchens */
+}
+
+/* Stile für die Kontrollkästchenbeschriftung */
+.admin-password-options label {
+  cursor: pointer; /* Setzt den Cursor auf Zeiger */
+  font-size: 14px; /* Schriftgröße der Beschriftung */
+  color: #333; /* Textfarbe der Beschriftung */
+}/*# sourceMappingURL=main.css.map */

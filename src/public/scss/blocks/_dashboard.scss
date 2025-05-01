@@ -1,0 +1,284 @@
+/* Основные стили для панели управления */
+#admin-dashboard {
+    font-family: Arial, sans-serif; /* Шрифт для панели управления */
+    padding: 20px; /* Отступы вокруг панели */
+}
+
+/* Заголовок */
+#admin-dashboard h1 {
+    color: #333; /* Цвет текста заголовка */
+    font-size: 24px; /* Размер шрифта заголовка */
+}
+
+/* Параграфы */
+#admin-dashboard p {
+    font-size: 16px; /* Размер шрифта для параграфов */
+}
+
+/* Ссылки */
+#admin-dashboard a {
+    color: #0066cc; /* Цвет текста ссылок */
+    text-decoration: none; /* Убираем подчеркивание ссылок */
+}
+
+#admin-dashboard a:hover {
+    text-decoration: underline; /* Подчеркивание при наведении на ссылку */
+}
+
+/* Ограничение ширины раздела управления чат-ботом */
+#admin-dashboard #chatbot-control {
+    margin-top: 20px; /* Отступ сверху */
+    padding: 20px; /* Внутренние отступы */
+    border: 1px solid #ddd; /* Граница */
+    border-radius: 4px; /* Скругленные углы */
+    background-color: #f9f9f9; /* Фоновый цвет */
+    max-width: 800px; /* Устанавливаем максимальную ширину */
+    margin-left: auto; /* Центрируем элемент по горизонтали */
+    margin-right: auto; /* Центрируем элемент по горизонтали */
+}
+
+/* Стили для чекбокса управления чат-ботом */
+#admin-dashboard #chatbot-control-toggle {
+    display: inline-block; /* Инлайн-блок, чтобы элемент имел ширину по содержимому */
+    margin-top: 20px; /* Отступ сверху */
+    border: 1px solid #ddd; /* Граница */
+    padding: 10px; /* Внутренние отступы */
+    border-radius: 4px; /* Скругленные углы */
+    background-color: #f9f9f9; /* Фоновый цвет */
+    white-space: nowrap; /* Запрещаем перенос текста */
+}
+
+#admin-dashboard #chatbot-control-toggle label {
+    margin-right: 10px; /* Отступ справа от метки */
+    font-size: large; /* Размер шрифта для метки */
+}
+
+#admin-dashboard #chatbot-control-toggle input[type="checkbox"] {
+    width: 14px; /* Ширина чекбокса */
+    height: 14px; /* Высота чекбокса */
+}
+
+/* Стили для раздела управления чат-ботом */
+#admin-dashboard #chatbot-control h2 {
+    font-size: 20px; /* Размер шрифта для подзаголовков */
+    margin-bottom: 10px; /* Отступ снизу */
+}
+
+/* Метки */
+#admin-dashboard #chatbot-control label {
+    display: block; /* Блочное отображение меток */
+    margin-top: 10px; /* Отступ сверху */
+    font-weight: bold; /* Жирный шрифт для меток */
+}
+
+/* Ширина селекторов и текстовых областей */
+#admin-dashboard #chatbot-control select,
+#admin-dashboard #chatbot-control textarea,
+#admin-dashboard #chatbot-control input[type="text"] {
+    width: 100%; /* Ширина элементов 100% от контейнера */
+    max-width: 100%; /* Максимальная ширина 100% */
+}
+
+/* Стили для кнопок */
+#admin-dashboard #chatbot-control button {
+    margin-top: 10px; /* Отступ сверху */
+    padding: 10px; /* Внутренние отступы */
+    background-color: #28a745; /* Зеленый цвет фона кнопки */
+    color: #fff; /* Белый цвет текста */
+    border: none; /* Убираем границу */
+    border-radius: 4px; /* Скругленные углы */
+    cursor: pointer; /* Курсор в виде указателя */
+    font-size: 16px; /* Размер шрифта */
+}
+
+#admin-dashboard #chatbot-control button:hover {
+    background-color: #218838; /* Темно-зеленый цвет фона при наведении */
+}
+
+/* Container im Chatbot-Verwaltungsbereich */
+#admin-dashboard #chatbot-control div {
+    padding: 10px; /* Внутренние отступы */
+    border-radius: 4px; /* Скругленные углы */
+    background-color: #fff; /* Белый фон */
+    max-width: 100%; /* Максимальная ширина 100% */
+}
+
+/* Стили для таблицы вопросов */
+#admin-dashboard #questions-table {
+    width: 100%; /* Ширина таблицы 100% */
+    border-collapse: collapse; /* Убираем промежутки между ячейками */
+    margin-top: 20px; /* Отступ сверху */
+}
+
+#admin-dashboard #questions-table th, 
+#admin-dashboard #questions-table td {
+    border: 1px solid #ddd; /* Граница ячеек */
+    padding: 8px; /* Внутренние отступы ячеек */
+    text-align: left; /* Выравнивание текста по левому краю */
+    overflow-wrap: break-word; /* Перенос длинного текста в ячейках */
+}
+
+#admin-dashboard #questions-table th {
+    background-color: #f4f4f4; /* Светлый фон для заголовков таблицы */
+    font-weight: bold; /* Жирный шрифт для заголовков */
+}
+
+#admin-dashboard #questions-table tr:nth-child(even) {
+    background-color: #f9f9f9; /* Светлый фон для четных строк таблицы */
+}
+
+#admin-dashboard #questions-table tr:hover {
+    background-color: #eaeaea; /* Цвет фона строки при наведении */
+}
+
+/* Стили для кнопок редактирования и удаления в таблице */
+#admin-dashboard #questions-table .edit-button, 
+#admin-dashboard #questions-table .delete-button {
+    margin-right: 5px;
+    padding: 5px 10px;
+    font-size: 14px;
+}
+
+/* Стили для кнопки редактирования */
+#admin-dashboard #questions-table .edit-button {
+    background-color: #ffc107;
+    color: #000;
+}
+
+#admin-dashboard #questions-table .edit-button:hover {
+    background-color: #e0a800;
+}
+
+/* Стили для кнопки удаления */
+#admin-dashboard #questions-table .delete-button {
+    background-color: #dc3545;
+    color: #fff;
+}
+
+#admin-dashboard #questions-table .delete-button:hover {
+    background-color: #c82333;
+}
+
+/* Стили для контейнера чат-бота */
+#admin-dashboard #chat-container {
+    margin-top: 20px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    background-color: #f9f9f9;
+}
+
+/* Заголовок чат-бота */
+#admin-dashboard #chat-header {
+    background-color: #f1f1f1;
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+#admin-dashboard #chat-header h2 {
+    margin: 0;
+}
+
+/* Кнопка закрытия чат-бота */
+#admin-dashboard #chat-close {
+    background: none;
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+}
+
+/* Стили для сообщений чат-бота */
+#admin-dashboard #chat-messages {
+    padding: 10px;
+    height: 300px;
+    overflow-y: auto;
+}
+
+/* Стили для футера чат-бота */
+#admin-dashboard #chat-footer {
+    padding: 10px;
+    border-top: 1px solid #ddd;
+    display: flex;
+    justify-content: space-between;
+}
+
+#admin-dashboard #chat-input {
+    flex: 1;
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+#admin-dashboard #chat-send-button {
+    padding: 8px 16px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+#admin-dashboard #chat-send-button:hover {
+    background-color: #0056b3;
+}
+
+/* Кнопка для открытия/закрытия чат-бота */
+#admin-dashboard #chat-toggle {
+    margin-top: 20px;
+    padding: 10px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+#admin-dashboard #chat-toggle:hover {
+    background-color: #0056b3;
+}
+
+/* Классы для скрытия элементов */
+.dash_hidden {
+    display: none;
+}
+
+.hidden { 
+    display: none; 
+}
+
+/* Стили для сообщений об ошибках */
+.alert { 
+    color: red; 
+}
+
+/* Класс для выделенных элементов */
+.selected {
+    background-color: #f0f0f0; /* Цвет выделения */
+}
+
+/* Стили для textarea */
+textarea {
+    width: 100%; /* Занимает всю ширину родительского контейнера */
+    height: auto;
+    white-space: normal; /* Разрешает перенос текста */
+    overflow-wrap: break-word; /* Перенос строк */
+}
+
+/* Стили для стилизованной таблицы */
+.styled-table {
+    border-collapse: collapse;
+    width: 100%;
+    margin: 20px 0;
+    font-size: 18px;
+    text-align: left;
+}
+
+.styled-table th, .styled-table td {
+    padding: 12px 15px;
+}
+
+.styled-table tr:hover {
+    background-color: #f1f1f1;
+}

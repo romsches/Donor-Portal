@@ -1,0 +1,69 @@
+/* SpecialFooter Styles */
+/* Footer Container */
+.footer_container {
+    padding: 5px;
+    background-size: 400% 400%; /* Hintergrundgröße für den Verlauf */
+    background-image: linear-gradient(
+        -45deg, /* Diagonaler Farbverlauf */
+        hsl(0, 100%, 50%), /* Farbwerte für den Verlauf */
+        hsl(0, 63%, 28%),
+        hsl(0, 97%, 34%),
+        hsl(0, 100%, 60%)
+    );
+    animation: diagonal 8s infinite alternate; /* Animation für den Hintergrund */
+    color: white; /* Textfarbe weiß */
+    text-align: center; /* Text zentrieren */
+}
+
+/* Links im Footer */
+.footer_container .links {
+    list-style: none; /* Keine Aufzählungszeichen */
+    padding: 0; /* Kein Padding */
+    display: flex; /* Flexbox für horizontale Ausrichtung */
+    justify-content: center; /* Zentrierte Anordnung der Links */
+    margin-left: 15px;
+}
+
+.footer_container .links a {
+    text-decoration: none; /* Keine Unterstreichung */
+    color: inherit; /* Erbt die Textfarbe */
+    margin: 0 10px; /* Abstand zwischen den Links */
+    transition: color 0.3s ease; /* Sanfter Farbwechsel beim Hover-Effekt */
+}
+
+.footer_container .links a:hover {
+    color: #ddd; /* Hover-Farbe für Links */
+}
+
+/* App-Icons im Footer */
+.footer_container .apps {
+    display: flex; /* Flexbox für horizontale Ausrichtung der Symbole */
+    justify-content: center; /* Zentrierte Anordnung der Symbole */
+    align-items: center; /* Vertikale Zentrierung */
+    margin-top: 5px; /* Abstand zwischen Links und Symbolen */
+    margin-bottom: 5px; /* Abstand nach unten */
+}
+
+.footer_container .apps a {
+    display: inline-block; /* Symbole in einer Reihe anzeigen */
+    margin: 0 10px; /* Abstand zwischen den Symbolen */
+    transition: transform 0.3s ease; /* Sanfter Übergang beim Skalieren */
+}
+
+.footer_container .apps img {
+    width: 30px; /* Symbolgröße */
+}
+
+.footer_container .apps a:hover {
+    transform: scale(1.2); /* Vergrößern der Symbole beim Hover-Effekt */
+}
+
+/* Entfernen des rechten Abstands beim letzten Symbol */
+.footer_container .apps a:last-child {
+    margin-right: 0; /* Kein zusätzlicher Abstand nach dem letzten Symbol */
+}
+
+/* Transparenz für die Symbole beim Hover-Effekt */
+.footer_container .apps a img:hover {
+    opacity: 0.7; /* Transparenz beim Hover-Effekt */
+}

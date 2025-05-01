@@ -1,0 +1,51 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "Launch Program",
+            "skipFiles": [
+                "<node_internals>/**"
+            ],
+            const express = require("express");
+const mysql = require("mysql");
+const config = require("./config.json");
+
+const app = express();
+const port = 3000;
+
+const db = mysql.createConnection(config.dbConfig);
+
+db.connect(err => {
+    if (err) {
+        console.error("ERROR", err);
+        return err;
+    } else {
+        console.log("SUCCESS");
+    }
+});
+
+app.get("/users", (req, res) => {
+    const sql = "SELECT * FROM urTable"; // Bitte ersetzen Sie "urTable" durch den tatsächlichen Tabellennamen
+    db.query(sql, (err, result) => {
+        if (err) {
+            console.error("ERROR", err);
+            res.status(500).send("ERROR FROM SERVER");
+        } else {
+            res.json(result);
+        }
+    });
+});
+
+app.listen(port, () => {
+    console.log(`Server läuft auf Port ${port}`);
+});
+
+              
+        }
+    ]
+}

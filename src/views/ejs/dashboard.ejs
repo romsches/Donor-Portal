@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+    <link rel="stylesheet" href="/css/main.css">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
+</head>
+<body>
+    <!-- Header und Logo -->
+    <special-header></special-header>
+    <special-logo></special-logo>
+
+    <main id="admin-dashboard">
+        <section class="dashboard">
+            <h1>Admin-Dashboard</h1>
+            <p>Willkommen, <%= adminName %>!</p>
+            <p><a href="#" id="logout-link">Abmelden</a></p>
+
+            <% if (privileges.includes('admin')) { %>
+            <!-- Chatbot-Management -->
+            <div id="chatbot-control-toggle">
+                <label for="chatbot-control-checkbox">Chatbot Steuerung</label>
+                <input type="checkbox" id="chatbot-control-checkbox">
+            </div>
+
+            <div id="chatbot-control" style="display:none;">
+                <h2>Chatbot-Verwaltung</h2>
+
+                <!-- Auswählen einer Aktion für einen Chatbot -->
+                <label for="action-select">Wählen Sie eine Aktion:</label>
+                <select id="action-select">
+                    <option value="">Aktion auswählen</option>
+                    <option value="view">Fragen und Antworten bearbeiten</option>
+                </select>
+
+                <!-- Sektionsauswahlcontainer -->
+                <div id="section-container" style="display:none;">
+                    <label for="chatbot-sections">Wählen Sie eine Sektion:</label>
+                    <select id="chatbot-sections">
+                        <option value="">Alle Sektionen</option>
+                    </select>
+                </div>
+
+                <!-- Container für Fragentabelle -->
+                <div id="questions-table-container" style="display:none;">
+                    <div id="button-container">
+                        <button id="submit-edit">Bearbeiten</button>
+                        <button id="submit-delete">Datensatz löschen</button>
+                        <button id="submit-insert">Einfügen</button>
+                        <button id="submit-delete-section">Sektion löschen</button>
+                    </div>
+
+                    <!-- Bestätigungsschaltflächen löschen -->
+                    <div id="confirm-buttons" class="dash_hidden">
+                        <button id="confirm-button">Bestätigen</button>
+                        <button id="cancel-button">Abbrechen</button>
+                    </div>
+
+                    <!-- Nachricht, die gelöscht werden soll -->
+                    <div id="delete-message" class="dash_hidden">
+                        <p id="delete-instruction" style="color: red;">Wählen Sie die Zeile, die Sie löschen möchten:</p>
+                        <p>ID: <span id="delete-id">undefined</span>, Section: <span id="delete-section">undefined</span></p>
+                    </div>
+
+                    <!-- Behälter zur Sektionsentnahme -->
+                    <div id="delete-section-container-admin" class="dash_hidden">
+                        <label for="section-select-admin">Wählen Sie eine Sektion:</label>                     
+                        <div id="confirm-buttons-admin" class="dash_hidden">
+                            <button id="confirm-delete-button-admin">Bestätigen</button>
+                            <button id="cancel-delete-button-admin">Abbrechen</button>
+                        </div>
+                        <div id="section-table-container"></div>
+                        <div id="section-info-admin" class="dash_hidden">
+                            <p>Information über die Sektion:</p>
+                            <p>ID: <span id="section-id-admin">undefined</span></p>
+                            <p>Name: <span id="section-name-admin">undefined</span></p>
+                            <p>Anzahl der Fragen: <span id="section-count-admin">0</span></p>
+                        </div>
+                                    
+                        <div id="warning-message-admin" class="dash_hidden">
+                            <p style="color: red;">Möchten Sie wirklich die Sektion mit der ID <span id="warning-section-id-admin"></span> löschen?</p>
+                        </div>
+                    </div>
+
+                    <!-- Formular zum Bearbeiten einer Frage -->
+                    <div id="edit-form-container" class="dash_hidden">
+                        <h2>Frage bearbeiten</h2>
+                        <button id="edit_confirm_button" type="submit">Bestätigen</button>
+                        <button id="back-edit-button">Abbrechen</button>
+                        <div id="edit-instruction" class="dash_hidden">
+                            <p>Bitte wählen Sie eine Zeile, um sie zu bearbeiten:</p>
+                        </div>                        
+                        <form id="edit-form">
+                            <label for="edit-section">Sektion:</label>
+                            <textarea id="edit-section" required></textarea>
+
+                            <label for="edit-question">Frage:</label>
+                            <textarea id="edit-question" required></textarea>
+
+                            <label for="edit-answer">Antwort:</label>
+                            <textarea id="edit-answer" required></textarea>
+                        </form>
+                    </div>
+
+
+                    <!-- Tisch mit Fragen -->
+                    <table id="questions-table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Section</th>
+                                <th>Question</th>
+                                <th>Answer</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Dynamisch geladene Strings -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Formular zum Hinzufügen einer neuen Frage -->
+            <div id="insert-form-container" class="dash_hidden">
+                <h2>Neue Frage hinzufügen</h2>
+                <button id="back-button">Zurück</button>
+                <form id="insert-form">
+                    <label for="insert-section">Sektion:</label>
+                    <input type="text" id="insert-section" required>
+                    <label for="insert-question">Frage:</label>
+                    <input type="text" id="insert-question" required>
+                    <label for="insert-answer">Antwort:</label>
+                    <input type="text" id="insert-answer" required>
+                    <button type="submit">Hinzufügen</button>
+                </form>
+            </div>
+            <% } %> <!-- Ende der Überprüfung der Administratorrechte -->
+            <% if (privileges.includes('editor') || privileges.includes('admin')) { %>
+                <h1>MANAGER CONTENT</h1>
+                <br>
+            <% } %> <!-- Ende der Überprüfung der Managerrechte -->
+        </section>
+    </main>
+    <p>Sie verfügen die Privilegien für: <%= JSON.stringify(privileges) %></p>
+
+
+    <!-- Fußzeile -->
+    <special-footer></special-footer>
+        <!-- Chat-Container -->
+        <div id="chat-container">
+            <div id="chat-header">
+                <h2>Chat</h2>
+                <button id="chat-close">&times;</button>
+            </div>
+            <div id="chat-messages"></div>
+            <div id="chat-footer">
+                <input type="text" id="chat-input" placeholder="Geben Sie Ihre Nachricht ein...">
+                <button id="chat-send-button">Senden</button>
+            </div>
+        </div>
+
+        <button id="chat-toggle">Chatbot öffnen</button>
+    <!-- scripts -->
+    <script>
+        let isNavigatingAway = false;
+
+        // Beenden der Sitzung beim Verlassen der Seite
+        window.addEventListener('beforeunload', function (e) {
+            if (isNavigatingAway) {
+                fetch('/admin/logout', {
+                    method: 'POST',
+                    credentials: 'same-origin'
+                }).then(response => {
+                    if (response.ok) {
+                        console.log('Session ended');
+                    } else {
+                        console.error('Failed to end session');
+                    }
+                });
+            }
+        });
+
+        // Verarbeitung von Linkklicks
+        document.addEventListener('click', function (e) {
+            const target = e.target;
+            if (target.tagName === 'A' && target.href) {
+                isNavigatingAway = true;
+            }
+        });
+
+        // Der Umgang geht zurück in die Geschichte
+        window.addEventListener('popstate', function (e) {
+            isNavigatingAway = true;
+        });
+    </script>
+    <script>
+        // Übergabe der Privilegienvariablen an Client-JavaScript
+        const privileges = "<%= JSON.stringify(privileges) %>";
+    </script>
+    
+    <script src="/js/main.js"></script>
+    <script src="/js/dashboard.js"></script>
+    <script src="/js/chatbot.js"></script>
+</body>
+</html>

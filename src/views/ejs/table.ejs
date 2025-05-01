@@ -1,0 +1,119 @@
+<% var alreadyRendered = false; %> <!-- Variable zur Vermeidung doppelter Renderings -->
+
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Table</title>
+    <link rel="stylesheet" href="/css/main.css"> <!-- Verlinkung des CSS-Stylesheets für das Design der Seite -->
+</head>
+<body>
+    <special-header></special-header> <!-- Benutzerdefinierter Header, der das Design der Seite festlegt -->
+    <special-logo></special-logo> <!-- Benutzerdefiniertes Logo, das in der Kopfzeile angezeigt wird -->
+    <main>
+        <section class="section_container">
+            <div>
+                <div class="filter">
+                    <div>
+                        <% if (canDonate) { %>
+                            <!-- Wenn der Benutzer spenden darf, wird dieser Abschnitt angezeigt -->
+                            <h1>Sie dürfen spenden</h1>
+                        <% } else { %>
+                            <!-- Wenn der Benutzer nicht spenden darf, wird dieser Abschnitt angezeigt -->
+                            <h1>Sie können derzeit nicht spenden.</h1>
+                            <div id="donation-info">
+                                <!-- Information für Benutzer
+
+                                <p>Die Tabelle ist derzeit nicht verfügbar.</p>
+                            </div>
+                        <% } %>
+                    </div>
+                    <span>Nächste Blutspende-Termine</span>
+                    <h2>Filtern nach Ort</h2>
+                    <select id="location-filter" name="location" onchange="refreshTable()">
+                        <option value="Alle Standorte">Alle Standorte</option> <!-- Default option for all locations -->
+                        <!-- You should populate this with dynamic locations -->
+                    </select>
+                    <div class="filter_btn">
+                        <h2>Datum auswählen</h2>
+                        <input type="date" name="date" id="dtm" maxlength="4" pattern="\d{4}" title="Vier Ziffern für das Jahr eingeben" required>
+                        <button id="updateButton" onclick="refreshTable()">Aktualisieren</button>
+                    </div>
+                </div>
+            </div>
+            <div class="standorte">
+                <% if (canDonate) { %>
+                    <table id="meeting-table" border="1">
+                        <thead>
+                            <tr>
+                                <th class="one">Datum</th>
+                                <% if (selectedLocation === 'Alle Standorte') { %>
+                                    <th class="two">Straße (Stadt)</th>
+                                <% } else { %>
+                                    <th class="two">Straße</th>
+                                <% } %>
+                                <th class="three">Uhrzeit (von - bis)</th>
+                                <th class="four">Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% for (let i = 0; i < meetings.length; i++) { %>
+                                <tr>
+                                    <td><%= new Date(meetings[i].Datum).toLocaleDateString('de-DE') %></td>
+                                    <% if (selectedLocation === 'Alle Standorte') { %>
+                                        <td><%= meetings[i].Strasse %> (<%= meetings[i].Stadt %>)</td>
+                                    <% } else { %>
+                                        <td><%= meetings[i].Strasse %></td>
+                                    <% } %>
+                                    <td><%= meetings[i].Uhrzeit %></td>
+                                    <td><%= meetings[i].Status %></td>
+                                </tr>
+                            <% } %>
+                        </tbody>
+                    </table>
+                <% } else { %>
+                    <div id="donation-info">
+                        <p>Sie können derzeit nicht spenden.</p>
+                    </div>
+                    <div id="no-donation-info">
+                        <p>Die Tabelle ist derzeit nicht verfügbar.</p>
+                    </div>
+                <% } %>
+            </div>
+            <div class="kontakt">
+                <p>Haben Sie Fragen?</p>
+                <p>Kontaktieren Sie unsere Hotline.</p>
+                <a href="#">Kontakt aufnehmen</a>
+            </div>
+        
+            <!-- HTML für den Chat -->
+            <div id="chat-container">
+                <div id="chat-header">
+                    <h2>Chat</h2>
+                    <button id="chat-close">&times;</button>
+                </div>
+                <div id="chat-messages"></div>
+                <div id="chat-footer">
+                    <input type="text" id="chat-input" placeholder="Ihre Nachricht...">
+                    <button id="chat-send-button">Senden</button>
+                </div>
+            </div>
+            <button id="chat-toggle">Chatbot öffnen</button>
+            
+        </section>        
+    </main>
+    <special-footer></special-footer> <!-- Benutzerdefinierter Footer -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() { // Warten auf DOMContentLoaded 
+            initializeLogoutTimer(); // Initialisierung des Logout-Timers 
+            setMinDate(); // Setzen des minimalen Datums 
+            setInitialDate(); // Setzen des Initialdatums 
+            refreshTable(); // Initiales Laden der Tabelle 
+            loadCities(); // Laden der Städte in den Filter 
+        });
+    </script>
+    <script src="/js/table.js"></script> <!-- Verlinkung des JavaScript-Files für die Tabelle Seite -->
+    <script src="/js/chatbot.js"></script>
+</body>
+</html>

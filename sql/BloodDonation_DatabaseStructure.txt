@@ -1,0 +1,139 @@
+###############################################################################
+# Database Structure: Blood Donation Management
+#
+# This structure is designed for the efficient management of information
+# related to blood donations, blood donors, appointments, locations, and
+# associated aspects. The modular design ensures flexibility, data integrity,
+# and optimized performance through the use of indexes and foreign keys.
+###############################################################################
+
+-- TABLE: spender
+-- Contains information about registered blood donors.
+-------------------------------------------------------------------------------
+CREATE TABLE spender (
+    blutspender_id VARCHAR(15) PRIMARY KEY, -- Unique ID of the donor
+    letzte_spende_datum DATE,              -- Date of the last blood donation
+    INDEX (blutspender_id)                 -- Index for quick search of donors
+);
+
+-- TABLE: spende
+-- Records details of individual blood donation events.
+-------------------------------------------------------------------------------
+CREATE TABLE spende (
+    spende_id INT PRIMARY KEY,              -- Unique ID of the donation
+    blutspender_id VARCHAR(15),            -- Foreign key to spender (Donor)
+    termin_id INT,                        -- Foreign key to spendetermine (Appointment)
+    FOREIGN KEY (blutspender_id) REFERENCES spender(blutspender_id),
+    FOREIGN KEY (termin_id) REFERENCES spendetermine(termin_id),
+    INDEX (blutspender_id),              -- Index for searching donations by donor
+    INDEX (termin_id)                    -- Index for searching donations by appointment
+);
+
+-- TABLE: spendetermine
+-- Manages information about planned and past blood donation appointments.
+-------------------------------------------------------------------------------
+CREATE TABLE spendetermine (
+    termin_id INT PRIMARY KEY,              -- Unique ID of the appointment
+    orts_id VARCHAR(15),                  -- Foreign key to ort (Location of the appointment)
+    status_id INT,                        -- Foreign key to status (Status of the appointment)
+    datum DATE,                           -- Date of the appointment
+    uhrzeit_von TIME,                     -- Start time of the appointment
+    uhrzeit_bis TIME,                     -- End time of the appointment
+    termin_gruppe VARCHAR(50),              -- Group assignment of the appointment (e.g., blood type)
+    terminplatz VARCHAR(50),                -- Designation of the slot within the appointment
+    FOREIGN KEY (orts_id) REFERENCES ort(orts_id),
+    FOREIGN KEY (status_id) REFERENCES status(status_id),
+    INDEX (orts_id),                      -- Index for searching appointments at a location
+    INDEX (status_id),                    -- Index for searching appointments by status
+    INDEX (datum, uhrzeit_von)            -- Index for time-based searches
+);
+
+-- TABLE: ort
+-- Contains details about the locations where blood donation appointments take place.
+-------------------------------------------------------------------------------
+CREATE TABLE ort (
+    orts_id VARCHAR(15) PRIMARY KEY,      -- Unique ID of the location
+    name VARCHAR(50),                     -- Name of the location
+    strasse VARCHAR(50),                  -- Street of the location
+    stadt VARCHAR(20),                    -- City of the location
+    PLZ INT,                            -- Postal code of the location
+    INDEX (name),                       -- Index for searching by location name
+    INDEX (stadt),                      -- Index for searching by city
+    INDEX (PLZ)                         -- Index for searching by postal code
+);
+
+-- TABLE: status
+-- Defines the possible status values for blood donation appointments.
+-------------------------------------------------------------------------------
+CREATE TABLE status (
+    status_id INT PRIMARY KEY,            -- Unique ID of the status
+    status VARCHAR(30),                 -- Description of the status (e.g., Planned, Cancelled)
+    INDEX (status)                      -- Index for searching by status description
+);
+
+-- TABLE: chat_faq
+-- Stores frequently asked questions and their answers.
+-------------------------------------------------------------------------------
+CREATE TABLE chat_faq (
+    id INT PRIMARY KEY,                   -- Unique ID of the FAQ entry
+    section_id INT,                     -- Foreign key to faq_sections (Section)
+    question VARCHAR(255),                -- The question
+    answer TEXT,                        -- The answer
+    FOREIGN KEY (section_id) REFERENCES faq_sections(id),
+    INDEX (section_id),                 -- Index for searching questions within a section
+    FULLTEXT (question, answer)          -- Full-text index for keyword search
+);
+
+-- TABLE: faq_sections
+-- Categorizes frequently asked questions into different sections.
+-------------------------------------------------------------------------------
+CREATE TABLE faq_sections (
+    id INT PRIMARY KEY,                   -- Unique ID of the section
+    section_name VARCHAR(50),            -- Name of the section
+    INDEX (section_name)                -- Index for searching by section name
+);
+
+-- TABLE: admins
+-- Contains information about database administrators.
+-------------------------------------------------------------------------------
+CREATE TABLE admins (
+    admin_id INT PRIMARY KEY,             -- Unique ID of the administrator
+    username VARCHAR(50) UNIQUE,          -- Username of the administrator (unique)
+    password VARCHAR(255),                -- Encrypted password of the administrator
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, -- Timestamp of account creation
+    INDEX (username)                    -- Index for searching by username
+);
+
+-- TABLE: admin_permission
+-- Links administrators with their specific permissions.
+-------------------------------------------------------------------------------
+CREATE TABLE admin_permission (
+    admin_id INT,                       -- Foreign key to admins (Administrator)
+    permission VARCHAR(50),             -- Assigned permission
+    FOREIGN KEY (admin_id) REFERENCES admins(admin_id),
+    INDEX (admin_id),                   -- Index for searching permissions of an admin
+    INDEX (permission)                 -- Index for searching by permission
+);
+
+###############################################################################
+# RELATIONSHIPS BETWEEN TABLES (Summary)
+#
+# - The 'spende' table establishes a connection via foreign keys to
+#   'spender' (who donated) and 'spendetermine' (at which appointment).
+#
+# - 'spendetermine' is linked to 'ort' (where the appointment takes place) and
+#   'status' (the current status of the appointment) through foreign keys.
+#
+# - 'chat_faq' references 'faq_sections' to organize questions thematically.
+#
+# - 'admin_permission' links 'admins' with their individual rights.
+###############################################################################
+
+###############################################################################
+# ADVANTAGES OF THIS STRUCTURE (Summary)
+#
+# - CLARITY AND ORGANIZATION: Logical organization of data into tables.
+# - FLEXIBILITY: Scalability for future requirements.
+# - EFFICIENCY: Faster search operations through indexes.
+# - DATA INTEGRITY: Ensuring consistency through foreign keys.
+###############################################################################

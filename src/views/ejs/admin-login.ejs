@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Login</title>
+    <link rel="stylesheet" href="/css/main.css"> <!-- Verweis auf die CSS-Datei für das Layout -->
+</head>
+<body class="admin-login-page">
+    <!-- Benutzerdefinierter Header -->
+    <special-header></special-header>
+    <!-- Benutzerdefiniertes Logo -->
+    <special-logo></special-logo>
+    
+    <main class="admin-login-main">
+        <section class="admin-login-section">
+            <h1>Admin Login</h1>
+            <!-- Fehlermeldung, falls Fehler beim Login auftreten -->
+            <% if (typeof error !== 'undefined') { %>
+                <p class="admin-login-error-message"><%= error %></p>
+            <% } %>
+            
+            <!-- Formular für die Anmeldung des Administrators -->
+            <form action="/admin/login" method="post">
+                <legend>Login</legend>
+
+                <!-- Label und Eingabefeld für die Admin ID -->
+                <label for="adminID">Admin ID:</label>
+                <input type="text" id="adminID" name="username" required>
+                <!-- Fehlermeldungen für die Admin ID werden hier angezeigt, wenn erforderlich -->
+
+                <!-- Label und Eingabefeld für das Passwort -->
+                <label for="password">Password:</label>
+                <div class="admin-password-container">
+                    <input type="password" id="password" name="password" required>
+                </div>
+                <!-- Fehlermeldungen für das Passwort werden hier angezeigt, wenn erforderlich -->
+
+                <!-- Absende-Button für das Formular -->
+                <button type="submit">Login</button>
+            </form>
+        </section>
+    </main>
+
+    <!-- Benutzerdefinierter Footer -->
+    <special-footer></special-footer>
+    <!-- Chat-Container -->
+    <div id="chat-container">
+        <div id="chat-header">
+            <h2>Chat</h2>
+            <button id="chat-close">&times;</button>
+        </div>
+        <div id="chat-messages"></div>
+        <div id="chat-footer">
+            <input type="text" id="chat-input" placeholder="Geben Sie Ihre Nachricht ein...">
+            <button id="chat-send-button">Senden</button>
+        </div>
+    </div>
+
+    <button id="chat-toggle">Chatbot öffnen</button>
+
+    <!-- Verweis auf die JavaScript-Dateien für interaktive Funktionen -->
+    <script src="/js/main.js"></script>
+    <script src="/js/chatbot.js"></script> 
+    <script src="/js/admin-login.js"></script> <!-- Die JS-Datei für das Admin-Login einbinden -->
+</body>
+</html>

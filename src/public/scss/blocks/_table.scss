@@ -1,0 +1,187 @@
+/* Allgemeine Stile */
+
+/* Stile für den Abschnitts-Container */
+.section_container {
+    display: flex; /* Flexbox verwenden, um Elemente zu ordnen */
+    align-items: center; /* Vertikale Ausrichtung der Elemente */
+    justify-content: center; /* Horizontale Ausrichtung der Elemente */
+    align-content: flex-end; /* Ausrichtung des Inhalts am unteren Ende des Containers */
+    flex-wrap: nowrap; /* Elemente sollen nicht in eine neue Zeile umbrechen */
+    flex-direction: column; /* Elemente werden in einer Spalte angeordnet */
+    margin-top: 30px; /* Abstand oben */
+}
+
+/* Stile für den Filter */
+.filter h1 {
+    color: hsl(0, 100%, 50%); /* Rote Farbe für die Überschrift */
+    font-size: xxx-large; /* Sehr große Schriftgröße */
+    margin-bottom: 20px; /* Abstand nach unten */
+    margin-top: -70px; /* Abstand nach oben */
+    display: flex; /* Flexbox für die Ausrichtung */
+    justify-content: center; /* Zentrierung der Inhalte horizontal */
+    padding: 10px; /* Innenabstand um den Text */
+    align-items: center; /* Zentrierung der Inhalte vertikal */
+    text-align: center; /* Text zentrieren */
+}
+
+.filter h2 {
+    display: flex; /* Flexbox für die Ausrichtung */
+    justify-content: center; /* Zentrierung der Inhalte horizontal */
+    padding: 8px; /* Innenabstand um den Text */
+    align-items: center; /* Zentrierung der Inhalte vertikal */
+    text-align: center; /* Text zentrieren */
+}
+
+.filter select {
+    -moz-appearance: none; /* Entfernen des Standardstils in Firefox */
+    appearance: none; /* Entfernen des Standardstils in anderen Browsern */
+    border: none; /* Keine Randlinie */
+    width: 200px; /* Breite des Auswahlfeldes */
+    height: 40px; /* Höhe des Auswahlfeldes */
+    background-color: rgb(200, 17, 17); /* Roter Hintergrund */
+    color: aliceblue; /* Weiße Textfarbe */
+    font-size: 16px; /* Schriftgröße */
+    margin-bottom: 5px; /* Abstand nach unten */
+    margin-top: 10px; /* Abstand nach oben */
+    border-radius: 5px; /* Abgerundete Ecken */
+    text-align: center; /* Text zentrieren */
+}
+
+select::-ms-expand {
+    display: none; /* Entfernen des Dropdown-Icons in Internet Explorer */
+}
+
+.filter_btn {
+    display: flex; /* Flexbox für die Ausrichtung */
+    align-items: center; /* Vertikale Ausrichtung der Inhalte */
+    justify-content: center; /* Horizontale Ausrichtung der Inhalte */
+    align-content: flex-end; /* Ausrichtung des Inhalts am unteren Ende des Containers */
+    flex-wrap: nowrap; /* Keine Umbruch der Elemente */
+    flex-direction: column; /* Anordnung der Elemente in einer Spalte */
+}
+
+.filter_btn [type="date"] {
+    background-color: rgb(200, 17, 17); /* Roter Hintergrund für das Datumseingabefeld */
+    padding: 15px; /* Innenabstand */
+    width: 150px; /* Breite des Eingabefeldes */
+    height: 5px; /* Höhe des Eingabefeldes */
+    color: #ffffff; /* Weiße Schriftfarbe */
+    font-size: 18px; /* Schriftgröße */
+    border: none; /* Keine Randlinie */
+    border-radius: 5px; /* Abgerundete Ecken */
+    outline: none; /* Entfernen des Rahmens bei Fokussierung */
+}
+
+::-webkit-calendar-picker-indicator {
+    background-color: #ffffff; /* Hintergrundfarbe des Kalendersymbols */
+    padding: 5px; /* Innenabstand */
+    cursor: pointer; /* Zeiger-Cursor bei Hover */
+    border-radius: 3px; /* Abgerundete Ecken für das Kalendersymbol */
+}
+
+/* Stile für die Standorte */
+.standorte {
+    display: flex; /* Flexbox für die Ausrichtung */
+    justify-content: flex-start; /* Ausrichtung am Anfang */
+    align-items: center; /* Zentrierung der Inhalte vertikal */
+    margin-top: 10px; /* Abstand nach oben */
+}
+
+/* Stile für die Tabelle */
+table {
+    border-collapse: collapse; /* Entfernt den Abstand zwischen Tabellenzellen */
+    width: 900px; /* Breite der Tabelle */
+    margin-top: 20px; /* Abstand nach oben */
+}
+
+th, td {
+    border: 1px solid rgb(204, 204, 204); /* Graue Randlinie für die Zellen */
+    padding: 5px; /* Innenabstand der Zellen */
+}
+
+th {
+    font-weight: bold; /* Fette Schrift für die Kopfzeilen */
+    font-size: 20px; /* Schriftgröße der Kopfzeilen */
+    text-align: center; /* Zentrierung des Texts in den Kopfzeilen */
+    color: #333; /* Dunkle Schriftfarbe */
+    margin-bottom: 16px; /* Abstand nach unten */
+}
+
+/* Stile für den Kontaktbereich */
+.kontakt p {
+    display: flex; /* Flexbox für die Ausrichtung */
+    justify-content: center; /* Zentrierung der Inhalte horizontal */
+    padding: 10px; /* Innenabstand */
+    align-items: center; /* Zentrierung der Inhalte vertikal */
+    text-align: center; /* Zentrierung des Textes */
+}
+
+.kontakt a {
+    display: flex; /* Flexbox für die Ausrichtung */
+    justify-content: center; /* Zentrierung der Inhalte horizontal */
+    padding: 10px; /* Innenabstand */
+    align-items: center; /* Zentrierung der Inhalte vertikal */
+    text-align: center; /* Zentrierung des Textes */
+    color: black; /* Schwarze Textfarbe */
+    text-decoration-line: underline; /* Unterstreichung des Links */
+}
+
+.kontakt a:hover {
+    color: rgb(255, 0, 0); /* Rote Farbe beim Hover über den Link */
+}
+
+span {
+    font-size: larger; /* Größere Schriftgröße für span */
+}
+
+/* Medienabfragen für verschiedene Bildschirmgrößen */
+@media (max-width: 1200px) {
+    .section_container .filter select {
+        text-align: center; /* Zentrierung des Textes im Select-Feld */
+    }
+}
+
+@media (max-width: 998px) {
+    table {
+        width: 500px; /* Tabelle wird bei kleinerem Bildschirm schmaler */
+    }
+
+    .one { width: 25%; } /* Spaltenbreite für die erste Spalte */
+    .two { width: 55%; } /* Spaltenbreite für die zweite Spalte */
+    .three { width: 10%; } /* Spaltenbreite für die dritte Spalte */
+    .four { width: 10%; } /* Spaltenbreite für die vierte Spalte */
+
+    .section_container .filter select {
+        text-align: center; /* Zentrierung des Textes im Select-Feld */
+    }
+}
+
+@media (max-width: 768px) {
+    table {
+        width: 500px; /* Tabelle wird bei kleinerem Bildschirm schmaler */
+    }
+
+    .one { width: 25%; } /* Spaltenbreite für die erste Spalte */
+    .two { width: 55%; } /* Spaltenbreite für die zweite Spalte */
+    .three { width: 10%; } /* Spaltenbreite für die dritte Spalte */
+    .four { width: 10%; } /* Spaltenbreite für die vierte Spalte */
+
+    .section_container .filter select {
+        text-align: center; /* Zentrierung des Textes im Select-Feld */
+    }
+}
+
+@media (max-width: 576px) {
+    table {
+        width: 400px; /* Tabelle wird bei sehr kleinem Bildschirm noch schmaler */
+    }
+
+    .one { width: 25%; } /* Spaltenbreite für die erste Spalte */
+    .two { width: 55%; } /* Spaltenbreite für die zweite Spalte */
+    .three { width: 10%; } /* Spaltenbreite für die dritte Spalte */
+    .four { width: 10%; } /* Spaltenbreite für die vierte Spalte */
+
+    .section_container .filter select {
+        text-align: center; /* Zentrierung des Textes im Select-Feld */
+    }
+}
