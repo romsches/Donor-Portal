@@ -15,8 +15,8 @@
         <section class="lgn">
             <!-- Anmeldeformular -->
             <form action="/login" method="post" aria-labelledby="login-form"> <!-- Formular, das eine POST-Anfrage an die URL /login sendet -->
-                <legend>Anmeldung</legend>
-                <label for="SpenderID">SpenderID:</label> <!-- Beschriftung für das Eingabefeld der SpenderID -->
+                <legend>Login</legend>
+                <label for="SpenderID">Donor ID:</label> <!-- Beschriftung für das Eingabefeld der SpenderID -->
                 <input type="text" name="SpenderID" id="SpenderID" required pattern="^[^\s]+$"> <!-- Eingabefeld für die SpenderID -->
                 <button type="submit">Login</button> <!-- Anmelde-Schaltfläche -->
             </form>
@@ -29,18 +29,18 @@
                 </div>
                 <div id="chat-messages"></div>
                 <div id="chat-footer">
-                    <input type="text" id="chat-input" placeholder="Ihre Nachricht...">
-                    <button id="chat-send-button">Senden</button>
+                    <input type="text" id="chat-input" placeholder="Your message...">
+                    <button id="chat-send-button">Send</button>
                 </div>
             </div>
-            <button id="chat-toggle">Chatbot öffnen</button>
+            <button id="chat-toggle">Open Chatbot</button>
 
             <!-- section für Hilfe Bereich -->
             <div class="hilfe">
-                <p>Probleme beim Einloggen?</p>
-                <p>Besuchen Sie unsere <a href="#">Hilfe-Site</a>, wo Sie alle Antworten über unsere Anmeldung finden können.</p>
-                <p>Oder öffnen Sie den <span style="color: rgb(27, 29, 117); font-weight: bold;">Chatbot</span> an der unteren rechten Ecke, um Ihres Anliegens/Probleme zu finden.</p>
-                <p>Außerdem können Sie uns per E-Mail: <span class="email">spender-portal@blutspende.de</span> oder telefonisch <span class="telefon">+49123456789</span> kontaktieren.</p>
+                <p>Having trouble logging in?</p>
+                <p>Visit our <a href="#">Help Site</a> where you can find all the answers about our login process.</p>
+                <p>Or open the <span style="color: rgb(27, 29, 117); font-weight: bold;">Chatbot</span> in the bottom right corner to find help with your issue.</p>
+                <p>You can also contact us via email: <span class="email">spender-portal@blutspende.de</span> or by phone <span class="telefon">+49123456789</span>.</p>
             </div>
         </section>
     </main>

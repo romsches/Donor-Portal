@@ -1,6 +1,6 @@
 const bcrypt = require('bcryptjs');
 
-const plainPassword = '12345'; // Ersetzen dies durch das tatsächliche Passwort
+const plainPassword = 'scheduler_bot123'; // Ersetzen dies durch das tatsächliche Passwort
 
 bcrypt.hash(plainPassword, 10, (err, hashedPassword) => {
     if (err) {

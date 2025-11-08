@@ -1,67 +1,91 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="de"> <!-- Sprache auf Deutsch setzen, da dein Text deutsch ist -->
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Login</title>
-    <link rel="stylesheet" href="/css/main.css"> <!-- Verweis auf die CSS-Datei für das Layout -->
+    <meta name="description" content="Login-Seite für Administratoren des Blutspendeportals">
+    <link rel="stylesheet" href="/css/main.css"> <!-- Haupt-CSS-Datei -->
 </head>
 <body class="admin-login-page">
-    <!-- Benutzerdefinierter Header -->
-    <special-header></special-header>
-    <!-- Benutzerdefiniertes Logo -->
-    <special-logo></special-logo>
     
-    <main class="admin-login-main">
-        <section class="admin-login-section">
-            <h1>Admin Login</h1>
-            <!-- Fehlermeldung, falls Fehler beim Login auftreten -->
-            <% if (typeof error !== 'undefined') { %>
-                <p class="admin-login-error-message"><%= error %></p>
-            <% } %>
-            
-            <!-- Formular für die Anmeldung des Administrators -->
-            <form action="/admin/login" method="post">
-                <legend>Login</legend>
+    <!-- Custom header -->
+<special-header></special-header>
 
-                <!-- Label und Eingabefeld für die Admin ID -->
-                <label for="adminID">Admin ID:</label>
-                <input type="text" id="adminID" name="username" required>
-                <!-- Fehlermeldungen für die Admin ID werden hier angezeigt, wenn erforderlich -->
+<!-- Custom logo -->
+<special-logo></special-logo>
 
-                <!-- Label und Eingabefeld für das Passwort -->
-                <label for="password">Password:</label>
-                <div class="admin-password-container">
-                    <input type="password" id="password" name="password" required>
+<main class="admin-login-main">
+    <section class="admin-login-section">
+        <h1>Admin Login</h1>
+
+        <!-- Error message for login issues -->
+        <% if (typeof error !== 'undefined') { %>
+            <p class="admin-login-error-message"><%= error %></p>
+        <% } %>
+
+        <!-- Admin login form -->
+        <form action="/admin/login" method="post" autocomplete="off">
+            <!-- Removed <fieldset> and <legend> for cleaner styling -->
+            <div class="form-fields-container"> 
+                <!-- Admin ID -->
+                <div class="form-group">
+                    <label for="adminID">Admin ID:</label>
+                    <input 
+                        type="text" 
+                        id="adminID" 
+                        name="username" 
+                        required 
+                        placeholder="Your Admin ID"
+                        aria-label="Admin ID">
                 </div>
-                <!-- Fehlermeldungen für das Passwort werden hier angezeigt, wenn erforderlich -->
 
-                <!-- Absende-Button für das Formular -->
-                <button type="submit">Login</button>
-            </form>
-        </section>
-    </main>
+                <!-- Password -->
+                <div class="form-group admin-password-container">
+                    <label for="password">Password:</label>
+                    <input 
+                        type="password" 
+                        id="password" 
+                        name="password" 
+                        required 
+                        minlength="6" 
+                        placeholder="Your Password"
+                        aria-label="Password">
+                </div>
 
-    <!-- Benutzerdefinierter Footer -->
-    <special-footer></special-footer>
-    <!-- Chat-Container -->
-    <div id="chat-container">
-        <div id="chat-header">
-            <h2>Chat</h2>
-            <button id="chat-close">&times;</button>
-        </div>
-        <div id="chat-messages"></div>
-        <div id="chat-footer">
-            <input type="text" id="chat-input" placeholder="Geben Sie Ihre Nachricht ein...">
-            <button id="chat-send-button">Senden</button>
-        </div>
+                <!-- Submit button -->
+                <button type="submit" class="login-button">Login</button>
+            </div>
+        </form>
+    </section>
+</main>
+
+<!-- Custom footer -->
+<special-footer></special-footer>
+
+<!-- Chat container -->
+<div id="chat-container" aria-live="polite">
+    <div id="chat-header">
+        <h2>Chat</h2>
+        <button id="chat-close" aria-label="Close chat">&times;</button>
     </div>
+    <div id="chat-messages"></div>
+    <div id="chat-footer">
+        <input 
+            type="text" 
+            id="chat-input" 
+            placeholder="Type your message..." 
+            aria-label="Type your chat message">
+        <button id="chat-send-button">Send</button>
+    </div>
+</div>
 
-    <button id="chat-toggle">Chatbot öffnen</button>
+<button id="chat-toggle" aria-label="Open chatbot">Open Chatbot</button>
 
-    <!-- Verweis auf die JavaScript-Dateien für interaktive Funktionen -->
-    <script src="/js/main.js"></script>
-    <script src="/js/chatbot.js"></script> 
-    <script src="/js/admin-login.js"></script> <!-- Die JS-Datei für das Admin-Login einbinden -->
+<!-- Scripts -->
+<script src="/js/main.js"></script>
+<script src="/js/chatbot.js"></script> 
+<script src="/js/admin-login.js"></script> <!-- Link to admin login script -->
+
 </body>
 </html>

@@ -1,44 +1,62 @@
 <!DOCTYPE html>
-<html lang="de">
+<html lang="en">
 <head>
-    <meta charset="UTF-8"> <!-- Meta-Daten für Zeichencodierung festlegen -->
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- Meta-Daten für Ansichtsbreite und Zoom festlegen -->
-    <meta name="description" content="Login Fehlerseite"> <!-- Meta-Beschreibung für SEO -->
-    <title>Login Error</title> <!-- Titel der Seite -->
-    <link rel="stylesheet" href="/css/main.css"> <!-- Verknüpfung zur CSS-Datei für Styling -->
+    <meta charset="UTF-8"> <!-- Character encoding -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- Ensure proper rendering on all devices -->
+    <meta name="description" content="Login error page for donor portal"> <!-- SEO and accessibility description -->
+    <title>Login Error</title> <!-- Page title -->
+    <link rel="stylesheet" href="/css/main.css"> <!-- Link to main CSS file -->
 </head>
 <body>
-    <special-header></special-header> <!-- Benutzerdefiniertes Header-Element einfügen -->
-    <special-logo></special-logo> <!-- Benutzerdefiniertes Logo-Element einfügen -->
+    <!-- Custom header and logo components -->
+    <special-header></special-header>
+    <special-logo></special-logo>
+
     <main>
-        <section class="error-section"> <!-- Abschnitt für Fehlermeldung -->
-            <h1>Login Fehler</h1> <!-- Überschrift für Fehlermeldung -->
-            <p class="login_fehler"><%= error %></p> <!-- Anzeige der Fehlermeldung -->
-            <a href="/">Zurück zum Login</a> <!-- Link zur Login-Seite -->
+        <!-- Error message section -->
+        <section class="error-section" role="alert" aria-live="assertive">
+            <h1>Login Error</h1>
+            <p class="login_fehler"><%= error %></p>
+            <a href="/" class="back-link">Back to Login</a>
         </section>
-        <div class="hilfe"> <!-- Hilfe-Abschnitt für Benutzer -->
-            <p>Probleme beim Einloggen?</p> <!-- Hinweis, dass es ein Problem beim Login gibt -->
-            <p>Besuchen Sie unsere <a href="#">Hilfe-Site</a>, wo alle Antworten über unsere Anmeldung finden können.</p> <!-- Link zur Hilfeseite -->
-            <p>Oder öffnen Sie den <span style="color: rgb(27, 29, 117); font-weight: bold;">Chatbot</span> an der unteren rechten Ecke, um Ihr Anliegen/Problem zu lösen.</p> <!-- Hinweis auf Chatbot -->
-            <p>Außerdem können Sie uns per E-Mail: <span class="email">spender-portal@blutspende.de</span> oder telefonisch <span class="telefon">+49123456789</span> kontaktieren.</p> <!-- Kontaktinformationen -->
+
+        <!-- Help and support section -->
+        <div class="hilfe">
+            <h2>Need Help?</h2>
+            <p>Having trouble logging in?</p>
+            <p>Visit our <a href="#">Help Center</a> to find answers about the login process.</p>
+            <p>Or open the <strong style="color: rgb(27, 29, 117);">Chatbot</strong> in the bottom-right corner to get instant assistance.</p>
+            <p>You can also contact us via email at 
+                <a href="mailto:spender-portal@blutspende.de" class="email">spender-portal@blutspende.de</a>
+                or call us at 
+                <a href="tel:+49123456789" class="telefon">+49 123 456789</a>.
+            </p>
         </div>
 
-        <!-- HTML für den Chat -->
-        <div id="chat-container"> <!-- Container für den Chat -->
-            <div id="chat-header"> <!-- Kopfzeile des Chats -->
-                <h2>Chat</h2> <!-- Titel des Chats -->
-                <button id="chat-close">&times;</button> <!-- Schließen-Schaltfläche für den Chat -->
+        <!-- Chat widget -->
+        <div id="chat-container" aria-live="polite" hidden>
+            <div id="chat-header">
+                <h2>Chat</h2>
+                <button id="chat-close" aria-label="Close chat">&times;</button>
             </div>
-            <div id="chat-messages"></div> <!-- Bereich für die Chat-Nachrichten -->
-            <div id="chat-footer"> <!-- Fußzeile des Chats -->
-                <input type="text" id="chat-input" placeholder="Ihre Nachricht..."> <!-- Eingabefeld für Nachrichten -->
-                <button id="chat-send-button">Senden</button> <!-- Schaltfläche zum Senden der Nachricht -->
+            <div id="chat-messages"></div>
+            <div id="chat-footer">
+                <input type="text" id="chat-input" placeholder="Your message..." aria-label="Type your message">
+                <button id="chat-send-button">Send</button>
             </div>
         </div>
-        <button id="chat-toggle">Chatbot öffnen</button> <!-- Schaltfläche zum Öffnen des Chatbots -->
+
+        <!-- Chat toggle button -->
+        <button id="chat-toggle" aria-controls="chat-container" aria-expanded="false">
+            Open Chatbot
+        </button>
     </main>
-    <special-footer></special-footer> <!-- Benutzerdefiniertes Footer-Element einfügen -->
-    <script src="/js/main.js"></script> <!-- Verknüpfung zur JavaScript-Datei für Hauptfunktionen -->
-    <script src="/js/chatbot.js"></script> <!-- Verknüpfung zur JavaScript-Datei für den Chatbot -->
+
+    <!-- Custom footer -->
+    <special-footer></special-footer>
+
+    <!-- JavaScript files -->
+    <script src="/js/main.js"></script>
+    <script src="/js/chatbot.js"></script>
 </body>
 </html>

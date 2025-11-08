@@ -1,66 +1,67 @@
-// Sobald das DOM vollständig geladen ist, wird der folgende Code ausgeführt
+// The following code is executed once the DOM is fully loaded
 document.addEventListener('DOMContentLoaded', function () {
-    // Selektieren des Login-Formulars und der Eingabefelder für Benutzername und Passwort
+    // Select the login form and the input fields for username and password
     const loginForm = document.querySelector('form');
     const usernameInput = document.getElementById('adminID');
     const passwordInput = document.getElementById('password');
 
-    // Überprüfung, ob das Formular existiert
+    // Check if the form exists
     if (loginForm) {
-        // Event-Listener für das Absenden des Formulars hinzufügen
+        // Add event listener for form submission
         loginForm.addEventListener('submit', function (event) {
-            event.preventDefault(); // Verhindert die Standardaktion des Formulars (Seiten-Neuladen)
+            event.preventDefault(); // Prevents the default form action (page reload)
 
-            const username = usernameInput.value.trim(); // Entfernt Leerzeichen im Benutzernamen
-            const password = passwordInput.value.trim(); // Entfernt Leerzeichen im Passwort
+            const username = usernameInput.value.trim(); // Removes whitespace in the username
+            const password = passwordInput.value.trim(); // Removes whitespace in the password
 
-            clearErrors(); // Entfernt vorherige Fehlermeldungen
+            clearErrors(); // Removes previous error messages
 
-            // Senden der Anmeldeinformationen an den Server
+            // Send login credentials to the server
             fetch('/admin/login', {
-                method: 'POST', // HTTP-Methode POST wird verwendet
-                headers: { 'Content-Type': 'application/json' }, // Daten werden als JSON gesendet
-                body: JSON.stringify({ username, password }), // Benutzername und Passwort in JSON umwandeln
+                method: 'POST', // HTTP method POST is used
+                headers: { 'Content-Type': 'application/json' }, // Data is sent as JSON
+                body: JSON.stringify({ username, password }), // Convert username and password to JSON
+                credentials: 'same-origin'
             })
                 .then(response => {
                     if (!response.ok) {
-                        // Wenn der Server-Response fehlschlägt, Fehlerdaten extrahieren
+                        // If the server response fails, extract error data
                         return response.json().then(data => {
                             if (data.errors) {
-                                showErrors(data.errors); // Zeigt Fehlermeldungen an, falls vorhanden
+                                showErrors(data.errors); // Shows error messages, if present
                             }
                         });
                     } else {
-                        // Weiterleitung zur Dashboard-Seite bei erfolgreichem Login
+                        // Redirect to the dashboard page upon successful login
                         window.location.href = '/admin/dashboard';
                     }
                 })
-                .catch(error => console.error('Fehler bei der Anmeldung:', error)); // Fehler bei der Anfrage ausgeben
+                .catch(error => console.error('Error during login:', error)); // Output error from the request
         });
     }
 
-    // Funktion zum Entfernen alter Fehlermeldungen
+    // Function to remove old error messages
     function clearErrors() {
-        const errorMessages = document.querySelectorAll('.error-message'); // Alle Fehlermeldungselemente finden
-        errorMessages.forEach(msg => msg.remove()); // Alle Fehlermeldungen aus dem DOM entfernen
+        const errorMessages = document.querySelectorAll('.error-message'); // Find all error message elements
+        errorMessages.forEach(msg => msg.remove()); // Remove all error messages from the DOM
     }
 
-    // Funktion zum Anzeigen neuer Fehlermeldungen
+    // Function to display new error messages
     function showErrors(errors) {
         if (errors.username) {
-            // Fehlermeldung für den Benutzernamen erstellen und hinzufügen
+            // Create and add error message for the username
             const usernameError = document.createElement('span');
-            usernameError.textContent = errors.username; // Fehlermeldungstext setzen
-            usernameError.classList.add('error-message'); // CSS-Klasse für Stil hinzufügen
-            usernameInput.parentElement.appendChild(usernameError); // Fehlermeldung nach dem Eingabefeld einfügen
+            usernameError.textContent = errors.username; // Set error message text
+            usernameError.classList.add('error-message'); // Add CSS class for styling
+            usernameInput.parentElement.appendChild(usernameError); // Insert error message after the input field
         }
 
         if (errors.password) {
-            // Fehlermeldung für das Passwort erstellen und hinzufügen
+            // Create and add error message for the password
             const passwordError = document.createElement('span');
-            passwordError.textContent = errors.password; // Fehlermeldungstext setzen
-            passwordError.classList.add('error-message'); // CSS-Klasse für Stil hinzufügen
-            passwordInput.parentElement.appendChild(passwordError); // Fehlermeldung nach dem Eingabefeld einfügen
+            passwordError.textContent = errors.password; // Set error message text
+            passwordError.classList.add('error-message'); // Add CSS class for styling
+            passwordInput.parentElement.appendChild(passwordError); // Insert error message after the input field
         }
     }
 });

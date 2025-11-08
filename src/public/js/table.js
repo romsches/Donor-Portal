@@ -1,17 +1,17 @@
-// Klasse für benutzerdefiniertes HTML-Element „SpecialHeader“
-// Diese Klasse erstellt ein benutzerdefiniertes HTML-Element für den Header.
+// Class for the custom HTML element "special-header"
+// This class creates a custom HTML element for the page header.
 class SpecialHeader extends HTMLElement {
     connectedCallback() {
-        // HTML-Inhalt für das benutzerdefinierte Header-Element
+        // HTML content for the custom header element
         this.innerHTML = `
         <div class="header_container">
             <nav>
                 <ul>
-                    <li><a href="/login">Startseite</a></li>
-                    <li><a href="#">Blutspende</a></li>
-                    <li><a href="#">Blutspender werden</a></li>
-                    <li><a href="#">Informationen</a></li>
-                    <li><a href="#">Kontakt</a></li>
+                    <li><a href="/login">Home</a></li>
+                    <li><a href="#">Blood Donation</a></li>
+                    <li><a href="#">Become a Donor</a></li>
+                    <li><a href="#">Information</a></li>
+                    <li><a href="#">Contact</a></li>
                 </ul>
             </nav>
         </div>
@@ -19,11 +19,12 @@ class SpecialHeader extends HTMLElement {
     }
 }
 
-// Klasse für benutzerdefiniertes HTML-Element „SpecialLogo“
-// Diese Klasse erstellt ein benutzerdefiniertes HTML-Element für das Logo.
+/*
+// Class for the custom HTML element "SpecialLogo"
+// This class creates a custom HTML element for the logo.
 class SpecialLogo extends HTMLElement {
     connectedCallback() {
-        // HTML-Inhalt für das benutzerdefinierte Logo-Element
+        // HTML content for the custom logo element
         this.innerHTML = `
         <section class="logodrk">
             <div>
@@ -33,151 +34,152 @@ class SpecialLogo extends HTMLElement {
         `;
     }
 }
+*/
 
-// Klasse für benutzerdefiniertes HTML-Element „SpecialFooter“
-// Diese Klasse erstellt ein benutzerdefiniertes HTML-Element für den Footer.
+// Class for the custom HTML element "special-footer"
+// This class creates a custom HTML element for the page footer.
 class SpecialFooter extends HTMLElement {
     connectedCallback() {
-        // HTML-Inhalt für das benutzerdefinierte Footer-Element
+        // HTML content for the custom footer element
         this.innerHTML = `
         <div class="footer_container">
             <div class="unten">
                 <ul class="links">
-                    <a href="#">Impressum</a>
-                    <a href="#">Nutzungsbedingungen</a>
-                    <a href="#">Datenschutz</a>
+                    <a href="#">Legal Notice</a>
+                    <a href="#">Terms of Use</a>
+                    <a href="#">Privacy Policy</a>
                 </ul>
             </div>
             <div class="apps">
-                <a href="#"><img src="/views/img/facebook-app-symbol.png" alt="fcb"></a>
-                <a href="#"><img src="/views/img/instagram.png" alt="inst"></a>
-                <a href="#"><img src="/views/img/twitter.png" alt="twit"></a>
+                <a href="#"><img src="/img/facebook-app-symbol.png" alt="fcb"></a>
+                <a href="#"><img src="/img/instagram.png" alt="inst"></a>
+                <a href="#"><img src="/img/twitter.png" alt="twit"></a>
             </div>
         </div>
         `;
     }
 }
 
-// Registrieren benutzerdefinierter HTML-Elemente
-// Diese Zeilen registrieren die benutzerdefinierten HTML-Elemente, sodass sie in HTML verwendet werden können.
+// Register custom HTML elements
+// These lines register the custom HTML elements so they can be used in HTML.
 customElements.define('special-header', SpecialHeader);
-customElements.define('special-logo', SpecialLogo);
+//customElements.define('special-logo', SpecialLogo);
 customElements.define('special-footer', SpecialFooter);
 
-// Variable für den Logout-Timer
+// Variable for the logout timer
 let logoutTimer;
 
-// Hinzufügen von Ereignis-Listenern für benutzerdefinierte Aktivitäten
-// Diese Ereignis-Listener setzen den Logout-Timer zurück, wenn der Benutzer eine der angegebenen Aktionen durchführt (z. B. Mausbewegung, Tastendrücke).
+// Add event listeners for user activity
+// These event listeners reset the logout timer when the user performs one of the specified actions (e.g., mouse movement, key presses).
 document.addEventListener('mousemove', resetLogoutTimer);
 document.addEventListener('mousedown', resetLogoutTimer);
 document.addEventListener('keypress', resetLogoutTimer);
 document.addEventListener('touchstart', resetLogoutTimer);
 
-// Funktion zum Festlegen des Mindestdatums für das Datumseingabefeld
-// Diese Funktion stellt sicher, dass das Datumseingabefeld nicht auf ein Datum in der Vergangenheit gesetzt werden kann.
+// Function to set the minimum date for the date input field
+// This function ensures that the date input field cannot be set to a date in the past.
 function setMinDate() {
     const dateInput = document.getElementById('dtm');
     if (dateInput) {
-        // Heute als Mindestdatum festlegen
+        // Set today as the minimum date
         const today = new Date().toISOString().split('T')[0];
         dateInput.setAttribute('min', today);
     } else {
-        console.error('Element mit der ID "dtm" nicht gefunden.');
+        console.error('Element with ID "dtm" not found.');
     }
 }
 
-// Funktion zum Festlegen des Startdatums auf heute
-// Diese Funktion setzt das Datumseingabefeld auf das heutige Datum.
+// Function to set the initial date to today
+// This function sets the date input field to today's date.
 function setInitialDate() {
     const dateInput = document.getElementById('dtm');
     if (dateInput) {
-        // Heute als Startdatum festlegen
+        // Set today as the initial date
         const today = new Date().toISOString().split('T')[0];
         dateInput.value = today;
     } else {
-        console.error('Element mit der ID "dtm" nicht gefunden.');
+        console.error('Element with ID "dtm" not found.');
     }
 }
 
-// Funktion zum Aktualisieren der Tabelle
-// Diese Funktion ruft die Tabelle vom Server ab und aktualisiert den Inhalt.
+// Function to update the table
+// This function fetches the table data from the server and updates the content.
 window.refreshTable = refreshTable;
 
-// Funktion zum Zurücksetzen des Logout-Timers
-// Diese Funktion wird bei jeder Benutzeraktivität aufgerufen, um den Logout-Timer zurückzusetzen.
+// Function to reset the logout timer
+// This function is called on every user activity to reset the logout timer.
 function resetLogoutTimer() {
-    clearTimeout(logoutTimer); // Den aktuellen Timer zurücksetzen
-    initializeLogoutTimer();  // Den Timer neu starten
+    clearTimeout(logoutTimer); // Clear the current timer
+    initializeLogoutTimer();  // Restart the timer
 }
 
-// Funktion zur Initialisierung des Logout-Timers
-// Dieser Timer loggt den Benutzer nach einer bestimmten Zeit der Inaktivität aus.
+// Function to initialize the logout timer
+// This timer logs the user out after a specified period of inactivity.
 function initializeLogoutTimer() {
-    clearTimeout(logoutTimer); // Den Timer zurücksetzen
+    clearTimeout(logoutTimer); // Clear the timer
     logoutTimer = setTimeout(() => {
-        window.location.href = '/login'; // Benutzer zur Login-Seite umleiten
-    }, 2 * 60 * 1000); // 2 Minuten Inaktivität (in Millisekunden)
+        window.location.href = '/login'; // Redirect user to the login page
+    }, 2 * 60 * 1000); // 2 minutes of inactivity (in milliseconds)
 }
 
-// Asynchrone Funktion zum Aktualisieren einer Tabelle
-// Diese Funktion ruft die Daten vom Server ab, um die Tabelle mit Spenderdaten zu aktualisieren.
+// Asynchronous function to refresh a table
+// This function fetches data from the server to update the table with donor meeting data.
 async function refreshTable() {
     try {
-        // Filterwerte von den Eingabefeldern abrufen
-        const selectedLocation = document.getElementById('location-filter').value || 'Alle Standorte';
+        // Retrieve filter values from the input fields
+        const selectedLocation = document.getElementById('location-filter').value || 'All Locations';
         const dateFilter = document.getElementById('dtm').value || '';
-        const donorID = ''; // Platzhalter für die eigentliche Spender-ID-Logik
+        const donorID = ''; // Placeholder for the actual donor ID logic
 
-        // Daten vom Server anfordern
+        // Request data from the server
         const response = await fetch(`/refreshTable?SpenderID=${donorID}&location=${encodeURIComponent(selectedLocation)}&date=${encodeURIComponent(dateFilter)}`);
         if (!response.ok) {
-            throw new Error('Netzwerkfehler.');
+            throw new Error('Network error.');
         }
         const data = await response.json();
 
         const tableBody = document.querySelector('#meeting-table tbody');
-        tableBody.innerHTML = ''; // Alte Tabelleninhalte entfernen
+        tableBody.innerHTML = ''; // Remove old table content
 
-        // Wenn Meetings-Daten vorhanden sind, die Tabelle füllen
+        // If meeting data is available, populate the table
         if (data.meetings && data.meetings.length > 0) {
             data.meetings.forEach(meeting => {
-                // Datum formatieren
+                // Format the date
                 const dateFormatted = formatDate(meeting.Datum);
-                const address = selectedLocation === 'Alle Standorte'
-                    ? `${meeting.Strasse || 'Straße fehlt'} (${meeting.Stadt || 'Stadt fehlt'})`
-                    : `${meeting.Strasse || 'Straße fehlt'}`;
+                const address = selectedLocation === 'All Locations'
+                    ? `${meeting.Strasse || 'Street missing'} (${meeting.Stadt || 'City missing'})`
+                    : `${meeting.Strasse || 'Street missing'}`;
 
                 const row = document.createElement('tr');
                 row.innerHTML = `
                     <td>${dateFormatted}</td>
                     <td>${address}</td>
-                    <td>${meeting.Uhrzeit || 'Uhrzeit fehlt'}</td>
-                    <td>${meeting.Status || 'Status fehlt'}</td>
+                    <td>${meeting.Uhrzeit || 'Time missing'}</td>
+                    <td>${meeting.Status || 'Status missing'}</td>
                 `;
                 tableBody.appendChild(row);
             });
         } else {
-            // Wenn keine Meetings-Daten vorhanden sind, eine Nachricht anzeigen
+            // If no meeting data is available, display a message
             const row = document.createElement('tr');
             const cell = document.createElement('td');
             cell.setAttribute('colspan', '4');
-            cell.textContent = 'Keine Ergebnisse gefunden.';
+            cell.textContent = 'No results found.';
             row.appendChild(cell);
             tableBody.appendChild(row);
         }
 
-        // Spendeninformationen aktualisieren
+        // Update donation information
         updateDonationInfo(data.canDonate);
     } catch (error) {
-        console.error('Fehler beim Aktualisieren der Tabelle:', error);
+        console.error('Error updating the table:', error);
     }
 }
 
-// Funktion zum Formatieren des Datums im Format „tt.mm.jjjj“
-// Diese Funktion formatiert das Datum von "yyyy-mm-dd" in das Format "dd.mm.yyyy".
+// Function to format the date in "dd.mm.yyyy" format
+// This function formats the date from "yyyy-mm-dd" to "dd.mm.yyyy" format.
 function formatDate(dateString) {
-    if (!dateString) return 'Datum fehlt';
+    if (!dateString) return 'Date missing';
 
     const dateParts = dateString.split('-');
     const day = dateParts[2] || '';
@@ -189,22 +191,22 @@ function formatDate(dateString) {
     if (month) formattedDate += `${month}.`;
     if (year) formattedDate += `${year}`;
 
-    return formattedDate || 'Datum fehlt';
+    return formattedDate || 'Date missing';
 }
 
-// Asynchrone Funktion zum Herunterladen von Städten vom Server
-// Diese Funktion ruft eine Liste von Städten vom Server ab und füllt das Standortauswahlfeld.
+// Asynchronous function to load cities from the server
+// This function fetches a list of cities from the server and populates the location selection field.
 async function loadCities() {
     try {
         const response = await fetch('/cities');
         if (!response.ok) {
-            throw new Error('Netzwerkfehler.');
+            throw new Error('Network error.');
         }
         const data = await response.json();
-        // console.log('Geladene Städte:', data); // Für Debugging
+        // console.log('Loaded Cities:', data); // For debugging
         const locationFilter = document.getElementById('location-filter');
         if (locationFilter) {
-            locationFilter.innerHTML = '<option value="Alle Standorte">Alle Standorte</option>'; // Alte Werte löschen
+            locationFilter.innerHTML = '<option value="All Locations">All Locations</option>'; // Clear old values
             data.cities.forEach(city => {
                 const option = document.createElement('option');
                 option.value = city.Ort;
@@ -212,32 +214,32 @@ async function loadCities() {
                 locationFilter.appendChild(option);
             });
         } else {
-            console.error('Element mit der ID "location-filter" nicht gefunden.');
+            console.error('Element with ID "location-filter" not found.');
         }
     } catch (error) {
-        console.error('Fehler beim Laden der Städte:', error);
+        console.error('Error loading cities:', error);
     }
 }
 
-// Funktion zum Aktualisieren der Spendeninformationen
-// Diese Funktion zeigt Informationen an, ob der Benutzer noch spenden kann.
+// Function to update donation information
+// This function displays information on whether the user is eligible to donate.
 function updateDonationInfo(canDonate) {
     const donateInfoElement = document.getElementById('can-donate-info');
     if (donateInfoElement) {
         donateInfoElement.textContent = canDonate
-            ? 'Sie können Blut spenden!'
-            : 'Sie können derzeit nicht spenden.';
+            ? 'You can donate blood!'
+            : 'You are currently not eligible to donate.';
     }
 }
 
-// Funktion zur Initialisierung der Seite
-// Diese Funktion wird beim Laden der Seite aufgerufen, um die Tabelle zu aktualisieren und die Standorte zu laden.
+// Function to initialize the page
+// This function is called when the page loads to update the table and load the locations.
 function initializePage() {
-    loadCities(); // Städte laden
-    setMinDate(); // Mindestdatum festlegen
-    setInitialDate(); // Startdatum festlegen
-    refreshTable(); // Tabelle mit den aktuellen Daten füllen
+    loadCities(); // Load cities
+    setMinDate(); // Set minimum date
+    setInitialDate(); // Set initial date
+    refreshTable(); // Populate the table with current data
 }
 
-// Seite beim Laden initialisieren
+// Initialize page on load
 window.addEventListener('load', initializePage);

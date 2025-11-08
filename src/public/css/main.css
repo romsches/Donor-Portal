@@ -757,7 +757,7 @@ label span {
 
 /* Stil für den Hilfe-Abschnitt */
 .hilfe {
-  margin-top: 20px; /* Fügt oben einen Abstand von 20px hinzu */
+  margin-top: 450px; /* Fügt oben einen Abstand von 20px hinzu */
   text-align: center; /* Zentriert den Text */
   background-color: #f0f0f0; /* Setzt den Hintergrund auf ein helles Grau */
   padding: 20px; /* Fügt Padding von 20px hinzu */
@@ -1209,24 +1209,98 @@ textarea {
 
 /* Stile für den Hauptabschnitt der Seite */
 .admin-login-main {
-  max-width: 400px;
-  margin: auto;
-  padding: 20px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Hinzufügen eines Schattens für eine bessere visuelle Trennung */
-  margin-bottom: 50px; /* Fügen Sie unten eine Polsterung hinzu */
+    max-width: 450px; /* Leicht vergrößert für besseren Look */
+    margin: 200px auto 400px ; /* Vertikalen Abstand hinzugefügt */
+    padding: 30px; /* Mehr Innenabstand */
+    background-color: #ffffff; /* Weißer Hintergrund für die Form */
+    border: 1px solid #e0e0e0;
+    border-radius: 12px; /* Stärkere Abrundung */
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08); /* Sanfter, moderner Schatten */
+}
+
+.admin-login-section h1 {
+    font-size: 28px;
+    color: #333;
+    margin-bottom: 25px;
+    font-weight: 600;
+}
+
+/* Container für die Formularfelder */
+.form-fields-container {
+    text-align: left; /* Textausrichtung für Labels */
+}
+
+/* Stile für jede Gruppe (Label + Input) */
+.form-group {
+    margin-bottom: 20px;
+}
+
+/* Labels */
+.form-fields-container label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 500;
+    color: #555;
+    font-size: 14px;
+}
+
+/* Input-Felder */
+.form-fields-container input[type="text"],
+.form-fields-container input[type="password"] {
+    width: 100%;
+    padding: 12px 15px;
+    border: 1px solid #ccc;
+    border-radius: 8px; /* Abgerundete Ecken für Inputs */
+    font-size: 16px;
+    transition: border-color 0.3s, box-shadow 0.3s;
+    box-sizing: border-box; /* Sicherstellen, dass Padding nicht die Breite verändert */
+}
+
+.form-fields-container input[type="text"]:focus,
+.form-fields-container input[type="password"]:focus {
+    border-color: #e3001b; /* Roter Rand beim Fokus (passend zum DRK/Blutspende-Thema) */
+    box-shadow: 0 0 0 3px rgba(227, 0, 27, 0.2);
+    outline: none;
+}
+
+/* Stile für den Login-Button */
+.login-button {
+    width: 100%;
+    padding: 12px;
+    background-color: #e3001b; /* Hauptfarbe: Rot */
+    color: white;
+    font-size: 18px;
+    font-weight: 600;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.1s;
+    margin-top: 10px; /* Abstand nach dem letzten Feld */
+}
+
+.login-button:hover {
+    background-color: #a00014; /* Dunkleres Rot beim Hover */
+}
+
+.login-button:active {
+    transform: translateY(1px); /* Kleiner Klick-Effekt */
 }
 
 /* Stile für den Admin-Login-Bereich */
 .admin-login-section {
-  margin: 0;
+    margin: 0;
+    text-align: center; /* Zentriert den Titel */
 }
 
 /* Fehlermeldungsstile */
 .admin-login-error-message {
-  color: red;
-  margin-bottom: 15px; /* am Ende der Fehlermeldung einen Einzug hinzufügen */
+    color: #e3001b; /* Rot als Akzentfarbe */
+    background-color: #fce4e4;
+    padding: 10px;
+    border-radius: 5px;
+    margin-bottom: 15px;
+    border: 1px solid #e3001b;
+    font-size: 14px;
 }
 
 /* Stile für den Passwortcontainer */

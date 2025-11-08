@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // DOM-Elemente
+    // DOM Elements
     const chatToggle = document.getElementById('chat-toggle');
     const chatContainer = document.getElementById('chat-container');
     const chatClose = document.getElementById('chat-close');
@@ -8,16 +8,16 @@ document.addEventListener('DOMContentLoaded', () => {
     const chatMessages = document.getElementById('chat-messages');
     const errorMessage = createErrorMessage();
 
-    let sections = []; // Liste der Sektionen
-    let currentSection = ''; // Aktuell ausgewählte Sektion
-    let isGreetingShown = false; // Flag zur Steuerung der Begrüßungsanzeige
+    let sections = []; // List of sections
+    let currentSection = ''; // Currently selected section
+    let isGreetingShown = false; // Flag to control the display of the greeting
 
-    // Initialisierung des Chats
+    // Chat initialization
     initChat();
     loadSections();
-    setInterval(loadSections, 10000); // Daten alle 10 Sekunden anfordern
+    setInterval(loadSections, 10000); // Request data every 10 seconds
 
-    // Erstellung eines Elements für die Fehleranzeige
+    // Creation of an element for error display
     function createErrorMessage() {
         const error = document.createElement('div');
         error.className = 'error-message';
@@ -26,7 +26,7 @@ document.addEventListener('DOMContentLoaded', () => {
         return error;
     }
 
-    // Initialisierung der Chat-Ereignisse
+    // Initialization of chat events
     function initChat() {
         chatToggle.addEventListener('click', openChat);
         chatClose.addEventListener('click', closeChat);
@@ -36,7 +36,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Öffnen des Chats und Anzeige der Begrüßung
+    // Opening the chat and displaying the greeting
     function openChat() {
         chatContainer.classList.add('open');
         if (!isGreetingShown) {
@@ -44,12 +44,12 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // Schließen des Chats
+    // Closing the chat
     function closeChat() {
         chatContainer.classList.remove('open');
     }
 
-    // Senden einer Nachricht
+    // Sending a message
     function sendMessage() {
         const userMessage = chatInput.value.trim();
         if (userMessage) {
@@ -66,73 +66,73 @@ document.addEventListener('DOMContentLoaded', () => {
             })
             .then(response => response.json())
             .then(data => {
-                addMessage('bot-message', data.reply || 'Keine Antwort gefunden.');
+                addMessage('bot-message', data.reply || 'No answer found.');
                 scrollToBottom();
             })
             .catch(error => {
-                console.error('Fehler:', error);
-                addMessage('bot-message', 'Es gab ein Problem beim Senden Ihrer Nachricht.');
+                console.error('Error:', error);
+                addMessage('bot-message', 'There was a problem sending your message.');
                 scrollToBottom();
             });
         } else {
-            displayErrorMessage(true, 'Bitte geben Sie eine Nachricht ein, um sie zu senden.');
+            displayErrorMessage(true, 'Please enter a message to send.');
         }
     }
 
-    // Senden einer Begrüßungsnachricht
+    // Sending a greeting message
     function sendGreeting() {
-        const greetingMessage = 'Willkommen im Chat! Wie kann ich Ihnen helfen?<br><button class="section-button">Wählen Sie eine Sektion</button>';
+        const greetingMessage = 'Welcome to the chat! How can I help you?<br><button class="section-button">Select a Section</button>';
         addMessage('bot-message greeting-message', greetingMessage);
         scrollToBottom();
         isGreetingShown = true;
         attachSectionButtonHandler();
     }
 
-    // Laden der Sektionen aus der API
+    // Loading sections from the API
     function loadSections() {
         fetch('/api/faq-sections')
             .then(response => response.json())
             .then(data => {
                 sections = data.sections || [];
                 
-                // Benutzer informieren, dass die Daten aktualisiert wurden
+                // Inform the user that the data has been updated
                 //if (sections.length > 0) {
-                //    addMessage('bot-message', 'Daten wurden aktualisiert. Bitte wählen Sie eine Sektion.');
+                //    addMessage('bot-message', 'Data has been updated. Please select a section.');
                 //}
             })
             .catch(error => {
-                console.error('Fehler beim Laden der Sektionen:', error);
-                addMessage('bot-message', 'Es gab ein Problem beim Laden der Sektion.');
+                console.error('Error loading sections:', error);
+                addMessage('bot-message', 'There was a problem loading the section.');
             });
     }
 
-    // Anzeige der Sektionen
+    // Displaying the sections
     function showSections() {
-        const sectionMessage = 'Bitte wählen Sie eine Sektion:<br>' + sections.map(section => `<button class="section-option">${section}</button>`).join('<br>');
+        const sectionMessage = 'Please select a section:<br>' + sections.map(section => `<button class="section-option">${section}</button>`).join('<br>');
         addMessage('bot-message', sectionMessage);
         scrollToBottom();
         attachSectionOptionHandlers();
     }
 
-    // Zuweisung des Event-Handlers für die Schaltfläche "Sektion wählen"
+    // Assigning the event handler for the "Select a Section" button
     function attachSectionButtonHandler() {
         const sectionButton = document.querySelector('.section-button');
         if (sectionButton) {
             sectionButton.addEventListener('click', () => {
-                chatMessages.innerHTML = ''; // Nachrichten löschen, bevor die Sektionen angezeigt werden
+                chatMessages.innerHTML = ''; // Clear messages before displaying sections
                 showSections();
             });
         }
     }
 
-    // Deaktivieren aller Schaltflächen, die dem Selektor entsprechen
+    // Disable all buttons matching the selector
     function disableAllButtons(selector) {
         document.querySelectorAll(selector).forEach(button => {
             button.disabled = true;
         });
     }
 
-    // Zuweisung der Event-Handler für die Schaltflächen mit Sektionen
+    // Assigning event handlers for the section buttons
     function attachSectionOptionHandlers() {
         document.querySelectorAll('.section-option').forEach(button => {
             button.addEventListener('click', () => {
@@ -143,27 +143,27 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Anzeige der Fragen aus der gewählten Sektion
+    // Displaying questions from the selected section
     function showQuestions(section) {
         fetch(`/api/faq-questions?section=${encodeURIComponent(section)}`)
             .then(response => response.json())
             .then(data => {
                 if (data.questions) {
-                    const questionsMessage = 'Bitte wählen Sie eine Frage:<br>' + data.questions.map(q => `<button class="question-option">${q.question}</button>`).join('<br>');
+                    const questionsMessage = 'Please select a question:<br>' + data.questions.map(q => `<button class="question-option">${q.question}</button>`).join('<br>');
                     addMessage('bot-message', questionsMessage);
                     scrollToBottom();
                     attachQuestionOptionHandlers();
                 } else {
-                    addMessage('bot-message', 'Keine Fragen gefunden.');
+                    addMessage('bot-message', 'No questions found.');
                 }
             })
             .catch(error => {
-                console.error('Fehler beim Laden der Fragen:', error);
-                addMessage('bot-message', 'Es gab ein Problem beim Laden der Fragen.');
+                console.error('Error loading questions:', error);
+                addMessage('bot-message', 'There was a problem loading the questions.');
             });
     }
 
-    // Zuweisung der Event-Handler für die Schaltflächen mit Fragen
+    // Assigning event handlers for the question buttons
     function attachQuestionOptionHandlers() {
         document.querySelectorAll('.question-option').forEach(button => {
             button.addEventListener('click', () => {
@@ -174,30 +174,30 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Anzeige der Antwort auf die gewählte Frage
+    // Displaying the answer to the selected question
     function showAnswer(question) {
         fetch(`/api/faq-answer?question=${encodeURIComponent(question)}`)
             .then(response => response.json())
             .then(data => {
-                addMessage('bot-message', data.answer || 'Keine Antwort gefunden.');
+                addMessage('bot-message', data.answer || 'No answer found.');
                 scrollToBottom();
-                setTimeout(showMoreHelpOptions, 2000); // Anzeige der Hilfeoptionen nach 2 Sekunden
+                setTimeout(showMoreHelpOptions, 2000); // Display help options after 2 seconds
             })
             .catch(error => {
-                console.error('Fehler beim Laden der Antwort:', error);
-                addMessage('bot-message', 'Es gab ein Problem beim Laden der Antwort.');
+                console.error('Error loading answer:', error);
+                addMessage('bot-message', 'There was a problem loading the answer.');
             });
     }
 
-    // Anzeige von Optionen für weitere Hilfe
+    // Displaying options for further help
     function showMoreHelpOptions() {
-        const moreHelpMessage = 'Kann ich Ihnen noch weiterhelfen?<br><button class="yes-option">Ja</button><button class="no-option">Nein</button>';
+        const moreHelpMessage = 'Can I help you further?<br><button class="yes-option">Yes</button><button class="no-option">No</button>';
         addMessage('bot-message', moreHelpMessage);
         scrollToBottom();
         attachMoreHelpOptionHandlers();
     }
 
-    // Zuweisung der Event-Handler für die Optionen "Ja" und "Nein"
+    // Assigning event handlers for "Yes" and "No" options
     function attachMoreHelpOptionHandlers() {
         const yesButton = document.querySelector('.yes-option');
         const noButton = document.querySelector('.no-option');
@@ -215,34 +215,34 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // Aktion bei Klick auf "Ja"
+    // Action on clicking "Yes"
     function onYesClick() {
         chatMessages.innerHTML = '';
         showSections();
     }
 
-    // Aktion bei Klick auf "Nein"
+    // Action on clicking "No"
     function onNoClick() {
-        const noReply = 'Vielen Dank für Ihr Verständnis. Wenn Sie noch Fragen haben, stehe ich Ihnen gerne zur Verfügung.<br><button class="restart-chat">Chat neu starten</button>';
+        const noReply = 'Thank you for your understanding. If you have any further questions, please feel free to ask.<br><button class="restart-chat">Restart Chat</button>';
         addMessage('bot-message', noReply);
         scrollToBottom();
         attachRestartChatHandler();
     }
 
-    // Zuweisung des Event-Handlers für den Chat-Neustart-Button
+    // Assigning the event handler for the chat restart button
     function attachRestartChatHandler() {
         const restartChatButton = document.querySelector('.restart-chat');
         if (restartChatButton) {
             restartChatButton.addEventListener('click', () => {
                 disableAllButtons('.restart-chat');
                 chatMessages.innerHTML = '';
-                isGreetingShown = false; // Begrüßungsstatus zurücksetzen
+                isGreetingShown = false; // Reset greeting status
                 sendGreeting();
             });
         }
     }
 
-    // Hinzufügen einer Nachricht zum Chat
+    // Adding a message to the chat
     function addMessage(className, textContent) {
         const messageElement = document.createElement('div');
         messageElement.className = className;
@@ -250,12 +250,12 @@ document.addEventListener('DOMContentLoaded', () => {
         chatMessages.appendChild(messageElement);
     }
 
-    // Scrollen des Chats zum unteren Ende
+    // Scrolling the chat to the bottom
     function scrollToBottom() {
         chatMessages.scrollTop = chatMessages.scrollHeight;
     }
 
-    // Anzeige einer Fehlermeldung
+    // Displaying an error message
     function displayErrorMessage(isError, message = '') {
         if (isError) {
             errorMessage.style.display = 'block';

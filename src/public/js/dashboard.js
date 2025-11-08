@@ -1,86 +1,86 @@
-// Überprüfen, ob der Benutzer über Administratorrechte verfügt
-// Diese Funktion wird vor der Ausführung aller Funktionen aufgerufen, um sicherzustellen, dass der Benutzer angemeldet ist und Administratorrechte besitzt
+// Check if the user has administrator privileges
+// This function is called before all other functions to ensure the user is logged in and has admin rights.
 function isAdmin() {
-    // Prüft, ob die Privilegien des Benutzers das Recht "admin" enthalten
-    return privileges && privileges.includes('admin'); // Gibt true zurück, wenn der Benutzer Administratorrechte hat, andernfalls false
+    // Checks if the user's privileges include the "admin" right.
+    return privileges && privileges.includes('admin'); // Returns true if the user has admin rights, otherwise false.
 }
 
-// Überprüfung der Administratorrechte, um den Code nur für Administratoren auszuführen
+// Admin privileges check to execute code only for administrators
 document.addEventListener('DOMContentLoaded', () => {
-    // Prüfen, ob der Benutzer über Administratorrechte verfügt
+    // Check if the user does NOT have admin privileges
     if (!privileges.includes('admin')) {
-        // Wenn der Benutzer kein Administrator ist, werden die Elemente, die nur für Administratoren sichtbar sind, ausgeblendet
+        // If the user is not an administrator, hide elements visible only to admins
         const adminSections = document.querySelectorAll('.admin-only');
         adminSections.forEach(section => {
-            section.style.display = 'none'; // Setzt das Display der Admin-Bereiche auf 'none', sodass sie nicht angezeigt werden
+            section.style.display = 'none'; // Set the display of admin areas to 'none' so they are not shown.
         });
     }
 });
 
-// Wenn der Benutzer Administratorrechte hat, wird das Logging angepasst
+// If the user has administrator privileges, adjust logging behavior
 if (isAdmin()) {
-    // Überschreiben der console.log Funktion, damit Administratoren weiterhin Logs sehen können
-    console._log = console.log; // Speichern der ursprünglichen console.log Funktion
+    // Overriding the console.log function so that administrators can still see logs
+    console._log = console.log; // Store the original console.log function
     console.log = function () {
-        console._log.apply(console, arguments); // Ruft die ursprüngliche console.log Funktion auf und zeigt die Logs in der Konsole an
+        console._log.apply(console, arguments); // Call the original console.log function and display logs in the console.
     };
 } else {
-    // Wenn der Benutzer kein Administrator ist, wird die console.log Funktion überschrieben, sodass keine Logs angezeigt werden
-    console.log = function () {}; // Ignoriert alle Log-Nachrichten, sodass sie nicht im Browser-Console erscheinen
+    // If the user is not an administrator, the console.log function is overridden so no logs are displayed
+    console.log = function () {}; // Ignores all log messages so they don't appear in the browser console.
 }
 
-// Funktion zum Setup des Inaktivität-Timers
+// Function to set up the inactivity timer
 function setupInactivityTimer() {
-    let timeout; // Variable für den Timeout-Timer
+    let timeout; // Variable for the timeout timer
 
-    // Funktion zum Zurücksetzen des Timers bei Benutzeraktivität
+    // Function to reset the timer upon user activity
     function resetTimer() {
-        clearTimeout(timeout); // Löscht den vorherigen Timer
+        clearTimeout(timeout); // Clear the previous timer
         timeout = setTimeout(() => {
-            // Wenn keine Aktivität erkannt wird, führe Logout aus
+            // If no activity is detected, perform logout
             fetch('/admin/logout', { 
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' }
             })
             .then(() => {
-                // Weiterleitung zur Login-Seite nach dem Logout
+                // Redirect to the login page after logout
                 window.location.href = '/admin/login';
             })
             .catch(error => {
-                // Fehlerbehandlung, wenn der Logout fehlschlägt
-                console.error('Fehler beim Beenden der Sitzung:', error);
+                // Error handling if logout fails
+                console.error('Error ending session:', error);
             });
-        }, 1000 * 60 * 10);  // Timeout nach 10 Minuten Inaktivität (600000ms)
+        }, 1000 * 60 * 10);  // Timeout after 10 minutes of inactivity (600000ms)
     }
 
-    // Event-Listener, um die Inaktivität zu überwachen und den Timer zurückzusetzen
-    document.addEventListener('mousemove', resetTimer); // Bei Mausbewegung
-    document.addEventListener('keypress', resetTimer); // Bei Tastendruck
-    document.addEventListener('click', resetTimer); // Bei Mausklick
-    document.addEventListener('scroll', resetTimer); // Bei Scrollen
-    document.addEventListener('touchstart', resetTimer); // Bei Touch-Start auf mobilen Geräten
+    // Event listeners to monitor inactivity and reset the timer
+    document.addEventListener('mousemove', resetTimer); // On mouse movement
+    document.addEventListener('keypress', resetTimer); // On key press
+    document.addEventListener('click', resetTimer); // On mouse click
+    document.addEventListener('scroll', resetTimer); // On scrolling
+    document.addEventListener('touchstart', resetTimer); // On touch-start on mobile devices
 
-    // Initiales Setzen des Timers
+    // Initial setup of the timer
     resetTimer();
 }
 
-// Funktion zur Steuerung des Chatbots
+// Function to control the chatbot visibility
 function setupChatbotControl() {
     if (!isAdmin()) {
         return;
     }
-    const checkbox = document.getElementById('chatbot-control-checkbox'); // Checkbox zur Steuerung
-    const chatbotControl = document.getElementById('chatbot-control'); // Bereich für den Chatbot
+    const checkbox = document.getElementById('chatbot-control-checkbox'); // Checkbox for control
+    const chatbotControl = document.getElementById('chatbot-control'); // Area for the chatbot
 
-    // Überprüfen, ob beide Elemente vorhanden sind
+    // Check if both elements exist
     if (checkbox && chatbotControl) {
-        // Event-Listener, um den Chatbot ein- oder auszublenden
+        // Event listener to show or hide the chatbot
         checkbox.addEventListener('change', () => {
-            chatbotControl.style.display = checkbox.checked ? 'block' : 'none'; // Einblenden, wenn Checkbox aktiv
+            chatbotControl.style.display = checkbox.checked ? 'block' : 'none'; // Show if checkbox is checked
         });
     } else {
-        // Fehlermeldung, falls die Elemente nicht gefunden wurden
-        console.error('Es konnten keine Elemente zur Steuerung des Chatbots gefunden werden');
+        // Error message if elements are not found
+        console.error('Could not find elements for chatbot control');
     }
 }
 
@@ -88,481 +88,489 @@ function setupActionVisibility() {
     if (!isAdmin()) {
         return;
     }
-    // Elemente für die Steuerung der Ansicht
-    const actionSelect = document.getElementById('action-select'); // Auswahl der Aktion
-    const sectionContainer = document.getElementById('section-container'); // Container für die Sektionen
-    const questionsTableContainer = document.getElementById('questions-table-container'); // Container für die Fragen-Tabelle
-    const actionButtons = document.getElementById('button-container'); // Container für die Aktions-Schaltflächen
-    const confirmButtons = document.getElementById('confirm-buttons'); // Bestätigungs-Schaltflächen
-    const editArea = document.getElementById('edit-area'); // Bereich für die Bearbeitung
-    const editTextarea = document.getElementById('edit-textarea'); // Textarea für die Bearbeitung
-    const editTypeLabel = document.getElementById('edit-type-label'); // Label für den Bearbeitungstyp
-    const deleteMessage = document.getElementById('delete-message'); // Nachricht für die Löschung
-    const insertFormContainer = document.getElementById('insert-form-container'); // Formular zum Hinzufügen
-    const backButton = document.getElementById('back-button'); // Zurück-Schaltfläche
+    // Elements for controlling the view
+    const actionSelect = document.getElementById('action-select'); // Action selection
+    const sectionContainer = document.getElementById('section-container'); // Container for sections
+    const questionsTableContainer = document.getElementById('questions-table-container'); // Container for the questions table
+    const actionButtons = document.getElementById('button-container'); // Container for action buttons
+    const confirmButtons = document.getElementById('confirm-buttons'); // Confirmation buttons
+    const editArea = document.getElementById('edit-area'); // Area for editing
+    const editTextarea = document.getElementById('edit-textarea'); // Textarea for editing
+    const editTypeLabel = document.getElementById('edit-type-label'); // Label for the edit type
+    const deleteMessage = document.getElementById('delete-message'); // Message for deletion
+    const insertFormContainer = document.getElementById('insert-form-container'); // Form for adding
+    const backButton = document.getElementById('back-button'); // Back button
 
-    // Funktion zum Ausblenden aller Steuerelemente
+    // Function to hide all controls
     function hideAllControls() {
-        if (sectionContainer) sectionContainer.style.display = 'none'; // Verstecke den Sektionen-Container
-        if (questionsTableContainer) questionsTableContainer.style.display = 'none'; // Verstecke den Tabellen-Container
-        if (actionButtons) actionButtons.style.display = 'none'; // Verstecke die Aktions-Schaltflächen
-        if (confirmButtons) confirmButtons.classList.add('dash_hidden'); // Verstecke die Bestätigungs-Schaltflächen
-        if (editArea) editArea.classList.add('dash_hidden'); // Verstecke den Bearbeitungsbereich
-        if (editTextarea) editTextarea.classList.add('dash_hidden'); // Verstecke das Bearbeitungs-Textarea
-        if (editTypeLabel) editTypeLabel.classList.add('dash_hidden'); // Verstecke das Bearbeitungs-Typ-Label
-        if (deleteMessage) deleteMessage.classList.add('dash_hidden'); // Verstecke die Löschnachricht
-        if (insertFormContainer) insertFormContainer.classList.add('dash_hidden'); // Verstecke das Formular zum Hinzufügen
+        if (sectionContainer) sectionContainer.style.display = 'none'; // Hide the sections container
+        if (questionsTableContainer) questionsTableContainer.style.display = 'none'; // Hide the table container
+        if (actionButtons) actionButtons.style.display = 'none'; // Hide the action buttons
+        if (confirmButtons) confirmButtons.classList.add('dash_hidden'); // Hide the confirmation buttons
+        if (editArea) editArea.classList.add('dash_hidden'); // Hide the editing area
+        if (editTextarea) editTextarea.classList.add('dash_hidden'); // Hide the editing textarea
+        if (editTypeLabel) editTypeLabel.classList.add('dash_hidden'); // Hide the edit type label
+        if (deleteMessage) deleteMessage.classList.add('dash_hidden'); // Hide the deletion message
+        if (insertFormContainer) insertFormContainer.classList.add('dash_hidden'); // Hide the form for adding
     }
 
-    let notificationShown = false; // Flag für Tracking-Benachrichtigungen
+    let notificationShown = false; // Flag for tracking notifications
 
-    // Funktion zum Ausblenden der Bearbeitungssteuerung
+    // Function to hide edit controls
     function hideEditControls() {
-        if (editArea) editArea.classList.add('dash_hidden'); // Verstecke den Bearbeitungsbereich
-        if (editTextarea) editTextarea.classList.add('dash_hidden'); // Verstecke das Textarea für die Bearbeitung
-        if (editTypeLabel) editTypeLabel.classList.add('dash_hidden'); // Verstecke das Label für den Bearbeitungstyp
-        if (confirmButtons) confirmButtons.classList.add('dash_hidden'); // Verstecke die Bestätigungs-Schaltflächen
-        actionButtons.style.display = 'block'; // Zeige die Aktions-Schaltflächen wieder an
+        if (editArea) editArea.classList.add('dash_hidden'); // Hide the editing area
+        if (editTextarea) editTextarea.classList.add('dash_hidden'); // Hide the textarea for editing
+        if (editTypeLabel) editTypeLabel.classList.add('dash_hidden'); // Hide the label for the edit type
+        if (confirmButtons) confirmButtons.classList.add('dash_hidden'); // Hide the confirmation buttons
+        actionButtons.style.display = 'block'; // Show the action buttons again
     }
 
-    // Zeigen der Löschsteuerung für eine ausgewählte Zeile
+    // Show delete controls for a selected row
     function showDeleteControls(row) {
         const id = row.dataset.id;
         const section = row.cells[1].textContent;
 
-        // Nachricht für die Löschung der Zeile mit ID aktualisieren
-        deleteMessage.textContent = `Möchten Sie die Zeile mit ID ${id} wirklich löschen?`;
+        // Update message for deleting the row with ID
+        deleteMessage.textContent = `Do you really want to delete the row with ID ${id}?`;
         deleteMessage.classList.remove('dash_hidden');
 
-        // Bestätigungsschaltflächen anzeigen
+        // Show confirmation buttons
         confirmButtons.classList.remove('dash_hidden');
-        actionButtons.style.display = 'none'; // Aktionsschaltflächen ausblenden
+        actionButtons.style.display = 'none'; // Hide action buttons
 
-        // Nachricht mit ID und Abschnitt der ausgewählten Zeile aktualisieren
+        // Update message with ID and section of the selected row
         document.getElementById('delete-id').textContent = id;
         document.getElementById('delete-section').textContent = section;
     }
 
-    // Verstecken der Löschsteuerung und Zurücksetzen der Anzeige
+    // Hide delete controls and reset the display
     function hideDeleteControls() {
         deleteMessage.classList.add('dash_hidden');
         confirmButtons.classList.add('dash_hidden');
-        actionButtons.style.display = 'block'; // Aktionsschaltflächen wieder anzeigen
+        actionButtons.style.display = 'block'; // Show action buttons again
 
-        // Nachricht mit ID und Abschnitt zurücksetzen
+        // Reset message with ID and section
         document.getElementById('delete-id').textContent = 'undefined';
         document.getElementById('delete-section').textContent = 'undefined';
 
-        // Zeilenauswahl zurücksetzen, falls eine Zeile ausgewählt wurde
+        // Reset row selection, if a row was selected
         const selectedRow = document.querySelector('#questions-table tbody tr.selected');
         if (selectedRow) {
             selectedRow.classList.remove('selected');
         }
     }
 
-    // Funktion zum Zurücksetzen des Benachrichtigungs-Flags
+    // Function to reset the notification flag
     function resetNotificationFlag() {
-        notificationShown = false; // Rücksetzen des Flags, wenn die Benachrichtigung verschwunden ist
+        notificationShown = false; // Reset the flag when the notification disappears
     }
 
-    // Beispiel für das Formular zum Hinzufügen von FAQ
+    // Example for the form to add FAQ
     const insertForm = document.getElementById('insert-form');
     if (insertForm) {
         insertForm.addEventListener('submit', function(event) {
-            event.preventDefault(); // Verhindern des Standard-Formularversands
+            event.preventDefault(); // Prevent the default form submission
 
-            // Abholen der Werte aus den Formularfeldern
+            // Retrieve values from the form fields
             const section = document.getElementById('insert-section').value.trim();
             const question = document.getElementById('insert-question').value.trim();
             const answer = document.getElementById('insert-answer').value.trim();
 
-            // Senden der Daten an die API, um die Frage hinzuzufügen
+            // Send data to the API to add the question
             fetch('/api/add-faq', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ section, question, answer }) // JSON-Daten im Request-Body
+                body: JSON.stringify({ section, question, answer }) // JSON data in the request body
             })
-            .then(response => response.json()) // Antwort als JSON verarbeiten
+            .then(response => response.json()) // Process response as JSON
             .then(data => {
                 if (data.success) {
-                    // Erfolgreich hinzugefügt
-                    showNotification('Die Frage wurde erfolgreich hinzugefügt.');
-                    insertForm.reset(); // Formular zurücksetzen
-                    document.getElementById('action-select').value = 'view'; // Auswahl zurücksetzen
-                    document.getElementById('action-select').dispatchEvent(new Event('change')); // Ereignis auslösen, um die Ansicht zu aktualisieren
+                    // Successfully added
+                    showNotification('The question was successfully added.');
+                    insertForm.reset(); // Reset form
+                    document.getElementById('action-select').value = 'view'; // Reset selection
+                    document.getElementById('action-select').dispatchEvent(new Event('change')); // Trigger event to update the view
                 } else {
-                    // Fehler bei der Anfrage
+                    // Error in the request
                     if (data.error === 'duplicate') {
-                        showNotification('Fehler: Diese Frage existiert bereits.'); // Fehlerfall für doppelte Frage
+                        showNotification('Error: This question already exists.'); // Error case for duplicate question
                     } else {
-                        showNotification(`Fehler: ${data.message}`); // Allgemeine Fehlernachricht
+                        showNotification(`Error: ${data.message}`); // General error message
                     }
                 }
             })
             .catch(error => {
-                console.error('Fehler beim Hinzufügen der Frage:', error);
-                showNotification('Fehler beim Hinzufügen der Frage. Überprüfen Sie die Konsole für Details.');
+                console.error('Error adding the question:', error);
+                showNotification('Error adding the question. Check the console for details.');
             });
         });
     }
 
-    // Wenn das Element 'actionSelect' existiert, fügen wir einen 'change' Event-Listener hinzu
+    // If the 'actionSelect' element exists, add a 'change' event listener
     if (actionSelect) {
         actionSelect.addEventListener('change', function() {
-            const value = actionSelect.value; // Holen Sie sich den aktuellen Wert der Auswahl
-            hideAllControls(); // Blenden Sie alle anderen Steuerelemente aus, bevor die erforderlichen angezeigt werden
+            const value = actionSelect.value; // Get the current value of the selection
+            hideAllControls(); // Hide all other controls before showing the required ones
 
-            // Überprüfen Sie den Wert der Auswahl und zeigen Sie je nach Auswahl die entsprechenden Steuerelemente an
+            // Check the value of the selection and display the corresponding controls
             switch (value) {
                 case 'view':
-                    sectionContainer.style.display = 'block'; // Zeige den Abschnittscontainer an
-                    questionsTableContainer.style.display = 'block'; // Zeige die Fragen-Tabelle an
-                    actionButtons.style.display = 'block'; // Zeige die Aktionsbuttons an
-                    loadQuestions(); // Lade die Fragen, um sie anzuzeigen
+                    sectionContainer.style.display = 'block'; // Show the section container
+                    questionsTableContainer.style.display = 'block'; // Show the questions table
+                    actionButtons.style.display = 'block'; // Show the action buttons
+                    loadQuestions(); // Load the questions to display them
                     break;
 
-                // Sie können hier weitere Fälle für andere Aktionswerte hinzufügen
+                // You can add more cases here for other action values
                 // default:
-                //    console.error('Unbekannter Handlungswert:', value);
+                //    console.error('Unknown action value:', value);
             }
         });
     } else {
-        console.error('Element zur Auswahl der Aktion konnte nicht gefunden werden');
+        console.error('Element for action selection could not be found');
     }
 
-    // Wenn das 'sectionSelect'-Element existiert, fügen wir einen 'change' Event-Listener hinzu
+    // If the 'sectionSelect' element exists, add a 'change' event listener
     const sectionSelect = document.getElementById('chatbot-sections');
     if (sectionSelect) {
         sectionSelect.addEventListener('change', function() {
-            const section = this.value; // Holen Sie sich den ausgewählten Abschnitt
+            const section = this.value; // Get the selected section
             if (section) {
-                loadQuestions(section); // Fragen basierend auf der ausgewählten Sektion laden
+                loadQuestions(section); // Load questions based on the selected section
             }
         });
     }
 
-    // Holen Sie sich die 'deleteButton' und 'insertButton' Elemente
+    // Get the 'deleteButton' and 'insertButton' elements
     const deleteButton = document.getElementById('submit-delete');
-    const insertButton = document.getElementById('submit-insert'); // Button "Einfügen"
+    const insertButton = document.getElementById('submit-insert'); // "Insert" button
 
-    // Wenn der 'deleteButton' existiert, fügen wir einen Klick-Event-Listener hinzu
+    // If the 'deleteButton' exists, add a click event listener
     if (deleteButton) {
         deleteButton.addEventListener('click', () => {
-            // Zeigen Sie die Bereiche für die Bestätigung des Löschens an
-            sectionContainer.style.display = 'block'; // Zeige den Abschnittscontainer an
-            questionsTableContainer.style.display = 'block'; // Zeige die Fragen-Tabelle an
-            actionButtons.style.display = 'none'; // Blende die Aktionsbuttons aus
-            confirmButtons.classList.remove('dash_hidden'); // Zeige die Bestätigungsbuttons an
-            deleteMessage.classList.remove('dash_hidden'); // Zeige die Löschmeldung an
-            document.getElementById('button-container').style.display = 'none'; // Blende die Schaltflächen „Bearbeiten“ und „Löschen“ aus
-            // Wenn der Bearbeitungsbereich existiert, blenden wir ihn aus
+            // Show areas for delete confirmation
+            sectionContainer.style.display = 'block'; // Show the section container
+            questionsTableContainer.style.display = 'block'; // Show the questions table
+            actionButtons.style.display = 'none'; // Hide the action buttons
+            confirmButtons.classList.remove('dash_hidden'); // Show the confirmation buttons
+            deleteMessage.classList.remove('dash_hidden'); // Show the delete message
+            document.getElementById('button-container').style.display = 'none'; // Hide the "Edit" and "Delete" buttons
+            // If the editing area exists, hide it
             if (editArea) {
-                editArea.style.display = 'none'; // Bearbeitungsbereich ausblenden
+                editArea.style.display = 'none'; // Hide editing area
             }
         });
     }
 
-    // Wenn der Button "insertButton" existiert, fügen wir einen Klick-Event-Listener hinzu
+    // If the "insertButton" exists, add a click event listener
     if (insertButton) {
         insertButton.addEventListener('click', () => {
-            hideAllControls(); // Alle Steuerelemente ausblenden
-            insertFormContainer.classList.remove('dash_hidden'); // Formular zum Hinzufügen anzeigen
+            hideAllControls(); // Hide all controls
+            insertFormContainer.classList.remove('dash_hidden'); // Show the form for adding
         });
     }
 
-    // Wenn der Button "backButton" existiert, fügen wir einen Klick-Event-Listener hinzu
+    // If the "backButton" exists, add a click event listener
     if (backButton) {
         backButton.addEventListener('click', () => {
-            hideAllControls(); // Alle Steuerelemente ausblenden
-            const actionSelect = document.getElementById('action-select'); // Suche das Aktionsauswahl-Element
+            hideAllControls(); // Hide all controls
+            const actionSelect = document.getElementById('action-select'); // Find the action selection element
             if (actionSelect) {
-                actionSelect.value = 'view'; // Setze den Wert der Aktionsauswahl auf 'view'
-                actionSelect.dispatchEvent(new Event('change')); // Generiere ein Ereignis, dass die Auswahl geändert wurde
+                actionSelect.value = 'view'; // Set the action selection value to 'view'
+                actionSelect.dispatchEvent(new Event('change')); // Generate an event that the selection has changed
             }
         });
     }
 
-    // Holen Sie sich das "cancelButton"-Element
+    // Get the "cancelButton" element
     const cancelButton = document.getElementById('cancel-button');
 
-    // Wenn der Button "cancelButton" existiert, fügen wir einen Klick-Event-Listener hinzu
+    // If the "cancelButton" exists, add a click event listener
     if (cancelButton) {
         cancelButton.addEventListener('click', () => {
-            hideDeleteControls(); // Alle Steuerelemente im Zusammenhang mit dem Löschen ausblenden
+            hideDeleteControls(); // Hide all controls related to deletion
         });
     }
     
 }
 
 let isLoadingQuestions = false;
-const allSections = new Set(); // Fügen Sie diese Definition hinzu
+const allSections = new Set(); // Add this definition
 
-// Nachdem die Benachrichtigung angezeigt wird, setzen Sie das Flag zurück
+// After the notification is shown, reset the flag
 function resetNotificationFlag() {
     if (!isAdmin()) {
-        console.log('Sie verfügen nicht über die Berechtigung, diesen Vorgang auszuführen');
+        console.log('You do not have permission to perform this operation');
         return;
     }
     notificationShown = false;
 }
 
-// Verwendung der Funktion für die Bestätigung des Löschvorgangs
-const confirmButton = document.getElementById('confirm-button'); // Button für die Bestätigung des Löschens
+// Usage of the function for delete confirmation
+const confirmButton = document.getElementById('confirm-button'); // Button for delete confirmation
 
-// Überprüfen, ob der Button existiert und hinzufügen eines Event Listeners
+// Check if the button exists and add an event listener
 if (confirmButton) {
     confirmButton.addEventListener('click', () => {
-        // Überprüfung der Administratorrechte innerhalb eines Event-Handlers
+        // Checking administrator rights within an event handler
         if (!isAdmin()) {
-            console.log('Sie verfügen nicht über die Berechtigung, diesen Vorgang auszuführen');
-            return; // Zurückgeben, wenn nicht korrekt
+            console.log('You do not have permission to perform this operation');
+            return; // Return if not correct
         }
 
-        // Wir erhalten die ID und den Abschnitt der zu löschenden Zeile
+        // Get the ID and section of the row to be deleted
         const deleteId = document.getElementById('delete-id').textContent;
         const deleteSection = document.getElementById('delete-section').textContent;
 
-        // Wenn die Zeile nicht ausgewählt ist, wird eine Benachrichtigung angezeigt und die Ausführung gestoppt
+        // If the row is not selected, a notification is shown and execution is stopped
         if (deleteId === 'undefined') {
-            showNotification('Keine Zeile ausgewählt. Bitte wählen Sie eine Zeile aus, um fortzufahren.');
-            return; // Rückkehr, wenn keine Zeile ausgewählt ist
+            showNotification('No row selected. Please select a row to proceed.');
+            return; // Return if no row is selected
         }
 
-        // Bestätigung der Zeilenlöschung
-        const confirmationMessage = `Möchten Sie die Zeile mit ID ${deleteId} wirklich löschen?`;
+        // Confirmation of row deletion
+        const confirmationMessage = `Do you really want to delete the row with ID ${deleteId}?`;
         
-        // Bestätigungsdialog anzeigen
+        // Show confirmation dialog
         if (confirm(confirmationMessage)) {
-            // Wenn der Benutzer bestätigt hat, rufen Sie die Löschfunktion auf
+            // If the user confirmed, call the delete function
             deleteRow(deleteId);
         } else {
-            // Wenn der Benutzer kündigt, zeigen wir eine Kündigungsbenachrichtigung an
-            showNotification('Löschvorgang abgebrochen.');
+            // If the user cancels, show a cancellation notification
+            showNotification('Deletion cancelled.');
         }
     });
 }
 
-// Funktion zum Anzeigen einer Benachrichtigung (einfaches Alert für Demonstration)
+// Function to display a notification (simple alert for demonstration)
 function showNotification(message) {
+    // Check for administrator privileges
     if (!isAdmin()) {
-        console.log('Sie verfügen nicht über die Berechtigung, diesen Vorgang auszuführen');
+        console.log('You do not have permission to perform this operation');
         return;
     }
-    alert(message); // Zeigt die Nachricht als Alert im Browser an
+    alert(message); // Displays the message as an alert in the browser
 }
 
-// Funktion zum Löschen einer Zeile (Frage) mit der angegebenen ID
+// Function to delete a row (question) with the specified ID
 function deleteRow(id) {
+    // Check for administrator privileges
     if (!isAdmin()) {
-        console.log('Sie verfügen nicht über die Berechtigung, diesen Vorgang auszuführen');
+        console.log('You do not have permission to perform this operation');
         return;
     }
-    // Senden einer POST-Anfrage an die API, um die Frage mit der angegebenen ID zu löschen
+    // Send a POST request to the API to delete the question with the specified ID
     fetch('/api/delete-faq', {
-        method: 'POST', // Wir verwenden die POST-Methode, da wir Daten auf dem Server löschen
-        headers: { 'Content-Type': 'application/json' }, // Setzen des Inhalts-Typs als JSON
-        body: JSON.stringify({ id }) // Senden der ID als JSON-Daten im Body der Anfrage
+        method: 'POST', // Use the POST method, as we are deleting data on the server
+        headers: { 'Content-Type': 'application/json' }, // Set the content type as JSON
+        body: JSON.stringify({ id }) // Send the ID as JSON data in the request body
     })
     .then(response => {
-        // Überprüfen, ob die Antwort vom Server erfolgreich war
+        // Check if the server response was successful
         if (!response.ok) {
-            throw new Error('Netzwerkantwort war nicht OK'); // Fehler, wenn der Statuscode der Antwort nicht ok ist
+            throw new Error('Network response was not OK'); // Error if the response status code is not ok
         }
-        return response.json(); // Rückgabe der Antwort als JSON
+        return response.json(); // Return the response as JSON
     })
     .then(data => {
-        // Überprüfen, ob der Server das Löschen erfolgreich durchgeführt hat
+        // Check if the server successfully performed the deletion
         if (data.success) {
-            showNotification('Die Frage wurde erfolgreich gelöscht.'); // Zeigt eine Benachrichtigung an, wenn das Löschen erfolgreich war
-            loadQuestions(); // Aktualisiert die Liste der Fragen nach dem Löschen
-            resetDeleteMessage(); // Setzt die Löschenachricht zurück, um sie zu leeren
+            showNotification('The question was successfully deleted.'); // Display a notification if the deletion was successful
+            loadQuestions(); // Update the list of questions after deletion
+            resetDeleteMessage(); // Reset the deletion message to clear it
         } else {
-            showNotification(`Fehler: ${data.message}`); // Zeigt eine Fehlernachricht an, wenn das Löschen fehlgeschlagen ist
+            showNotification(`Error: ${data.message}`); // Display an error message if the deletion failed
         }
     })
     .catch(error => {
-        // Falls ein Fehler beim Senden der Anfrage auftritt (z.B. Netzwerkfehler)
-        console.error('Fehler beim Löschen der Frage:', error); // Fehler wird in der Konsole protokolliert
-        showNotification('Fehler beim Löschen der Frage. Überprüfen Sie die Konsole für Details.'); // Zeigt eine allgemeine Fehlermeldung an
+        // Handle error if sending the request fails (e.g., network error)
+        console.error('Error deleting the question:', error); // Error is logged in the console
+        showNotification('Error deleting the question. Check the console for details.'); // Display a general error message
     });
 }
 
-// Funktion zum Zurücksetzen der Löschenachricht (ID und Abschnitt)
+// Function to reset the deletion message (ID and section)
 function resetDeleteMessage() {
+    // Check for administrator privileges
     if (!isAdmin()) {
-        console.log('Sie verfügen nicht über die Berechtigung, diesen Vorgang auszuführen');
+        console.log('You do not have permission to perform this operation');
         return;
     }
-    // Setzt den Textinhalt für ID und Abschnitt auf 'undefined', um anzuzeigen, dass keine Frage mehr ausgewählt ist
+    // Set the text content for ID and section to 'undefined' to indicate that no question is selected anymore
     document.getElementById('delete-id').textContent = 'undefined';
     document.getElementById('delete-section').textContent = 'undefined';
 }
 
-// Funktion zum Laden von Sektionen (Abschnitten)
+// Function to load sections
 function loadSections() {
+    // Check for administrator privileges
     if (!isAdmin()) {
-        console.log('Sie verfügen nicht über die Berechtigung, diesen Vorgang auszuführen');
+        console.log('You do not have permission to perform this operation');
         return;
     }
-    // Holt das Select-Element mit der ID 'chatbot-sections', wo die Sektionen angezeigt werden
+    // Get the select element with the ID 'chatbot-sections' where the sections are displayed
     const sectionSelect = document.getElementById('chatbot-sections');
 
-    // Senden einer Fetch-Anfrage an die API, um die Sektionen zu laden
-    fetch('/api/update-faq-sections') // Ersetzen Sie hier durch die richtige Route, die die Sektionen zurückgibt
+    // Send a Fetch request to the API to load the sections
+    fetch('/api/update-faq-sections') // Replace here with the correct route that returns the sections
         .then(response => {
-            // Überprüft, ob die Antwort vom Server erfolgreich war
+            // Check if the response from the server was successful
             if (!response.ok) {
-                throw new Error('Netzwerkfehler beim Laden von Sektionen'); // Fehler, wenn der Statuscode nicht OK ist
+                throw new Error('Network error loading sections'); // Error if the status code is not OK
             }
-            return response.json(); // Wenn alles gut geht, die Antwort als JSON zurückgeben
+            return response.json(); // If all goes well, return the response as JSON
         })
         .then(data => {
-            // Überprüfen der erhaltenen Daten und Aktualisieren des Dropdown-Menüs für die Sektionen
+            // Check the received data and update the dropdown menu for the sections
             if (!data.sections || data.sections.length === 0) {
-                // Falls keine Sektionen vorhanden sind, eine entsprechende Option anzeigen
-                sectionSelect.innerHTML = '<option value="">Keine Abschnitte verfügbar</option>';
-                return; // Die Funktion verlassen, wenn keine Sektionen vorhanden sind
+                // If no sections are available, display a corresponding option
+                sectionSelect.innerHTML = '<option value="">No Sections Available</option>';
+                return; // Exit the function if no sections are available
             }
 
-            // Setzt eine Standard-Option "Alle Sektionen" für die Dropdown-Liste
-            sectionSelect.innerHTML = '<option value="">Alle Sektionen</option>';
+            // Set a default option "All Sections" for the dropdown list
+            sectionSelect.innerHTML = '<option value="">All Sections</option>';
 
-            // Iteriert über jede Sektion und fügt sie als Option im Select-Element hinzu
+            // Iterate over each section and add it as an option in the select element
             data.sections.forEach(section => {
                 const option = document.createElement('option');
-                option.value = section; // Setzt den Wert der Option auf den Namen der Sektion
-                option.textContent = section; // Setzt den Text der Option
-                sectionSelect.appendChild(option); // Fügt die Option zum Select-Element hinzu
+                option.value = section; // Set the value of the option to the section name
+                option.textContent = section; // Set the text of the option
+                sectionSelect.appendChild(option); // Add the option to the select element
             });
         })
         .catch(error => {
-            // Falls ein Fehler während des Fetch-Vorgangs auftritt, wird dieser hier behandelt
-            console.error('Netzwerkfehler beim Laden von Sektionen:', error); // Fehler im Konsolenlog ausgeben
+            // If an error occurs during the fetch process, it is handled here
+            console.error('Network error loading sections:', error); // Output error in the console log
         });
 }
 
-// ABMELDEN-LINK (Link für die Abmeldung)
+// LOGOUT LINK
 document.addEventListener('DOMContentLoaded', function() {
-    // Holt das Element für den Abmelde-Link mit der ID 'logout-link'
+    // Get the element for the logout link with the ID 'logout-link'
     const logoutLink = document.getElementById('logout-link');
     
-    // Wenn der Link existiert, wird ein Event-Listener hinzugefügt
+    // If the link exists, an event listener is added
     if (logoutLink) {
         logoutLink.addEventListener('click', function(event) {
-            // Verhindert das Standardverhalten des Links (z.B. eine neue Seite zu laden)
+            // Prevent the default link behavior (e.g., loading a new page)
             event.preventDefault(); 
 
-            // Sendet eine POST-Anfrage an den Server, um die Sitzung zu beenden
+            // Send a POST request to the server to end the session
             fetch('/admin/logout', {
-                method: 'POST', // HTTP-Methode POST zum Beenden der Sitzung
-                credentials: 'same-origin', // Sendet Cookies für die Authentifizierung
+                method: 'POST', // HTTP method POST to end the session
+                credentials: 'same-origin', // Send cookies for authentication
                 headers: {
-                    'Content-Type': 'application/json' // Definiert den Inhaltstyp als JSON
+                    'Content-Type': 'application/json' // Define the content type as JSON
                 }
             }).then(response => {
-                // Wenn die Antwort erfolgreich ist, wird der Benutzer zur Login-Seite weitergeleitet
+                // If the response is successful, the user is redirected to the login page
                 if (response.ok) {
-                    // Weiterleitung zur Anmeldeseite nach erfolgreichem Logout
+                    // Redirect to the login page after successful logout
                     window.location.href = '/admin/login';
                 } else {
-                    // Wenn ein Fehler beim Logout auftritt, wird eine Fehlermeldung ausgegeben
-                    console.error('Fehler beim Beenden der Sitzung');
-                    alert('Die Abmeldung von Ihrem Konto ist fehlgeschlagen. Versuchen Sie es erneut.');
+                    // If an error occurs during logout, an error message is output
+                    console.error('Error ending session');
+                    alert('Logout from your account failed. Please try again.');
                 }
             }).catch(error => {
-                // Wenn beim Senden der Anfrage ein Fehler auftritt, wird eine Fehlermeldung ausgegeben
-                console.error('Fehler beim Senden der Abmeldeanfrage:', error);
+                // If an error occurs while sending the request, an error message is output
+                console.error('Error sending the logout request:', error);
             });
         });
     }
 });
 
-let currentSection = ''; // Variable zum Speichern des aktuell ausgewählten Abschnitts
+let currentSection = ''; // Variable to store the currently selected section
 
-updateSectionSelect();// Aufrufen einer Funktion zum Aktualisieren von Sektionen
-setInterval(updateSectionSelect, 5000); // Jede 5 Sekunden
+// Function call to update sections (will run immediately)
+updateSectionSelect();
+// Run function every 5 seconds
+setInterval(updateSectionSelect, 5000); 
 
-// Funktion zum Laden der Fragen basierend auf der ausgewählten Sektion
+// Function to load questions based on the selected section
 function loadQuestions(section = '') {
+    // Check for administrator privileges
     if (!isAdmin()) {
-        console.log('Sie verfügen nicht über die Berechtigung, diesen Vorgang auszuführen');
+        console.log('You do not have permission to perform this operation');
         return;
     }
-    // Überprüft, ob gerade Fragen geladen werden, um mehrfaches Laden zu verhindern
+    // Check if questions are currently being loaded to prevent multiple loads
     if (isLoadingQuestions) return;
     isLoadingQuestions = true;
 
-    // Holt das <tbody>-Element der Tabelle, in das die Fragen geladen werden
+    // Get the <tbody> element of the table where the questions will be loaded
     const tbody = document.querySelector('#questions-table tbody');
 
-    // Wenn das <tbody>-Element gefunden wird, fahren wir mit dem Laden fort
+    // If the <tbody> element is found, we proceed with loading
     if (tbody) {
-        // Leert die Tabelle, bevor neue Daten hinzugefügt werden
+        // Clear the table before new data is added
         tbody.innerHTML = ''; 
 
-        // Startet die Anfrage zum Laden der Fragen, abhängig von der ausgewählten Sektion
+        // Start the request to load the questions, depending on the selected section
         fetch(`/api/faq-questions?section=${encodeURIComponent(section)}`)
             .then(response => {
-                // Wenn die Antwort vom Server nicht erfolgreich ist, werfen wir einen Fehler
+                // If the response from the server is not successful, throw an error
                 if (!response.ok) {
-                    throw new Error('Netzwerkfehler beim Laden der Fragen');
+                    throw new Error('Network error loading questions');
                 }
-                // Wenn die Antwort erfolgreich war, wird sie als JSON zurückgegeben
+                // If the response was successful, return it as JSON
                 return response.json();
             })
             .then(data => {
-                // Extrahiert die Fragen aus den empfangenen Daten
+                // Extract the questions from the received data
                 const questions = data.questions;
                 
-                // Sortiert die Fragen nach ihrer ID in aufsteigender Reihenfolge
+                // Sort the questions by their ID in ascending order
                 const sortedQuestions = questions.sort((a, b) => a.id - b.id);
 
-                // Geht jede Frage durch und fügt eine neue Zeile in die Tabelle ein
+                // Iterate through each question and insert a new row into the table
                 sortedQuestions.forEach(question => {
-                    // Erstellt eine neue Zeile (<tr>) für jede Frage
+                    // Create a new row (<tr>) for each question
                     const row = document.createElement('tr');
-                    row.dataset.id = question.id; // Setzt das ID-Attribut der Zeile für spätere Verwendung
+                    row.dataset.id = question.id; // Set the ID attribute of the row for later use
 
-                    // Erstellt eine Zelle für die ID der Frage und fügt sie der Zeile hinzu
+                    // Create a cell for the question ID and add it to the row
                     const idCell = document.createElement('td');
-                    idCell.textContent = question.id; // Setzt den Text der Zelle auf die Frage-ID
-                    row.appendChild(idCell); // Fügt die Zelle der Zeile hinzu
+                    idCell.textContent = question.id; // Set the text of the cell to the question ID
+                    row.appendChild(idCell); // Add the cell to the row
 
-                    // Erstellt eine Zelle für die Sektion der Frage und fügt sie der Zeile hinzu
+                    // Create a cell for the question section and add it to the row
                     const sectionCell = document.createElement('td');
-                    sectionCell.textContent = question.section_name; // Verwendet section_name aus der Frage
-                    row.appendChild(sectionCell); // Fügt die Zelle der Zeile hinzu
+                    sectionCell.textContent = question.section_name; // Use section_name from the question
+                    row.appendChild(sectionCell); // Add the cell to the row
 
-                    // Erstellt eine Zelle für die Frage selbst und fügt sie der Zeile hinzu
+                    // Create a cell for the question itself and add it to the row
                     const questionCell = document.createElement('td');
-                    questionCell.textContent = question.question; // Setzt den Text der Zelle auf die Frage
-                    row.appendChild(questionCell); // Fügt die Zelle der Zeile hinzu
+                    questionCell.textContent = question.question; // Set the text of the cell to the question
+                    row.appendChild(questionCell); // Add the cell to the row
 
-                    // Erstellt eine Zelle für die Antwort und fügt sie der Zeile hinzu
+                    // Create a cell for the answer and add it to the row
                     const answerCell = document.createElement('td');
-                    answerCell.textContent = question.answer; // Setzt den Text der Zelle auf die Antwort
-                    row.appendChild(answerCell); // Fügt die Zelle der Zeile hinzu
+                    answerCell.textContent = question.answer; // Set the text of the cell to the answer
+                    row.appendChild(answerCell); // Add the cell to the row
 
-                    // Fügt die erstellte Zeile der Tabelle hinzu
+                    // Add the created row to the table
                     tbody.appendChild(row);
                 });
             })
             .catch(error => {
-                // Gibt einen Fehler aus, wenn etwas schief geht
-                console.error('Fehler beim Laden der Fragen:', error);
+                // Output an error if something goes wrong
+                console.error('Error loading questions:', error);
             })
             .finally(() => {
-                // Setzt die isLoadingQuestions-Variable zurück, nachdem der Ladevorgang abgeschlossen ist
+                // Reset the isLoadingQuestions variable after the loading process is complete
                 isLoadingQuestions = false;
             });
     } else {
-        // Falls das <tbody>-Element nicht gefunden wird, geben wir eine Fehlermeldung aus
-        console.error('Tabelle konnte nicht gefunden werden');
+        // If the <tbody> element is not found, output an error message
+        console.error('Table could not be found');
     }
 }
 
-// Funktion zum Aktualisieren der Sektionen-Auswahl
+// Function to update the section selection
 function updateSectionSelect() {
+    // Check for administrator privileges
     if (!isAdmin()) {
         return;
     }
@@ -570,15 +578,15 @@ function updateSectionSelect() {
         .then(response => response.json())
         .then(data => {
             const selectElement = document.getElementById('chatbot-sections'); 
-            selectElement.innerHTML = ''; // Löscht die aktuellen Optionen
+            selectElement.innerHTML = ''; // Clear the current options
 
-            // Erstellt und fügt eine Option für die Auswahl der Sektionen hinzu
+            // Create and add an option for section selection
             const defaultOption = document.createElement('option');
-            defaultOption.value = ''; // Leerer Wert für "Alle Sektionen"
-            defaultOption.textContent = 'Alle Sektionen'; 
+            defaultOption.value = ''; // Empty value for "All Sections"
+            defaultOption.textContent = 'All Sections'; 
             selectElement.appendChild(defaultOption);
 
-            // Erstellt und fügt Optionen für die Sektionen hinzu
+            // Create and add options for the sections
             data.sections.forEach(section => {
                 const option = document.createElement('option');
                 option.value = section;
@@ -586,289 +594,303 @@ function updateSectionSelect() {
                 selectElement.appendChild(option);
             });
 
-            // Stellt die ausgewählte Sektion wieder her, falls vorhanden
-            selectElement.value = currentSection; // Setzt den Wert der ausgewählten Sektion
+            // Restore the selected section, if present
+            selectElement.value = currentSection; // Set the value of the selected section
 
-            // Lädt Fragen für die aktuelle Sektion, falls ausgewählt
+            // Load questions for the current section, if selected
             if (currentSection) {
                 loadQuestions(currentSection);
             }
         })
         .catch(error => {
-            console.error('Fehler beim Aktualisieren der Sektionen:', error);
+            console.error('Error updating sections:', error);
         });
 }
 
 document.addEventListener('DOMContentLoaded', () => {
     const sectionSelect = document.getElementById('chatbot-sections');
     if (sectionSelect) {
+        // Listener for changes in the section selection dropdown
         sectionSelect.addEventListener('change', function() {
             if (!isAdmin()) {
                 return;
             }
+            // Update the global variable for the currently selected section
             currentSection = this.value;
+            // Load questions filtered by the new section
             loadQuestions(currentSection);
         });
     } else {
-        
+        // console.error('Section select element not found.');
     }
 });
 
-// Aufrufen einer Funktion zum Aktualisieren von Sektionen
+// Calling a function to update sections (defined in a previous code block)
 updateSectionSelect();
 
-// Funktion zum Einrichten der Zeilenauswahl in der Tabelle
+// Function to set up row selection in the questions table
 function setupRowSelection() {
     if (!isAdmin()) {
-        console.log('Sie verfügen nicht über die Berechtigung, diesen Vorgang auszuführen');
+        console.log('You do not have permission to perform this operation');
         return;
     }
     const tableBody = document.querySelector('#questions-table tbody');
 
     if (tableBody) {
+        // Event delegation: listen for clicks on the table body
         tableBody.addEventListener('click', function(event) {
+            // Find the closest table row (<tr>) ancestor of the clicked element
             const clickedRow = event.target.closest('tr');
-            if (!clickedRow) return; // Wenn nicht auf eine Zeile geklickt wird, nichts tun
+            if (!clickedRow) return; // Do nothing if a row wasn't clicked
 
-            // Entfernt die Markierung von der vorher ausgewählten Zeile
+            // Remove the selection from the previously selected row
             const previouslySelectedRow = tableBody.querySelector('tr.selected');
             if (previouslySelectedRow) {
                 previouslySelectedRow.classList.remove('selected');
             }
 
-            // Markiert die neue Zeile
+            // Mark the new row as selected
             clickedRow.classList.add('selected');
 
-            // Aktualisiert den Text im Element mit der ausgewählten Zeile
+            // Update the display elements with the selected row's ID and Section
             const id = clickedRow.dataset.id;
             const section = clickedRow.cells[1].textContent;
             document.getElementById('delete-id').textContent = id;
             document.getElementById('delete-section').textContent = section;
         });
     } else {
-        console.error('Tabellenkörper für die Zeilenauswahl konnte nicht gefunden werden');
+        console.error('Table body for row selection could not be found');
     }
 }
 
-// Funktion, die nach dem Laden des DOMs ausgeführt wird, um verschiedene Funktionen zu initialisieren
+// Function executed after the DOM is loaded to initialize various features
 document.addEventListener('DOMContentLoaded', function() {
+    // Only run initialization if the user is an admin
     if (!isAdmin()) {
         return;
     }
-    loadSections(); // Lädt die Abschnitte
-    setupInactivityTimer(); // Startet den Inaktivitätstimer
-    setupChatbotControl(); // Richtet die Chatbot-Steuerung ein
-    setupActionVisibility(); // Stellt die Sichtbarkeit der Aktionen ein
-    setupRowSelection(); // Fügt die Funktion zur Auswahl der Zeilen hinzu
+    loadSections(); // Load sections (dropdown options)
+    setupInactivityTimer(); // Start the inactivity timer
+    setupChatbotControl(); // Set up chatbot control visibility
+    setupActionVisibility(); // Set up action visibility (e.g., Edit/Delete buttons)
+    setupRowSelection(); // Add row selection functionality
 });
 
-// Funktion zum Aktualisieren der Checkboxen in den Zeilen
+// Function to update checkboxes in the rows (for multi-selection, currently unused by the initializer)
 function updateRowCheckboxes(rows) {
     if (!isAdmin()) {
-        console.log('Sie verfügen nicht über die Berechtigung, diesen Vorgang auszuführen');
+        console.log('You do not have permission to perform this operation');
         return;
     }
     const rowCheckboxesContainer = document.getElementById('row-checkboxes');
     if (!rowCheckboxesContainer) return;
 
-    rowCheckboxesContainer.innerHTML = ''; // Löscht die vorherigen Checkboxen
+    rowCheckboxesContainer.innerHTML = ''; // Clear previous checkboxes
 
     rows.forEach(row => {
         const checkbox = document.createElement('input');
         checkbox.type = 'checkbox';
         checkbox.className = 'row-checkbox';
-        checkbox.dataset.id = row.dataset.id; // Setzt die ID der Zeile
+        checkbox.dataset.id = row.dataset.id; // Set the row ID
 
         rowCheckboxesContainer.appendChild(checkbox);
-        rowCheckboxesContainer.appendChild(document.createElement('br')); // Fügt einen Zeilenumbruch hinzu
+        rowCheckboxesContainer.appendChild(document.createElement('br')); // Add a line break
     });
 }
 
-//Button "Bearbeiten"
+// "Edit" Button Logic
 document.addEventListener('DOMContentLoaded', () => {
     if (!isAdmin()) {
         return;
     }
-    // Elemente für Bearbeitungsprozess definieren
-    const editButton = document.getElementById('submit-edit'); // Button zum Starten der Bearbeitung
-    const buttonContainer = document.getElementById('button-container'); // Container für Standard-Buttons
-    const editFormContainer = document.getElementById('edit-form-container'); // Container für das Bearbeitungsformular
-    const editInstruction = document.getElementById('edit-instruction'); // Anweisung für Bearbeitungsmodus
-    const table = document.getElementById('questions-table'); // Tabelle mit FAQs
-    const sectionInput = document.getElementById('edit-section'); // Eingabefeld für die Sektion
-    const questionInput = document.getElementById('edit-question'); // Eingabefeld für die Frage
-    const answerInput = document.getElementById('edit-answer'); // Eingabefeld für die Antwort
-    const backEditButton = document.getElementById('back-edit-button'); // Button zum Abbrechen der Bearbeitung
-    const confirmButton = document.getElementById('edit_confirm_button'); // Button zum Bestätigen der Bearbeitung
-    let selectedRow = null; // Speichert die aktuell ausgewählte Tabellenzeile
+    // Define elements for the editing process
+    const editButton = document.getElementById('submit-edit'); 
+    const buttonContainer = document.getElementById('button-container'); 
+    const editFormContainer = document.getElementById('edit-form-container'); 
+    const editInstruction = document.getElementById('edit-instruction'); 
+    const table = document.getElementById('questions-table'); 
+    const sectionInput = document.getElementById('edit-section'); 
+    const questionInput = document.getElementById('edit-question'); 
+    const answerInput = document.getElementById('edit-answer'); 
+    const backEditButton = document.getElementById('back-edit-button'); 
+    const confirmButton = document.getElementById('edit_confirm_button'); 
+    let selectedRow = null; // Stores the currently selected table row
 
-    // Funktion zum Verarbeiten des Klicks auf eine Tabellenzeile
+    // Function to handle clicking on a table row in edit mode
     const handleRowClick = (row) => {
-        selectedRow = row; // Speichert die ausgewählte Zeile
-        const section = row.querySelector('td:nth-child(2)').innerText; // Sektion der Zeile
-        const question = row.querySelector('td:nth-child(3)').innerText; // Frage der Zeile
-        const answer = row.querySelector('td:nth-child(4)').innerText; // Antwort der Zeile
+        selectedRow = row; // Store the selected row
+        // Get data from cells (Section, Question, Answer)
+        const section = row.querySelector('td:nth-child(2)').innerText; 
+        const question = row.querySelector('td:nth-child(3)').innerText; 
+        const answer = row.querySelector('td:nth-child(4)').innerText; 
 
-        // Übertragung der Werte in die Eingabefelder des Bearbeitungsformulars
+        // Transfer values to the input fields of the edit form
         sectionInput.value = section;
         questionInput.value = question;
         answerInput.value = answer;
 
-        editInstruction.classList.add('dash_hidden'); // Versteckt die Bearbeitungsanweisung
-        buttonContainer.scrollIntoView({ behavior: 'smooth', block: 'start' }); // Scrollt zur Button-Gruppe
+        editInstruction.classList.add('dash_hidden'); // Hide the edit instruction
+        // Scroll to the button group for better visibility
+        buttonContainer.scrollIntoView({ behavior: 'smooth', block: 'start' }); 
     };
 
-    // Ereignislistener für das Klicken auf Tabellenzeilen (Delegierung)
-    table.addEventListener('click', (event) => {
-        const row = event.target.closest('tr'); // Findet die nächste Zeile
-        if (row) handleRowClick(row); // Verarbeitet Klicks nur auf Zeilen
-    });
+    // Event delegation: listen for clicks on table rows during edit mode
+    if (table) {
+        table.addEventListener('click', (event) => {
+            const row = event.target.closest('tr'); // Find the closest row
+            // Only process the click if the edit form is visible AND a row was clicked
+            if (row && !editFormContainer.classList.contains('dash_hidden')) {
+                handleRowClick(row); 
+            }
+        });
+    }
 
-    // Ereignislistener für den Bearbeitungsbutton
-    editButton.addEventListener('click', () => {
-        buttonContainer.style.display = 'none'; // Versteckt den Button-Container
-        editInstruction.classList.remove('dash_hidden'); // Zeigt die Bearbeitungsanweisung
-        editFormContainer.classList.remove('dash_hidden'); // Zeigt das Bearbeitungsformular
-        sectionInput.value = '';
-        questionInput.value = '';
-        answerInput.value = '';
-        selectedRow = null; // Zurücksetzen der ausgewählten Zeile
-    });
+    // Event listener for the Edit button
+    if (editButton) {
+        editButton.addEventListener('click', () => {
+            buttonContainer.style.display = 'none'; // Hide the standard button container
+            editInstruction.classList.remove('dash_hidden'); // Show the edit instruction
+            editFormContainer.classList.remove('dash_hidden'); // Show the edit form
+            
+            // Clear previous form data
+            sectionInput.value = '';
+            questionInput.value = '';
+            answerInput.value = '';
+            selectedRow = null; // Reset the selected row
+        });
+    }
 
-    // Ereignislistener für das Auswahlfeld der Sektionen
-    const sectionSelect = document.getElementById('chatbot-sections');
-    sectionSelect.addEventListener('change', () => {
-        selectedRow = null; // Setzt die Auswahl zurück bei Sektionenwechsel
-        loadQuestions(sectionSelect.value); // Lädt die Fragen der gewählten Sektion
-    });
+    // Event listener for the confirmation button in the edit form
+    if (confirmButton) {
+        confirmButton.addEventListener('click', () => {
+            if (!selectedRow) { // Check if a row has been selected
+                alert('Please select a row to apply the changes.');
+                return;
+            }
 
-    // Ereignislistener für den Bestätigungsbutton im Bearbeitungsformular
-    confirmButton.addEventListener('click', () => {
-        if (!selectedRow) { // Prüfung, ob eine Zeile ausgewählt wurde
-            alert('Bitte wählen Sie eine Zeile aus, um die Änderungen vorzunehmen.');
-            return;
-        }
+            const id = selectedRow.querySelector('td:nth-child(1)').innerText; // ID of the selected row
+            const confirmUpdate = confirm(`Do you really want to apply the changes to row ID ${id}?`);
 
-        const id = selectedRow.querySelector('td:nth-child(1)').innerText; // ID der gewählten Zeile
-        const confirmUpdate = confirm(`Möchten Sie die Änderungen wirklich auf die Zeilen-ID ${id} anwenden?`);
+            if (confirmUpdate) {
+                const updatedData = {
+                    id: id,
+                    section: sectionInput.value,
+                    question: questionInput.value,
+                    answer: answerInput.value
+                };
 
-        if (confirmUpdate) {
-            const updatedData = {
-                id: id,
-                section: sectionInput.value,
-                question: questionInput.value,
-                answer: answerInput.value
-            };
+                // Send the update request to the server
+                fetch('/api/edit-faq', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(updatedData)
+                })
+                .then(response => {
+                    if (!response.ok) throw new Error('Error during data update');
+                    return response.json();
+                })
+                .then(data => {
+                    if (data.success) {
+                        // Update the local table with new values
+                        selectedRow.querySelector('td:nth-child(2)').innerText = updatedData.section;
+                        selectedRow.querySelector('td:nth-child(3)').innerText = updatedData.question;
+                        selectedRow.querySelector('td:nth-child(4)').innerText = updatedData.answer;
 
-            // Senden der Aktualisierungsanforderung an den Server
-            fetch('/api/edit-faq', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(updatedData)
-            })
-            .then(response => {
-                if (!response.ok) throw new Error('Fehler bei der Datenaktualisierung');
-                return response.json();
-            })
-            .then(data => {
-                if (data.success) {
-                    // Aktualisierung der lokalen Tabelle mit neuen Werten
-                    selectedRow.querySelector('td:nth-child(2)').innerText = updatedData.section;
-                    selectedRow.querySelector('td:nth-child(3)').innerText = updatedData.question;
-                    selectedRow.querySelector('td:nth-child(4)').innerText = updatedData.answer;
+                        editFormContainer.classList.add('dash_hidden'); // Hide the edit form
+                        buttonContainer.style.display = 'block'; // Show the standard button container
+                        alert('Data successfully updated');
+                    } else {
+                        alert(data.message || 'Data could not be updated');
+                    }
+                })
+                .catch(error => {
+                    console.error(error);
+                    alert('Data could not be updated');
+                });
+            }
+        });
+    }
 
-                    editFormContainer.classList.add('dash_hidden'); // Versteckt das Bearbeitungsformular
-                    buttonContainer.style.display = 'block'; // Zeigt den Button-Container
-                    alert('Daten erfolgreich aktualisiert');
-                } else {
-                    alert(data.message || 'Daten konnten nicht aktualisiert werden');
-                }
-            })
-            .catch(error => {
-                console.error(error);
-                alert('Daten konnten nicht aktualisiert werden');
-            });
-        }
-    });
-
-    // Ereignislistener für den Zurück-Button im Bearbeitungsmodus
-    backEditButton.addEventListener('click', () => {
-        editFormContainer.classList.add('dash_hidden'); // Versteckt das Bearbeitungsformular
-        buttonContainer.style.display = 'block'; // Zeigt den Button-Container
-        sectionInput.value = '';
-        questionInput.value = '';
-        answerInput.value = '';
-        selectedRow = null; // Setzt die Auswahl der Zeile zurück
-    });
+    // Event listener for the back/cancel button in edit mode
+    if (backEditButton) {
+        backEditButton.addEventListener('click', () => {
+            editFormContainer.classList.add('dash_hidden'); // Hide the edit form
+            buttonContainer.style.display = 'block'; // Show the standard button container
+            
+            // Clear form fields
+            sectionInput.value = '';
+            questionInput.value = '';
+            answerInput.value = '';
+            selectedRow = null; // Reset the row selection
+        });
+    }
 });
 
-// Sektionen löschen
+// Delete Sections Logic
 document.addEventListener('DOMContentLoaded', () => {
     if (!isAdmin()) {
         return;
     }
-    // Elemente für die verschiedenen Container und Buttons abrufen
+    // Get elements for the different containers and buttons
     const deleteSectionButton = document.getElementById('submit-delete-section');
     const buttonContainer = document.getElementById('button-container');
     const deleteSectionContainer = document.getElementById('delete-section-container-admin');
-    const sectionSelect = document.getElementById('section-select-admin');
     const confirmButtons = document.getElementById('confirm-buttons-admin');
-    const sectionInfo = document.getElementById('section-info-admin');
-    const warningMessage = document.getElementById('warning-message-admin');
-    const confirmDeleteButton = document.getElementById('confirm-delete-button-admin');
-    const cancelDeleteButton = document.getElementById('cancel-delete-button-admin');
+    const sectionSelect = document.getElementById('section-select-admin'); // NOTE: Element not used in this block
+    // const confirmDeleteButton = document.getElementById('confirm-delete-button-admin'); // NOTE: Element not used in this block
+    // const cancelDeleteButton = document.getElementById('cancel-delete-button-admin'); // NOTE: Element not used in this block
 
-    // Event-Listener für den Button zum Löschen von Sektionen
+    // Event listener for the Delete Sections button
     if (deleteSectionButton) {
         deleteSectionButton.addEventListener('click', () => {
-            buttonContainer.style.display = 'none'; // Haupt-Button-Container ausblenden
-            deleteSectionContainer.classList.remove('dash_hidden'); // Löschen-Container anzeigen
+            buttonContainer.style.display = 'none'; // Hide the main button container
+            deleteSectionContainer.classList.remove('dash_hidden'); // Show the delete section container
 
             const sectionContainer = document.getElementById('section-container');
             if (sectionContainer) {
-                sectionContainer.style.display = 'none'; // Sektionen-Container ausblenden
+                sectionContainer.style.display = 'none'; // Hide the general section container
             }
 
-            // Abruf der Sektionen vom Server
+            // Fetch sections from the server
             fetch('/admin/get-sections')
                 .then(response => {
                     if (!response.ok) {
-                        throw new Error('Fehler beim Laden der Abschnitte');
+                        throw new Error('Error loading sections');
                     }
                     return response.json();
                 })
                 .then(data => {
                     const tableContainer = document.getElementById('section-table-container');
-                    tableContainer.innerHTML = ''; // Vorherigen Inhalt löschen
+                    tableContainer.innerHTML = ''; // Clear previous content
 
                     const questionsTable = document.getElementById('questions-table');
                     if (questionsTable) {
-                        questionsTable.style.display = 'none'; // Fragen-Tabelle ausblenden
+                        questionsTable.style.display = 'none'; // Hide the questions table
                     }
 
                     if (data.length === 0) {
-                        alert('Sektionen nicht gefunden.');
+                        alert('Sections not found.');
                         return;
                     }
 
-                    // Tabelle für Sektionen erstellen und füllen
+                    // Create and populate the table for sections
                     const table = document.createElement('table');
                     table.className = 'styled-table';
                     table.innerHTML = `
                         <thead>
                             <tr>
-                                <th>Auswahl</th>
-                                <th>ID der Sektionen</th>
-                                <th>Sektion</th>
-                                <th>Datenmenge</th>
+                                <th>Select</th>
+                                <th>Section ID</th>
+                                <th>Section Name</th>
+                                <th>Question Count</th>
                             </tr>
                         </thead>
                         <tbody></tbody>
                     `;
 
-                    // Jede Sektion als Zeile hinzufügen
+                    // Add each section as a row
                     data.forEach(section => {
                         const row = document.createElement('tr');
                         row.innerHTML = `
@@ -878,123 +900,129 @@ document.addEventListener('DOMContentLoaded', () => {
                             <td>${section.questionCount}</td>
                         `;
 
-                        // Checkbox aktivieren/deaktivieren beim Klick auf die Zeile
+                        // Toggle checkbox on row click
                         row.addEventListener('click', (event) => {
-                            const checkbox = row.querySelector('input[type="checkbox"]');
-                            checkbox.checked = !checkbox.checked;
+                            // Only toggle if the target isn't the checkbox itself (to avoid double-toggling)
+                            if (event.target.type !== 'checkbox') {
+                                const checkbox = row.querySelector('input[type="checkbox"]');
+                                checkbox.checked = !checkbox.checked;
+                            }
                         });
 
                         table.querySelector('tbody').appendChild(row);
                     });
 
-                    tableContainer.appendChild(table); // Tabelle dem Container hinzufügen
-                    confirmButtons.classList.remove('dash_hidden'); // Bestätigungs-Buttons anzeigen
+                    tableContainer.appendChild(table); // Add table to the container
+                    confirmButtons.classList.remove('dash_hidden'); // Show confirmation buttons
                 })
                 .catch(error => {
                     alert(error.message);
-                    console.error('Fehler beim Laden der Sektionen:', error);
+                    console.error('Error loading sections:', error);
                 });
         });
     }
 
-    // Event-Listener für den Bestätigungs-Button zum Löschen
+const confirmDeleteButton = document.getElementById('confirm-delete-section'); 
+const cancelDeleteButton = document.getElementById('cancel-delete-section');
+
+// Event listener for the confirmation button for deletion
     if (confirmDeleteButton) {
         confirmDeleteButton.addEventListener('click', () => {
-            // Auswahl der markierten Sektionen
+            // Selection of marked sections
             const checkboxes = document.querySelectorAll('#section-table-container input[type="checkbox"]:checked');
             const selectedSections = Array.from(checkboxes).map(checkbox => checkbox.value);
 
             if (selectedSections.length === 0) {
-                alert('Bitte wählen Sie mindestens eine Sektion zum Löschen aus.');
+                alert('Please select at least one section to delete.');
                 return;
             }
 
-            // Bestätigungsnachricht für das Löschen der ausgewählten Sektionen
-            const confirmDelete = confirm(`Sind Sie sicher, dass Sie die Sektionen mit ID: ${selectedSections.join(', ')} löschen möchten?`);
+            // Confirmation message for deleting the selected sections
+            const confirmDelete = confirm(`Are you sure you want to delete the sections with ID: ${selectedSections.join(', ')}?`);
             if (confirmDelete) {
-                // Löschen jeder ausgewählten Sektion und aktualisieren der Tabelle danach
+                // Deleting each selected section and updating the table afterward
                 Promise.all(selectedSections.map(sectionId => 
                     fetch(`/admin/delete-section/${sectionId}`, {
                         method: 'DELETE'
                     }).then(response => {
                         if (!response.ok) {
-                            throw new Error(`Fehler beim Löschen der Sektion mit ID ${sectionId}`);
+                            throw new Error(`Error deleting the section with ID ${sectionId}`);
                         }
                         return response.json();
                     })
                 ))
                 .then(data => {
-                    alert('Sektionen erfolgreich gelöscht.');
-                    // Aktualisieren der Sektionstabelle nach dem Löschen
+                    alert('Sections successfully deleted.');
+                    // Updating the section table after deletion
                     return fetchSections();
                 })
                 .then(() => {
-                    // Aktualisieren der Fragen-Tabelle nach dem Löschen
-                    loadQuestions(); // Funktion für das Laden der Fragen erneut aufrufen
+                    // Updating the questions table after deletion
+                    loadQuestions(); // Call the function for loading questions again
                 })
                 .catch(error => {
-                    console.error('Fehler:', error);
+                    console.error('Error:', error);
                     alert(error.message);
                 });
             }
         });
     }
 
-    // Event-Listener für den Abbrechen-Button
+    // Event listener for the cancel button
     if (cancelDeleteButton) {
         cancelDeleteButton.addEventListener('click', () => {
-            deleteSectionContainer.classList.add('dash_hidden'); // Löschen-Container ausblenden
-            buttonContainer.style.display = 'block'; // Haupt-Buttons wieder anzeigen
+            deleteSectionContainer.classList.add('dash_hidden'); // Hide deletion container
+            buttonContainer.style.display = 'block'; // Show main buttons again
 
             if (sectionSelect) {
-                sectionSelect.value = ''; // Auswahl zurücksetzen
+                sectionSelect.value = ''; // Reset selection
             }
 
-            warningMessage.classList.add('dash_hidden'); // Warnnachricht ausblenden
-            sectionInfo.classList.add('dash_hidden'); // Sektion-Info ausblenden
+            warningMessage.classList.add('dash_hidden'); // Hide warning message
+            sectionInfo.classList.add('dash_hidden'); // Hide section info
 
-            // Sektionstabelle aktualisieren beim Abbrechen
+            // Update section table upon cancellation
             fetchSections();
 
             const sectionContainer = document.getElementById('section-container');
             if (sectionContainer) {
-                sectionContainer.style.display = 'block'; // Sektionen-Container anzeigen
+                sectionContainer.style.display = 'block'; // Show sections container
             }
 
             const questionsTable = document.getElementById('questions-table');
             if (questionsTable) {
-                questionsTable.style.display = 'block'; // Fragen-Tabelle anzeigen
+                questionsTable.style.display = 'block'; // Show questions table
             }
         });
     }
 
-    // Funktion zum Abrufen und Anzeigen der Sektionen
+    // Function to retrieve and display the sections
     function fetchSections() {
         return fetch('/admin/get-sections')
             .then(response => {
                 if (!response.ok) {
-                    throw new Error('Fehler beim Laden der Sektionen nach dem Löschen');
+                    throw new Error('Error loading sections after deletion');
                 }
                 return response.json();
             })
             .then(data => {
                 const sectionTableContainer = document.getElementById('section-table-container');
-                sectionTableContainer.innerHTML = ''; // Vorherigen Inhalt löschen
+                sectionTableContainer.innerHTML = ''; // Clear previous content
                 const table = document.createElement('table');
                 table.className = 'styled-table';
                 table.innerHTML = `
                     <thead>
                         <tr>
-                            <th>Auswahl</th>
-                            <th>ID der Sektionen</th>
-                            <th>Sektion</th>
-                            <th>Datenmenge</th>
+                            <th>Selection</th>
+                            <th>ID of sections</th>
+                            <th>Section</th>
+                            <th>Data volume</th>
                         </tr>
                     </thead>
                     <tbody></tbody>
                 `;
 
-                // Jede Sektion als Zeile hinzufügen
+                // Add each section as a row
                 data.forEach(section => {
                     const row = document.createElement('tr');
                     row.innerHTML = `
@@ -1004,7 +1032,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         <td>${section.questionCount}</td>
                     `;
 
-                    // Checkbox aktivieren/deaktivieren beim Klick auf die Zeile
+                    // Activate/deactivate checkbox upon clicking the row
                     row.addEventListener('click', (event) => {
                         const checkbox = row.querySelector('input[type="checkbox"]');
                         checkbox.checked = !checkbox.checked;
@@ -1012,7 +1040,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
                     table.querySelector('tbody').appendChild(row);
                 });
-                sectionTableContainer.appendChild(table); // Tabelle dem Container hinzufügen
+                sectionTableContainer.appendChild(table); // Add table to the container
             });
     }
 });

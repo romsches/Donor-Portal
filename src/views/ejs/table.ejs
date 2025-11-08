@@ -1,7 +1,7 @@
 <% var alreadyRendered = false; %> <!-- Variable zur Vermeidung doppelter Renderings -->
 
 <!DOCTYPE html>
-<html lang="de">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -18,27 +18,26 @@
                     <div>
                         <% if (canDonate) { %>
                             <!-- Wenn der Benutzer spenden darf, wird dieser Abschnitt angezeigt -->
-                            <h1>Sie dürfen spenden</h1>
+                            <h1>You may donate</h1>
                         <% } else { %>
                             <!-- Wenn der Benutzer nicht spenden darf, wird dieser Abschnitt angezeigt -->
-                            <h1>Sie können derzeit nicht spenden.</h1>
+                            <h1>You are currently unable to donate.</h1>
                             <div id="donation-info">
-                                <!-- Information für Benutzer
-
-                                <p>Die Tabelle ist derzeit nicht verfügbar.</p>
+                                <!-- Information für Benutzer -->
+                                <p>The table is currently unavailable.</p>
                             </div>
                         <% } %>
                     </div>
-                    <span>Nächste Blutspende-Termine</span>
-                    <h2>Filtern nach Ort</h2>
+                    <span>Next Blood Donation Appointments</span>
+                    <h2>Filter by Location</h2>
                     <select id="location-filter" name="location" onchange="refreshTable()">
-                        <option value="Alle Standorte">Alle Standorte</option> <!-- Default option for all locations -->
+                        <option value="All Locations">All Locations</option> <!-- Default option for all locations -->
                         <!-- You should populate this with dynamic locations -->
                     </select>
                     <div class="filter_btn">
-                        <h2>Datum auswählen</h2>
-                        <input type="date" name="date" id="dtm" maxlength="4" pattern="\d{4}" title="Vier Ziffern für das Jahr eingeben" required>
-                        <button id="updateButton" onclick="refreshTable()">Aktualisieren</button>
+                        <h2>Select Date</h2>
+                        <input type="date" name="date" id="dtm" maxlength="4" pattern="\d{4}" title="Enter four digits for the year" required>
+                        <button id="updateButton" onclick="refreshTable()">Update</button>
                     </div>
                 </div>
             </div>
@@ -47,21 +46,21 @@
                     <table id="meeting-table" border="1">
                         <thead>
                             <tr>
-                                <th class="one">Datum</th>
-                                <% if (selectedLocation === 'Alle Standorte') { %>
-                                    <th class="two">Straße (Stadt)</th>
+                                <th class="one">Date</th>
+                                <% if (selectedLocation === 'All Locations') { %>
+                                    <th class="two">Street (City)</th>
                                 <% } else { %>
-                                    <th class="two">Straße</th>
+                                    <th class="two">Street</th>
                                 <% } %>
-                                <th class="three">Uhrzeit (von - bis)</th>
+                                <th class="three">Time (from - to)</th>
                                 <th class="four">Status</th>
                             </tr>
                         </thead>
                         <tbody>
                             <% for (let i = 0; i < meetings.length; i++) { %>
                                 <tr>
-                                    <td><%= new Date(meetings[i].Datum).toLocaleDateString('de-DE') %></td>
-                                    <% if (selectedLocation === 'Alle Standorte') { %>
+                                    <td><%= new Date(meetings[i].Datum).toLocaleDateString('en-GB') %></td>
+                                    <% if (selectedLocation === 'All Locations') { %>
                                         <td><%= meetings[i].Strasse %> (<%= meetings[i].Stadt %>)</td>
                                     <% } else { %>
                                         <td><%= meetings[i].Strasse %></td>
@@ -74,17 +73,17 @@
                     </table>
                 <% } else { %>
                     <div id="donation-info">
-                        <p>Sie können derzeit nicht spenden.</p>
+                        <p>You are currently unable to donate.</p>
                     </div>
                     <div id="no-donation-info">
-                        <p>Die Tabelle ist derzeit nicht verfügbar.</p>
+                        <p>The table is currently unavailable.</p>
                     </div>
                 <% } %>
             </div>
             <div class="kontakt">
-                <p>Haben Sie Fragen?</p>
-                <p>Kontaktieren Sie unsere Hotline.</p>
-                <a href="#">Kontakt aufnehmen</a>
+                <p>Do you have any questions?</p>
+                <p>Contact our hotline.</p>
+                <a href="#">Contact us</a>
             </div>
         
             <!-- HTML für den Chat -->
@@ -95,11 +94,11 @@
                 </div>
                 <div id="chat-messages"></div>
                 <div id="chat-footer">
-                    <input type="text" id="chat-input" placeholder="Ihre Nachricht...">
-                    <button id="chat-send-button">Senden</button>
+                    <input type="text" id="chat-input" placeholder="Your message...">
+                    <button id="chat-send-button">Send</button>
                 </div>
             </div>
-            <button id="chat-toggle">Chatbot öffnen</button>
+            <button id="chat-toggle">Open Chatbot</button>
             
         </section>        
     </main>

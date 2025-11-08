@@ -9,6 +9,8 @@ const dotenv = require('dotenv'); // dotenv-Modul für die Arbeit mit Umgebungsv
 
 const app = express(); // Eine neue Instanz der Express-Anwendung erstellen
 
+dotenv.config();
+
 // Protokollierung mit Winston einrichten
 const logger = winston.createLogger({
     level: 'info', // Setzt das Protokollierungsniveau auf 'info'
@@ -28,13 +30,19 @@ app.use(bodyParser.json()); // Middleware für das Parsen von JSON-Daten im Anfo
 
 // Sitzungen einrichten
 app.use(session({
-    secret: process.env.SESSION_SECRET || 'default_secret', // Geheimer Schlüssel für die Session (sollte sicher sein und nicht öffentlich geteilt werden)
-    resave: false, // Verhindert, dass die Sitzung bei jeder Anfrage erneut gespeichert wird, wenn keine Änderungen vorgenommen wurden
-    saveUninitialized: true, // Speichert die Sitzung auch, wenn sie noch nicht verändert wurde
-    cookie: { 
-        secure: process.env.COOKIE_SECURE === 'true', // Setzt das Secure-Flag für Cookies basierend auf einer Umgebungsvariablen
-        httpOnly: true, // Macht das Cookie für den Client unzugänglich (kann nur vom Server aus genutzt werden)
-        maxAge: 24 * 60 * 60 * 1000 // Legt die Lebensdauer des Cookies auf 24 Stunden fest
+    // Секретный ключ из .env (у вас '123')
+    secret: process.env.SESSION_SECRET, 
+    // Запрещает сохранять сессию, если она не была изменена
+    resave: false, 
+    // Запрещает создавать сессию для неаутентифицированных пользователей
+    saveUninitialized: false, 
+    cookie: {
+        // У вас в .env: COOKIE_SECURE=false. На локальном HTTP-сервере это критично!
+        secure: process.env.COOKIE_SECURE === 'true', 
+        // Запрещает доступ к куки через клиентский JavaScript
+        httpOnly: true, 
+        // Время жизни куки (например, 1 день)
+        maxAge: 1000 * 60 * 60 * 24 
     }
 }));
 
@@ -145,7 +153,7 @@ app.post('/login', (req, res) => {
             res.render('table', { meetings: [], canDonate: true, selectedLocation: '', selectedDate: '', SpenderID: donorID }); // Rendert die Tabelle für den Spender
         } else {
             // Wenn der Spender nicht gefunden wurde, wird eine Fehlermeldung angezeigt
-            return res.redirect('/login-error?error=Ungültige SpenderID.'); // Weiterleitung zur Fehlerseite
+            return res.redirect('/login-error?error=Invalid donor ID'); // Weiterleitung zur Fehlerseite
         }
     });
 });
@@ -164,38 +172,49 @@ app.get('/refreshTable', (req, res) => {
     // SQL-Abfrage für die Spendetermine-Tabelle
     let sqlQuery = `
             SELECT 
-                DATE_FORMAT(spendetermine.datum, '%d.%m.%Y') AS Datum,  // Formatieren des Datums
-                ort.strasse AS Strasse,                                  // Straße des Ortes
-                ort.stadt AS Stadt,                                      // Stadt des Ortes
-                CONCAT(spendetermine.uhrzeit_von, ' - ', spendetermine.uhrzeit_bis) AS Uhrzeit,  // Uhrzeit der Spende
-                status.status AS Status                                  // Status des Spendetermins
+                DATE_FORMAT(spendetermine.datum, '%d.%m.%Y') AS Datum,  -- Formatieren des Datums
+                ort.strasse AS Strasse,                                 -- Straße des Ortes
+                ort.stadt AS Stadt,                                     -- Stadt des Ortes
+                CONCAT(spendetermine.uhrzeit_von, ' - ', spendetermine.uhrzeit_bis) AS Uhrzeit,  -- Uhrzeit der Spende
+                status.status AS Status                                 -- Status des Spendetermins
             FROM spendetermine
-            JOIN ort ON spendetermine.orts_id = ort.orts_id  // Join der Tabellen für den Ort
-            JOIN status ON spendetermine.status_id = status.status_id  // Join der Tabellen für den Status
+            JOIN ort ON spendetermine.orts_id = ort.orts_id             -- Join der Tabellen für den Ort
+            JOIN status ON spendetermine.status_id = status.status_id   -- Join der Tabellen für den Status
             `;
+
+    // Hinzufügen des Joins zur 'spende'-Tabelle, falls wir nach einem Spender filtern
+    // Ein LEFT JOIN ist notwendig, um auch zukünftige Termine anzuzeigen, die noch keine abgeschlossene Spende sind.
+    if (donorID) {
+        sqlQuery += `
+            LEFT JOIN spende ON spendetermine.termin_id = spende.termin_id
+            `;
+    }
 
     // Array für Filterbedingungen und Abfrageparameter
     const filterConditions = [];
     const queryParams = [];
 
     // Wenn ein Standort ausgewählt wurde, füge eine Filterbedingung hinzu
-    if (selectedLocation && selectedLocation !== 'Alle Standorte') {
+    if (selectedLocation && selectedLocation !== 'All Locations') {
         filterConditions.push('ort.stadt = ?');
         queryParams.push(selectedLocation);
     }
 
     // Wenn ein Datum ausgewählt wurde, füge eine Filterbedingung hinzu
     if (selectedDate) {
+        // Wir filtern Termine, die am oder nach dem ausgewählten Datum liegen
         filterConditions.push('spendetermine.datum >= ?');
         queryParams.push(selectedDate);
     } else {
-        // Wenn kein Datum angegeben wurde, benutze das heutige Datum
+        // Wenn kein Datum angegeben wurde (als Absicherung), benutze das heutige Datum
+        filterConditions.push('spendetermine.datum >= ?');
         queryParams.push(new Date().toISOString().split('T')[0]);
     }
 
     // Wenn eine SpenderID angegeben wurde, füge auch eine Filterbedingung für den Spender hinzu
     if (donorID) {
-        filterConditions.push('spender.blutspender_id = ?');
+        // Filtern nach der SpenderID in der Tabelle 'spende'
+        filterConditions.push('spende.blutspender_id = ?');
         queryParams.push(donorID);
     }
 
@@ -596,12 +615,12 @@ app.delete('/admin/delete-section/:id', (req, res) => {
         // Dann löschen wir die Sektion selbst
         dbAdmin.query('DELETE FROM faq_sections WHERE id = ?', [sectionId], (err, result) => {
             if (err) {
-                console.error('Fehler beim Löschen der Sektion:', err);
-                return res.status(500).json({ error: 'Fehler beim Löschen der Sektion.' });
+                console.error('Error deleting section:', err);
+                return res.status(500).json({ error: 'Error deleting section.' });
             }
 
             // Erfolgreich gelöscht
-            res.status(200).json({ message: 'Sektion und zugehörige Daten wurden erfolgreich gelöscht.' });
+            res.status(200).json({ message: 'Section and associated data have been successfully deleted..' });
         });
     });
 });
@@ -613,11 +632,11 @@ app.get('/admin/get-section-info/:id', (req, res) => {
     // Abfrage der Datenbank, um Informationen zur Sektion zu erhalten
     dbAdmin.query('SELECT * FROM faq_sections WHERE id = ?', [sectionId], (error, results) => {
         if (error) {
-            console.error('Fehler beim Abrufen der Sektion-Informationen:', error);
-            return res.status(500).json({ error: 'Fehler beim Abrufen der Sektion-Informationen.' });
+            console.error('Error retrieving section information:', error);
+            return res.status(500).json({ error: 'Error retrieving section information.' });
         }
         if (results.length === 0) {
-            return res.status(404).json({ error: 'Sektion nicht gefunden.' });
+            return res.status(404).json({ error: 'Section not found.' });
         }
         res.json(results[0]); // Gibt die Informationen zur Sektion zurück
     });
@@ -634,8 +653,8 @@ app.get('/admin/get-sections', (req, res) => {
 
     req.db.query(query, (error, sections) => {
         if (error) {
-            console.error('Fehler beim Abrufen der Sektionen:', error);
-            return res.status(500).json({ error: 'Fehler beim Abrufen der Sektionen.' });
+            console.error('Error retrieving sections:', error);
+            return res.status(500).json({ error: 'Error retrieving sections.' });
         }
         res.json(sections); // Gibt alle Sektionen zurück, einschließlich der Anzahl der Fragen
     });
@@ -646,8 +665,8 @@ app.get('/api/update-faq-sections', (req, res) => {
     const sqlQuery = 'SELECT section_name FROM faq_sections';
     dbUser.query(sqlQuery, (error, results) => {
         if (error) {
-            logger.error('Fehler bei der Ausführung der Anfrage:', error);
-            return res.status(500).json({ error: 'Interner Serverfehler' });
+            logger.error('Error while executing the request:', error);
+            return res.status(500).json({ error: 'Internal server error' });
         }
         res.json({ sections: results.map(row => row.section_name) }); // Gibt die Namen der Sektionen zurück
     });
@@ -686,22 +705,27 @@ app.get('/admin/dashboard', ensureAuthenticated, (req, res) => {
 
     // SQL-Abfragen zur Überprüfung der Berechtigungen des Administrators und seiner Daten
     const sqlQueryPermissions = 'SELECT * FROM admin_permission WHERE admin_id = ?';
-    const sqlQueryAdmin = 'SELECT * FROM admins WHERE id = ?';
+    const sqlQueryAdmin = 'SELECT * FROM admins WHERE admin_id = ?';
 
     // Abfrage für die Berechtigungen des Administrators
     req.db.query(sqlQueryPermissions, [adminId], (error, results) => {
         if (error) {
-            logger.error('Fehler bei der Ausführung der Anfrage:', error);
-            return res.status(500).send('Interner Serverfehler');
+            logger.error('Error while executing the request:', error);
+            return res.status(500).send('Internal server error');
         }
 
         const privileges = results.map(result => result.permission); // Extrahiert alle Berechtigungen des Administrators
 
+        // 🔥 ИСПРАВЛЕНИЕ: Добавляем ключ 'admin' в массив, который ожидает клиентский код.
+        if (privileges.length > 0) {
+            privileges.push('admin'); 
+        }
+
         // Abfrage für die Daten des Administrators
         req.db.query(sqlQueryAdmin, [adminId], (error, adminResults) => {
             if (error) {
-                logger.error('Fehler bei der Ausführung der Anfrage:', error);
-                return res.status(500).send('Interner Serverfehler');
+                logger.error('Error while executing the request:', error);
+                return res.status(500).send('Internal server error');
             }
 
             const admin = adminResults[0]; // Holt sich die Informationen des Administrators
@@ -725,8 +749,8 @@ app.get('/admin/dashboard', ensureAuthenticated, (req, res) => {
 app.post('/admin/logout', (req, res) => {
     req.session.destroy((err) => {
         if (err) {
-            logger.error('Fehler bei der Beendigung der Sitzung:', err);
-            return res.status(500).send('Fehler bei der Beendigung der Sitzung');
+            logger.error('Error terminating session:', err);
+            return res.status(500).send('Error terminating session');
         }
         res.clearCookie('connect.sid'); // Löscht das Sitzungscookie
         res.redirect('/admin/login'); // Weiterleitung zur Login-Seite nach dem Logout
@@ -750,61 +774,64 @@ app.get('/admin/check-session', (req, res) => {
 // ** ANMELDUNG ADMIN-SEITE (Login) **
 // ---------------------------------
 
-// Route für die Anmeldung des Administrators
+// API: Administrator login handler
 app.post('/admin/login', (req, res) => {
-    // Destrukturierung der Benutzereingaben (Benutzername und Passwort) aus dem Request-Body
+    // Destructure user input (username and password) from the request body
     const { username, password } = req.body;
 
-    // Überprüfung, ob der Benutzername und das Passwort angegeben sind
+    // Check if username and password are provided
     if (!username || !password) {
         return res.status(400).json({
             errors: {
-                // Fehlermeldung für den Benutzernamen, wenn er fehlt
-                username: !username ? 'Die Anmeldung darf nicht leer sein' : undefined,
-                // Fehlermeldung für das Passwort, wenn es fehlt
-                password: !password ? 'Das Passwort darf nicht leer sein' : undefined,
+                // If username is missing
+                username: !username ? 'Username is required.' : undefined,
+                // If password is missing
+                password: !password ? 'Password is required.' : undefined,
             },
         });
     }
 
-    // SQL-Abfrage, um den Benutzer anhand des Benutzernamens zu finden
+    // SQL query to find the user by username
     const sqlQuery = 'SELECT * FROM admins WHERE username = ?';
+    // FIX: Using dbAdmin.query to resolve "ReferenceError: db is not defined"
     dbAdmin.query(sqlQuery, [username], (error, results) => {
         if (error) {
-            // Loggen der Fehler, wenn bei der SQL-Abfrage ein Fehler auftritt
-            logger.error('Fehler beim Ausführen der Anfrage:', error);
-            return res.status(500).send('interner Serverfehler');
+            // Log SQL query error
+            logger.error('Database error while searching for administrator:', error);
+            // FIX: Returning JSON for 500 error to avoid client-side SyntaxError
+            return res.status(500).json({ general: 'Internal server error while executing query.' });
         }
 
-        // Überprüfung, ob der Benutzer in der Datenbank gefunden wurde
+        // Check if administrator was found in the database
         if (results.length > 0) {
-            const admin = results[0]; // Der erste (und möglicherweise einzige) gefundene Administrator
+            const admin = results[0]; // The first administrator found
 
-            // Überprüfung des Passworts mithilfe von bcrypt
+            // Compare the hashed password with the provided password
             bcrypt.compare(password, admin.password, (bcryptErr, bcryptRes) => {
                 if (bcryptErr) {
-                    // Loggen des Fehlers, wenn es bei der Passwortüberprüfung einen Fehler gibt
-                    logger.error('Fehler bei der Passwortüberprüfung:', bcryptErr);
-                    return res.status(500).send('interner Serverfehler');
+                    // Log error if password verification failed
+                    logger.error('Error during password verification:', bcryptErr);
+                    // FIX: Returning JSON for 500 error to avoid client-side SyntaxError
+                    return res.status(500).json({ general: 'Internal server error during password check.' });
                 }
 
-                // Wenn das Passwort korrekt ist
+                // If password is correct
                 if (bcryptRes) {
-                    // Speichern der Administrator-ID in der Session für zukünftige Anfragen
-                    req.session.adminId = admin.id;
-                    // Rückgabe einer erfolgreichen Antwort
-                    return res.status(200).send('Erfolgreiche Anmeldung');
+                    // Save administrator ID in the session
+                    req.session.adminId = admin.admin_id;
+                    // Return successful response
+                    return res.status(200).send('Successful login');
                 } else {
-                    // Rückgabe eines Fehlers, wenn das Passwort falsch ist
+                    // Return error if password is incorrect
                     return res.status(400).json({
-                        errors: { password: 'Falsches Passwort' },
+                        errors: { password: 'Incorrect password' },
                     });
                 }
             });
         } else {
-            // Rückgabe eines Fehlers, wenn der Benutzername nicht gefunden wurde
+            // Return error if username was not found
             return res.status(400).json({
-                errors: { username: 'Benutzer mit diesem Login wurde nicht gefunden' },
+                errors: { username: 'User not found' },
             });
         }
     });

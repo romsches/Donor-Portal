@@ -1,16 +1,16 @@
-// Klasse für ein benutzerdefiniertes HTML-Element 'SpecialHeader'
+// Class for a custom HTML element 'SpecialHeader'
 class SpecialHeader extends HTMLElement {
-    // Wird aufgerufen, wenn das Element mit dem DOM verbunden wird
+    // Called when the element is connected to the DOM
     connectedCallback() {
         this.innerHTML = `
         <div class="header_container">
             <nav>
                 <ul>
-                    <li><a href="/login">Startseite</a></li>
-                    <li><a href="#">Blutspende</a></li>
-                    <li><a href="#">Blutspender werden</a></li>
-                    <li><a href="#">Informationen</a></li>
-                    <li><a href="#">Kontakt</a></li>
+                    <li><a href="/login">Home</a></li>
+                    <li><a href="#">Blood Donation</a></li>
+                    <li><a href="#">Become a Donor</a></li>
+                    <li><a href="#">Information</a></li>
+                    <li><a href="#">Contact</a></li>
                 </ul>
             </nav>
         </div>
@@ -18,9 +18,10 @@ class SpecialHeader extends HTMLElement {
     }
 }
 
-// Klasse für ein benutzerdefiniertes HTML-Element 'SpecialLogo'
+/*
+// Class for a custom HTML element 'SpecialLogo'
 class SpecialLogo extends HTMLElement {
-    // Wird aufgerufen, wenn das Element mit dem DOM verbunden wird
+    // Called when the element is connected to the DOM
     connectedCallback() {
         this.innerHTML = `
         <section class="logo">
@@ -31,18 +32,19 @@ class SpecialLogo extends HTMLElement {
         `;
     }
 }
+*/
 
-// Klasse für ein benutzerdefiniertes HTML-Element 'SpecialFooter'
+// Class for a custom HTML element 'SpecialFooter'
 class SpecialFooter extends HTMLElement {
-    // Wird aufgerufen, wenn das Element mit dem DOM verbunden wird
+    // Called when the element is connected to the DOM
     connectedCallback() {
         this.innerHTML = `
         <div class="footer_container">
             <div class="unten">
                 <ul class="links">
-                    <a href="#">Impressum</a>
-                    <a href="#">Nutzungsbedingungen</a>
-                    <a href="#">Datenschutz</a>
+                    <a href="#">Legal Notice</a>
+                    <a href="#">Terms of Use</a>
+                    <a href="#">Privacy Policy</a>
                 </ul>
             </div>
             <div class="apps">
@@ -55,45 +57,45 @@ class SpecialFooter extends HTMLElement {
     }
 }
 
-// Benutzerdefinierte HTML-Elemente registrieren
+// Register custom HTML elements
 customElements.define('special-header', SpecialHeader);
 customElements.define('special-footer', SpecialFooter);
-customElements.define('special-logo', SpecialLogo);
+//customElements.define('special-logo', SpecialLogo);
 
-// DOMContentLoaded-Ereignis überwachen, um sicherzustellen, dass das DOM vollständig geladen ist
+// Monitor the DOMContentLoaded event to ensure the DOM is fully loaded
 document.addEventListener('DOMContentLoaded', () => {
 
-    // Das Login-Formular im DOM suchen
+    // Find the login form in the DOM
     const loginForm = document.querySelector('#login-form');
-    if (loginForm) { // Überprüfen, ob das Login-Formular existiert
+    if (loginForm) { // Check if the login form exists
         loginForm.addEventListener('submit', async (event) => {
-            event.preventDefault(); // Verhindern des Standardformular-Absendevorgangs
+            event.preventDefault(); // Prevent the default form submission process
 
-            const formData = new FormData(loginForm); // Formulardaten sammeln
+            const formData = new FormData(loginForm); // Collect form data
 
             try {
-                const response = await fetch(loginForm.action, { // Asynchrone Anfrage mit fetch an die URL des Formulars
-                    method: loginForm.method, // HTTP-Methode des Formulars (z.B. POST)
-                    body: formData // Formulardaten als Anfragekörper
+                const response = await fetch(loginForm.action, { // Asynchronous request using fetch to the form's URL
+                    method: loginForm.method, // HTTP method of the form (e.g., POST)
+                    body: formData // Form data as the request body
                 });
 
                 if (!response.ok) {
-                    throw new Error('Netzwerkantwort war nicht ok.');
+                    throw new Error('Network response was not OK.');
                 }
 
-                const data = await response.json(); // Antwort in JSON konvertieren
+                const data = await response.json(); // Convert response to JSON
 
-                if (data.success) { // Überprüfen, ob die Anmeldung erfolgreich war
+                if (data.success) { // Check if the login was successful
                     if (data.redirectUrl) {
-                        window.location.href = data.redirectUrl; // Bei Erfolg zur angegebenen URL weiterleiten
+                        window.location.href = data.redirectUrl; // On success, redirect to the specified URL
                     } else {
-                        console.error('Keine Weiterleitungs-URL angegeben.'); // Fehlermeldung ausgeben
+                        console.error('No redirect URL specified.'); // Output error message
                     }
                 } else {
-                    console.error('Autorisierungsfehler:', data.message); // Fehler in der Konsole ausgeben
+                    console.error('Authorization Error:', data.message); // Output error in the console
                 }
             } catch (error) {
-                console.error('Fehler beim Senden des Formulars:', error); // Fehler beim Senden des Formulars behandeln
+                console.error('Error submitting the form:', error); // Handle error during form submission
             }
         });
     }
